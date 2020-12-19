@@ -1,0 +1,22 @@
+{
+    "name": "devnet/entity",
+    "description": "The DevNet Object Relational Mapper",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohammed Moussaoui",
+            "email": "m.moussaoui@outlook.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.4.0",
+        "devnet/core": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Artister\\Data\\Entity\\" : "src/"
+        }
+    }
+}
