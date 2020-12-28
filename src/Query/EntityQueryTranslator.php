@@ -17,6 +17,7 @@ use Artister\System\Linq\IQueryable;
 class EntityQueryTranslator extends ExpressionVisitor
 {
     public string $Out              = '';
+    public string $Method           = '';
     private array $Parameters       = [];
     public array $OuterVariables    = [];
 
@@ -42,20 +43,27 @@ class EntityQueryTranslator extends ExpressionVisitor
             $this->visit($lastExpression);
         }
 
-        switch ($expression->Method)
+        $method = strtolower($expression->Method);
+        switch ($method)
         {
-            case 'Where':
+            case 'where':
                 $this->Out .= " WHERE ";
                 break;
-            case 'OrderBy':
-            case 'OrderByDescending':
+            case 'str_contains':
+            case 'str_starts_with':
+            case 'str_ends_with':
+                $this->Out .= " LIKE ";
+                $this->Method = $expression->Method;
+                break;
+            case 'orderby':
+            case 'orderbydescending':
                 $this->Out .= " ORDER BY ";
                 break;
-            case 'ThenBy':
-            case 'ThenByDescending':
+            case 'thenby':
+            case 'thenbydescending':
                 $this->Out .= ", ";
                 break;
-            case 'GroupBy':
+            case 'groupby':
                 $this->Out .= " GROUP BY ";
                 break;
             default:
@@ -68,10 +76,10 @@ class EntityQueryTranslator extends ExpressionVisitor
             $this->visit($argument);
         }
 
-        if ($expression->Method == 'OrderBy' || $expression->Method == 'ThenBy')
+        if ($method == 'orderby' || $method == 'thenby')
         {
             $this->Out .= " ASC";
-        } else if ($expression->Method == 'OrderByDescending' || $expression->Method == 'ThenByDescending') {
+        } else if ($method == 'orderbydescending' || $method == 'thenbydescending') {
             $this->Out .= " DESC";
         }
     }
@@ -86,7 +94,6 @@ class EntityQueryTranslator extends ExpressionVisitor
         $this->Out .= "(";
         $this->visit($expression->Expression);
         $this->Out .= ")";
-        //return $expression;
     }
 
     public function visitBinary(Expression $expression)
@@ -115,7 +122,6 @@ class EntityQueryTranslator extends ExpressionVisitor
         $this->visit($expression->Left);
         $this->Out .= ' '.$operator.' ';
         $this->visit($expression->Right);
-        //return $expression;
     }
 
     public function visitProperty(Expression $expression)
@@ -151,7 +157,30 @@ class EntityQueryTranslator extends ExpressionVisitor
         }
         else
         {
-            $this->Out .= $expression->Value;
+            switch ($this->Method) {
+                case 'str_contains':
+                    $this->Out .= "'%".$expression->Value."%'";
+                    break;
+                case 'str_starts_with':
+                    $this->Out .= "{$expression->Value}%";
+                    break;
+                case 'str_ends_with':
+                    $this->Out .= "%{$expression->Value}";
+                    break;
+                default:
+                    if ($expression->Type == "string")
+                    {
+                        $this->Out .= "'{$expression->Value}'";
+                        break;
+                    }
+                    else if ($expression->Type == "bool")
+                    {
+                        $this->Out .= $expression->Value == true ? "true" : "false";
+                        break;
+                    }
+                    $this->Out .= "{$expression->Value}";
+                    break;
+            }
         }
     }
 
@@ -164,7 +193,6 @@ class EntityQueryTranslator extends ExpressionVisitor
         }
         $this->Out .= "{$operator}";
         $this->visit($expression->Operand);
-        //return $expression;
     }
 
     public function __toString()
