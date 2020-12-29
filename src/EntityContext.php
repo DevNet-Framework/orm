@@ -15,10 +15,10 @@ use Artister\System\Database\DbTransaction;
 
 class EntityContext
 {
-    private ?DbTransaction $Transaction;
-    private EntityMapper $Mapper;
-    private EntityModel $Model;
-    private array $Repositories = [];
+    protected ?DbTransaction $Transaction;
+    protected EntityMapper $Mapper;
+    protected EntityModel $Model;
+    protected array $Repositories = [];
 
     public function __construct(DbConnection $connection)
     {
