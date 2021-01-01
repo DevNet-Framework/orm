@@ -8,6 +8,7 @@
 
 namespace Artister\Data\Entity;
 
+use Artister\System\Database\DbConnectionStringBuilder;
 use Artister\System\Exceptions\ClassException;
 
 class EntityOptions
@@ -20,9 +21,10 @@ class EntityOptions
         return $this->$name;
     }
 
-    public function useConnection(string $connection)
+    public function useConnection(string $connectionUri)
     {
-        $this->Connection = $connection;
+        $builder = new DbConnectionStringBuilder($connectionUri);
+        $this->Connection = $builder->build();
     }
 
     public function useContext(string $contextType)
