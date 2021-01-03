@@ -26,12 +26,12 @@ class EntityQueryProvider implements IQueryProvider
         $this->Mapper       = $mapper;
     }
 
-    public function CreateQuery(string $resultType, Expression $expression = null) : IQueryable
+    public function CreateQuery(object $entityType, Expression $expression = null) : IQueryable
     {
-        return new EntityQuery($resultType, $this, $expression);
+        return new EntityQuery($entityType, $this, $expression);
     }
 
-    public function execute(string $resultType, Expression $expression)
+    public function execute(object $entityType, Expression $expression)
     {
         $translator = new EntityQueryTranslator();
         $translator->visit($expression);
@@ -44,7 +44,7 @@ class EntityQueryProvider implements IQueryProvider
             $command->addParameters($translator->OuterVariables);
         }
 
-        $dbReader = $command->executeReader($resultType);
+        $dbReader = $command->executeReader($entityType->getName());
 
         if (!$dbReader)
         {

@@ -17,15 +17,15 @@ use Artister\System\Linq\IQueryProvider;
 
 class EntitySet extends EntityQuery
 {
-    public EntityType $EntityType;
+    //public object $EntityType;
     private EntityMapper $Mapper;
 
     public function __construct(string $entityName, EntityMapper $mapper)
     {
-        $this->EntityType = $mapper->Model->getEntityType($entityName);
         $this->Mapper = $mapper;
+        //$this->EntityType = $mapper->Model->getEntityType($entityName);
 
-        parent::__construct($this->EntityType->getName(), $mapper->Provider);
+        parent::__construct($mapper->Model->getEntityType($entityName), $mapper->Provider);
     }
 
     public function find(int $id) : ?IEntity

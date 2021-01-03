@@ -21,13 +21,13 @@ class EntityQuery implements IQueryable
 {
     use \Artister\System\Extension\ExtensionTrait;
 
-    public string $ResultType;
-    public IQueryProvider $Provider;
-    public Expression $Expression;
+    private object $EntityType;
+    private IQueryProvider $Provider;
+    private Expression $Expression;
 
-    public function __construct(string $resultType, IQueryProvider $provider, Expression $expression = null)
+    public function __construct(object $entityType, IQueryProvider $provider, Expression $expression = null)
     {
-        $this->ResultType   = $resultType;
+        $this->EntityType   = $entityType;
         $this->Provider     = $provider;
         $this->Expression   = ($expression == null) ? Expression::constant($this) : $expression;
     }
@@ -39,7 +39,7 @@ class EntityQuery implements IQueryable
 
     public function getIterator() : Enumerator
     {
-        return $this->Provider->execute($this->ResultType, $this->Expression);
+        return $this->Provider->execute($this->EntityType, $this->Expression);
     }
 
     public function toArray() : array

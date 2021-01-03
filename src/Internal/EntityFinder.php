@@ -8,13 +8,15 @@
 
 namespace Artister\Data\Entity\Internal;
 
+use Artister\System\Linq;
 use Artister\Data\Entity\IEntity;
 use Artister\Data\Entity\Metadata\EntityType;
 use Artister\Data\Entity\Metadata\EntityNavigation;
+use Artister\Data\Entity\Query\EntityQuery;
 use Artister\Data\Entity\Storage\EntityMapper;
 use Artister\Data\Entity\Tracking\EntityStateManager;
 use Artister\System\Database\DbConnection;
-use Artister\System\Collections\Enumerator;
+use Artister\System\Linq\IQueryable;
 
 class EntityFinder
 {   
@@ -29,7 +31,7 @@ class EntityFinder
         $this->EntityStateManager   = $mapper->EntityStateManager;
     }
 
-    public function find(EntityType $entityType, $id)
+    public function find(EntityType $entityType, $id) : ?IEntity
     {
         $entry = $this->EntityStateManager->getEntry($entityType->getName(), $id);
         if ($entry)
@@ -37,21 +39,10 @@ class EntityFinder
             return $entry->Entity;
         }
 
-        $this->Connection->open();
-        $DbCommand = $this->Connection->createCommand("SELECT * FROM {$entityType->getTableName()} WHERE {$entityType->getPrimaryKey()} = ?");
-        $DbCommand->addParameters([$id]);
+        $query  = new EntityQuery($entityType, $this->Mapper->Provider);
+        $key    = $entityType->getPrimaryKey();
 
-        $dbReader = $DbCommand->executeReader($entityType->getName());
-        if ($dbReader)
-        {
-            $entity = $dbReader->read();
-            $dbReader->close();
-            
-            $this->load($entity);
-            return $entity;
-        }
-
-        return null;
+        return $query->where(fn($entity) => $entity->$key ==  $id)->first();
     }
 
     public function load(IEntity $entity)
@@ -88,25 +79,11 @@ class EntityFinder
         }
     }
 
-    public function Query(EntityNavigation $navigation, $keyValue)
+    public function Query(EntityNavigation $navigation, $keyValue) : IQueryable
     {
-        $tableReference = $navigation->MetadataReference->getTableName();
+        $query      = new EntityQuery($navigation->MetadataReference, $this->Mapper->Provider);
         $foreignKey = $navigation->getForeignKey();
 
-        $this->Connection->open();
-        $DbCommand = $this->Connection->createCommand("SELECT * FROM {$tableReference} WHERE {$foreignKey} = ?");
-        $DbCommand->addParameters([$keyValue]);
-        $dbReader = $DbCommand->executeReader($navigation->MetadataReference->getName());
-
-        $entities = [];
-        if ($dbReader) {
-            while ($relatedEntity = $dbReader->read()) {
-                $this->load($relatedEntity);
-                $entities[] = $relatedEntity;
-            }
-            $dbReader->close();
-        }
-
-        return new Enumerator($entities);
+        return $query->where(fn($entity) => $entity->$foreignKey ==  $keyValue);
     }
 }
