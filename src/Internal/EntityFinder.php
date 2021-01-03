@@ -11,6 +11,7 @@ namespace Artister\Data\Entity\Internal;
 use Artister\Data\Entity\IEntity;
 use Artister\Data\Entity\Metadata\EntityType;
 use Artister\Data\Entity\Metadata\EntityNavigation;
+use Artister\Data\Entity\Storage\EntityMapper;
 use Artister\Data\Entity\Tracking\EntityStateManager;
 use Artister\System\Database\DbConnection;
 use Artister\System\Collections\Enumerator;
