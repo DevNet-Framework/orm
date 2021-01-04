@@ -8,10 +8,10 @@
 
 namespace Artister\Data\Entity;
 
-use Artister\Data\Entity\Query\EntityQuery;
-use Artister\Data\Entity\Storage\EntityMapper;
-use Artister\Data\Entity\Metadata\EntityType;
 use Artister\Data\Entity\IEntity;
+use Artister\Data\Entity\Query\EntityQuery;
+use Artister\Data\Entity\Metadata\EntityType;
+use Artister\Data\Entity\Internal\EntityMapper;
 use Artister\System\Linq\Expressions\Expression;
 use Artister\System\Linq\IQueryProvider;
 

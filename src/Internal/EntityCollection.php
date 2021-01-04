@@ -9,7 +9,6 @@
 namespace Artister\Data\Entity\Internal;
 
 use Artister\Data\Entity\Metadata\EntityNavigation;
-use Artister\Data\Entity\Storage\EntityMapper;
 use Artister\System\Collections\Enumerator;
 use Artister\System\Collections\IList;
 

@@ -8,7 +8,7 @@
 
 namespace Artister\Data\Entity\Query;
 
-use Artister\Data\Entity\Storage\EntityMapper;
+use Artister\Data\Entity\Internal\EntityMapper;
 use Artister\System\Database\DbConnection;
 use Artister\System\Linq\IQueryable;
 use Artister\System\Linq\IQueryProvider;

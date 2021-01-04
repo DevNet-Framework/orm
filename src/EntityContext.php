@@ -9,8 +9,8 @@
 namespace Artister\Data\Entity;
 
 
+use Artister\Data\Entity\Internal\EntityMapper;
 use Artister\Data\Entity\Metadata\EntityModel;
-use Artister\Data\Entity\Storage\EntityMapper;
 use Artister\System\Database\DbConnection;
 use Artister\System\Database\DbTransaction;
 

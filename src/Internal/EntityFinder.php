@@ -9,18 +9,15 @@
 namespace Artister\Data\Entity\Internal;
 
 use Artister\System\Linq;
+use Artister\System\Linq\IQueryable;
 use Artister\Data\Entity\IEntity;
+use Artister\Data\Entity\Query\EntityQuery;
 use Artister\Data\Entity\Metadata\EntityType;
 use Artister\Data\Entity\Metadata\EntityNavigation;
-use Artister\Data\Entity\Query\EntityQuery;
-use Artister\Data\Entity\Storage\EntityMapper;
 use Artister\Data\Entity\Tracking\EntityStateManager;
-use Artister\System\Database\DbConnection;
-use Artister\System\Linq\IQueryable;
 
 class EntityFinder
-{   
-    private DbConnection $Connection;
+{
     private EntityMapper $Mapper;
     private EntityStateManager $EntityStateManager;
 

@@ -6,13 +6,13 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Storage;
+namespace Artister\Data\Entity\Internal;
 
 use Artister\Data\Entity\IEntity;
-use Artister\Data\Entity\Internal\EntityFinder;
 use Artister\Data\Entity\Query\EntityQueryProvider;
 use Artister\Data\Entity\Tracking\EntityStateManager;
 use Artister\Data\Entity\Metadata\EntityModel;
+use Artister\Data\Entity\Storage\EntityPersister;
 use Artister\Data\Entity\Tracking\EntityState;
 use Artister\System\Database\DbConnection;
 
