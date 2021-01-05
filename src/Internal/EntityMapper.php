@@ -13,6 +13,7 @@ use Artister\Data\Entity\Query\EntityQueryProvider;
 use Artister\Data\Entity\Tracking\EntityStateManager;
 use Artister\Data\Entity\Metadata\EntityModel;
 use Artister\Data\Entity\Storage\EntityPersister;
+use Artister\Data\Entity\Storage\IEntityPersister;
 use Artister\Data\Entity\Tracking\EntityState;
 use Artister\System\Database\DbConnection;
 
@@ -23,7 +24,7 @@ class EntityMapper
     protected EntityQueryProvider $Provider;
     protected EntityStateManager $EntityStateManager;
     protected EntityFinder $Finder;
-    protected EntityPersister $EntityPersister;
+    protected IEntityPersister $EntityPersister;
 
     public function __construct(DbConnection $connection, EntityModel $model)
     {

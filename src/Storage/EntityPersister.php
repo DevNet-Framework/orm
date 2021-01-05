@@ -11,11 +11,11 @@ namespace Artister\Data\Entity\Storage;
 use Artister\Data\Entity\Tracking\EntityEntry;
 use Artister\System\Database\DbConnection;
 
-class EntityPersister
+class EntityPersister implements IEntityPersister
 {   
     private DbConnection $Connection;
 
-    public function __construct(DbConnection $connection) 
+    public function __construct(DbConnection $connection)
     {
         $this->Connection = $connection;
     }
