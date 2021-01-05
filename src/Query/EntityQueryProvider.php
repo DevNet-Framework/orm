@@ -30,7 +30,7 @@ class EntityQueryProvider implements IQueryProvider
 
     public function execute(object $entityType, Expression $expression)
     {
-        $translator = new EntityQueryTranslator();
+        $translator = $this->Database->DataProvider->Visitor;
         $translator->visit($expression);
         $slq = $translator->Out;
         

@@ -6,7 +6,7 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Query;
+namespace Artister\Data\Entity\Providers\Mysql;
 
 use Artister\System\Compiler\ExpressionVisitor;
 use Artister\System\Compiler\ExpressionStringBuilder;
@@ -14,7 +14,7 @@ use Artister\System\Compiler\Expressions\Expression;
 use Artister\System\Linq\IQueryable;
 
 
-class EntityQueryTranslator extends ExpressionVisitor
+class MysqlQueryTranslator extends ExpressionVisitor
 {
     public string $Out              = '';
     public string $Method           = '';

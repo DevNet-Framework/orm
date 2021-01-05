@@ -10,31 +10,33 @@ namespace Artister\Data\Entity\Storage;
 
 use Artister\System\Database\DbConnection;
 use Artister\Data\Entity\Metadata\EntityModel;
-use Artister\Data\Entity\Internal\EntityFinder;
-use Artister\Data\Entity\Query\EntityQueryProvider;
-use Artister\Data\Entity\Storage\EntityPersister;
-use Artister\Data\Entity\Storage\IEntityPersister;
 use Artister\Data\Entity\Tracking\EntityStateManager;
 use Artister\Data\Entity\Tracking\EntityState;
+use Artister\Data\Entity\Internal\EntityFinder;
+use Artister\Data\Entity\Query\EntityQueryProvider;
+use Artister\Data\Entity\Storage\IEntityPersister;
+use Artister\Data\Entity\Providers\Mysql\MysqlDataProvider;
+use Artister\Data\Entity\Providers\Mysql\MysqlEntityPersister;
+use Artister\Data\Entity\Providers\Mysql\MysqlQueryTranslator;
 use Artister\Data\Entity\IEntity;
 
 class EntityDatabase
 {
     protected DbConnection $Connection;
     protected EntityModel $Model;
+    protected EntityStateManager $EntityStateManager;
     protected EntityFinder $Finder;
     protected EntityQueryProvider $QueryProvider;
-    protected IEntityPersister $EntityPersister;
-    protected EntityStateManager $EntityStateManager;
+    protected IEntityDataProvider $DataProvider;
 
     public function __construct(DbConnection $connection, EntityModel $model)
     {
         $this->Connection               = $connection;
         $this->Model                    = $model;
-        $this->QueryProvider            = new EntityQueryProvider($this);
-        $this->EntityStateManager       = new EntityStateManager($this->Model);
+        $this->EntityStateManager       = new EntityStateManager($model);
         $this->Finder                   = new EntityFinder($this);
-        $this->EntityPersister          = new EntityPersister($connection);
+        $this->QueryProvider            = new EntityQueryProvider($this);
+        $this->DataProvider             = new MysqlDataProvider(new MysqlEntityPersister($connection), new MysqlQueryTranslator);
     }
 
     public function __get(string $name)
@@ -86,13 +88,13 @@ class EntityDatabase
                 switch ($entry->State)
                 {
                     case EntityState::Added:
-                        $this->EntityPersister->insert($entry);
+                        $this->DataProvider->Persister->insert($entry);
                         break;
                     case EntityState::Modified:
-                        $this->EntityPersister->update($entry);
+                        $this->DataProvider->Persister->update($entry);
                         break;
                     case EntityState::Deleted:
-                        $this->EntityPersister->delete($entry);
+                        $this->DataProvider->Persister->delete($entry);
                         break;
                 }
             }

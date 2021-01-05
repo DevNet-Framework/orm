@@ -6,12 +6,13 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Storage;
+namespace Artister\Data\Entity\Providers\Mysql;
 
+use Artister\Data\Entity\Storage\IEntityPersister;
 use Artister\Data\Entity\Tracking\EntityEntry;
 use Artister\System\Database\DbConnection;
 
-class EntityPersister implements IEntityPersister
+class MysqlEntityPersister implements IEntityPersister
 {   
     private DbConnection $Connection;
 
