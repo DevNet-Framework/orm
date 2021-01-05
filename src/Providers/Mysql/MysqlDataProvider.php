@@ -10,6 +10,7 @@ namespace Artister\Data\Entity\Providers\Mysql;
 
 use Artister\Data\Entity\Storage\IEntityDataProvider;
 use Artister\Data\Entity\Storage\IEntityPersister;
+use Artister\System\Database\DbConnection;
 use Artister\System\Compiler\ExpressionVisitor;
 use Artister\System\Exceptions\PropertyException;
 
@@ -19,12 +20,10 @@ class MysqlDataProvider implements IEntityDataProvider
     private IEntityPersister $Persister;
     private ExpressionVisitor $Visitor;
 
-    public function __construct(
-        IEntityPersister $persister,
-        ExpressionVisitor $visitor
-    ){
-        $this->Persister    = $persister;
-        $this->Visitor      = $visitor;
+    public function __construct(DbConnection $connection)
+    {
+        $this->Persister    = new MysqlEntityPersister($connection);
+        $this->Visitor      = new MysqlQueryTranslator();
     }
 
     public function __get(string $name)

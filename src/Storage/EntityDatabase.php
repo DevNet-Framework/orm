@@ -10,33 +10,31 @@ namespace Artister\Data\Entity\Storage;
 
 use Artister\System\Database\DbConnection;
 use Artister\Data\Entity\Metadata\EntityModel;
-use Artister\Data\Entity\Tracking\EntityStateManager;
-use Artister\Data\Entity\Tracking\EntityState;
-use Artister\Data\Entity\Internal\EntityFinder;
-use Artister\Data\Entity\Query\EntityQueryProvider;
 use Artister\Data\Entity\Storage\IEntityPersister;
 use Artister\Data\Entity\Providers\Mysql\MysqlDataProvider;
-use Artister\Data\Entity\Providers\Mysql\MysqlEntityPersister;
-use Artister\Data\Entity\Providers\Mysql\MysqlQueryTranslator;
+use Artister\Data\Entity\Tracking\EntityStateManager;
+use Artister\Data\Entity\Tracking\EntityState;
+use Artister\Data\Entity\Query\EntityQueryProvider;
+use Artister\Data\Entity\Internal\EntityFinder;
 use Artister\Data\Entity\IEntity;
 
 class EntityDatabase
 {
     protected DbConnection $Connection;
     protected EntityModel $Model;
-    protected EntityStateManager $EntityStateManager;
-    protected EntityFinder $Finder;
-    protected EntityQueryProvider $QueryProvider;
     protected IEntityDataProvider $DataProvider;
+    protected EntityStateManager $EntityStateManager;
+    protected EntityQueryProvider $QueryProvider;
+    protected EntityFinder $Finder;
 
     public function __construct(DbConnection $connection, EntityModel $model)
     {
         $this->Connection               = $connection;
         $this->Model                    = $model;
+        $this->DataProvider             = new MysqlDataProvider($connection);
         $this->EntityStateManager       = new EntityStateManager($model);
-        $this->Finder                   = new EntityFinder($this);
         $this->QueryProvider            = new EntityQueryProvider($this);
-        $this->DataProvider             = new MysqlDataProvider(new MysqlEntityPersister($connection), new MysqlQueryTranslator);
+        $this->Finder                   = new EntityFinder($this);
     }
 
     public function __get(string $name)
