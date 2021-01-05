@@ -6,31 +6,32 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Internal;
+namespace Artister\Data\Entity\Storage;
 
-use Artister\Data\Entity\IEntity;
-use Artister\Data\Entity\Query\EntityQueryProvider;
-use Artister\Data\Entity\Tracking\EntityStateManager;
+use Artister\System\Database\DbConnection;
 use Artister\Data\Entity\Metadata\EntityModel;
+use Artister\Data\Entity\Internal\EntityFinder;
+use Artister\Data\Entity\Query\EntityQueryProvider;
 use Artister\Data\Entity\Storage\EntityPersister;
 use Artister\Data\Entity\Storage\IEntityPersister;
+use Artister\Data\Entity\Tracking\EntityStateManager;
 use Artister\Data\Entity\Tracking\EntityState;
-use Artister\System\Database\DbConnection;
+use Artister\Data\Entity\IEntity;
 
-class EntityMapper
+class EntityDatabase
 {
     protected DbConnection $Connection;
     protected EntityModel $Model;
-    protected EntityQueryProvider $Provider;
-    protected EntityStateManager $EntityStateManager;
     protected EntityFinder $Finder;
+    protected EntityQueryProvider $QueryProvider;
     protected IEntityPersister $EntityPersister;
+    protected EntityStateManager $EntityStateManager;
 
     public function __construct(DbConnection $connection, EntityModel $model)
     {
         $this->Connection               = $connection;
         $this->Model                    = $model;
-        $this->Provider                 = new EntityQueryProvider($this);
+        $this->QueryProvider            = new EntityQueryProvider($this);
         $this->EntityStateManager       = new EntityStateManager($this->Model);
         $this->Finder                   = new EntityFinder($this);
         $this->EntityPersister          = new EntityPersister($connection);

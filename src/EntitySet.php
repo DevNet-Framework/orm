@@ -10,37 +10,32 @@ namespace Artister\Data\Entity;
 
 use Artister\Data\Entity\IEntity;
 use Artister\Data\Entity\Query\EntityQuery;
-use Artister\Data\Entity\Metadata\EntityType;
-use Artister\Data\Entity\Internal\EntityMapper;
-use Artister\System\Linq\Expressions\Expression;
-use Artister\System\Linq\IQueryProvider;
+use Artister\Data\Entity\Storage\EntityDatabase;
 
 class EntitySet extends EntityQuery
 {
-    //public object $EntityType;
-    private EntityMapper $Mapper;
+    private EntityDatabase $Database;
 
-    public function __construct(string $entityName, EntityMapper $mapper)
+    public function __construct(string $entityName, EntityDatabase $database)
     {
-        $this->Mapper = $mapper;
-        //$this->EntityType = $mapper->Model->getEntityType($entityName);
+        $this->Database = $database;
 
-        parent::__construct($mapper->Model->getEntityType($entityName), $mapper->Provider);
+        parent::__construct($database->Model->getEntityType($entityName), $database->QueryProvider);
     }
 
     public function find(int $id) : ?IEntity
     {
-        return $this->Mapper->Finder->find($this->EntityType, $id);
+        return $this->Database->Finder->find($this->EntityType, $id);
     }
 
     public function add(IEntity $entity) : void
     {
-        $this->Mapper->add($entity);
+        $this->Database->add($entity);
     }
 
     public function remove(IEntity $entity) : void
     {
-        $this->Mapper->remove($entity);
+        $this->Database->remove($entity);
     }
 
     public function create()

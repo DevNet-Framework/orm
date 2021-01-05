@@ -8,24 +8,23 @@
 
 namespace Artister\Data\Entity;
 
-
-use Artister\Data\Entity\Internal\EntityMapper;
 use Artister\Data\Entity\Metadata\EntityModel;
+use Artister\Data\Entity\Storage\EntityDatabase;
 use Artister\System\Database\DbConnection;
 use Artister\System\Database\DbTransaction;
 
 class EntityContext
 {
     protected ?DbTransaction $Transaction;
-    protected EntityMapper $Mapper;
+    protected EntityDatabase $Database;
     protected EntityModel $Model;
     protected array $Repositories = [];
 
     public function __construct(DbConnection $connection)
     {
         $builder        = new EntityModelBuilder();
-        $this->Mapper   = new EntityMapper($connection, $builder->getModel());
-        $this->Model    = $this->Mapper->Model;
+        $this->Database = new EntityDatabase($connection, $builder->getModel());
+        $this->Model    = $this->Database->Model;
         
         $this->onModelCreate($builder);
     }
@@ -37,7 +36,7 @@ class EntityContext
 
     public function beginTransaction()
     {
-        $this->Transaction = $this->Mapper->Connection->beginTransaction();
+        $this->Transaction = $this->Database->Connection->beginTransaction();
     }
 
     /** Registry pattern and singleton pattern. */
@@ -48,7 +47,7 @@ class EntityContext
             return $this->Repositories[$entityType];
         }
 
-        $entityRepository = new EntitySet($entityType, $this->Mapper);
+        $entityRepository = new EntitySet($entityType, $this->Database);
 
         $this->Repositories[$entityType] = $entityRepository;
         return $this->Repositories[$entityType];
@@ -56,7 +55,7 @@ class EntityContext
 
     public function save()
     {
-        return $this->Mapper->save();
+        return $this->Database->save();
     }
 
     public function commit()

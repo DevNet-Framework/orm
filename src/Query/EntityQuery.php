@@ -27,9 +27,9 @@ class EntityQuery implements IQueryable
 
     public function __construct(object $entityType, IQueryProvider $provider, Expression $expression = null)
     {
-        $this->EntityType   = $entityType;
-        $this->Provider     = $provider;
-        $this->Expression   = ($expression == null) ? Expression::constant($this) : $expression;
+        $this->EntityType       = $entityType;
+        $this->Provider         = $provider;
+        $this->Expression       = ($expression == null) ? Expression::constant($this) : $expression;
     }
 
     public function __get(string $name)

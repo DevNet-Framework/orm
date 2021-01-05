@@ -14,18 +14,19 @@ use Artister\Data\Entity\IEntity;
 use Artister\Data\Entity\Query\EntityQuery;
 use Artister\Data\Entity\Metadata\EntityType;
 use Artister\Data\Entity\Metadata\EntityNavigation;
+use Artister\Data\Entity\Storage\EntityDatabase;
 use Artister\Data\Entity\Tracking\EntityStateManager;
 
 class EntityFinder
 {
-    private EntityMapper $Mapper;
+    private EntityDatabase $Database;
     private EntityStateManager $EntityStateManager;
 
-    public function __construct(EntityMapper $mapper)
+    public function __construct(EntityDatabase $database)
     {
-        $this->Mapper               = $mapper;
-        $this->Connection           = $mapper->Connection;
-        $this->EntityStateManager   = $mapper->EntityStateManager;
+        $this->Database             = $database;
+        $this->Connection           = $database->Connection;
+        $this->EntityStateManager   = $database->EntityStateManager;
     }
 
     public function find(EntityType $entityType, $id) : ?IEntity
@@ -36,7 +37,7 @@ class EntityFinder
             return $entry->Entity;
         }
 
-        $query  = new EntityQuery($entityType, $this->Mapper->Provider);
+        $query  = new EntityQuery($entityType, $this->Database->QueryProvider);
         $key    = $entityType->getPrimaryKey();
 
         return $query->where(fn($entity) => $entity->$key ==  $id)->first();
@@ -44,9 +45,9 @@ class EntityFinder
 
     public function load(IEntity $entity)
     {
-        $this->Mapper->attach($entity);
+        $this->Database->attach($entity);
 
-        $entityType = $this->Mapper->Model->getEntityType(get_class($entity));
+        $entityType = $this->Database->Model->getEntityType(get_class($entity));
         $key = $entityType->PropertyKey;
 
         foreach ($entityType->Navigations as $navigation)
@@ -54,7 +55,7 @@ class EntityFinder
             $navigation->PropertyInfo->setAccessible(true);
             if ($navigation->NavigationType == 2)
             {
-                $navigation->PropertyInfo->setValue($entity, new EntityCollection($navigation, $this->Mapper, $entity->$key));
+                $navigation->PropertyInfo->setValue($entity, new EntityCollection($navigation, $this->Database, $entity->$key));
             }
             else if ($navigation->NavigationType == 1)
             {
@@ -78,7 +79,7 @@ class EntityFinder
 
     public function Query(EntityNavigation $navigation, $keyValue) : IQueryable
     {
-        $query      = new EntityQuery($navigation->MetadataReference, $this->Mapper->Provider);
+        $query      = new EntityQuery($navigation->MetadataReference, $this->Database->QueryProvider);
         $foreignKey = $navigation->getForeignKey();
 
         return $query->where(fn($entity) => $entity->$foreignKey ==  $keyValue);

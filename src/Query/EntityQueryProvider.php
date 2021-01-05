@@ -8,8 +8,7 @@
 
 namespace Artister\Data\Entity\Query;
 
-use Artister\Data\Entity\Internal\EntityMapper;
-use Artister\System\Database\DbConnection;
+use Artister\Data\Entity\Storage\EntityDatabase;
 use Artister\System\Linq\IQueryable;
 use Artister\System\Linq\IQueryProvider;
 use Artister\System\Compiler\Expressions\Expression;
@@ -17,13 +16,11 @@ use Artister\System\Collections\Enumerator;
 
 class EntityQueryProvider implements IQueryProvider
 {
-    private DbConnection $Connection;
-    private EntityMapper $Mapper;
+    private EntityDatabase $Database;
 
-    public function __construct(EntityMapper $mapper)
+    public function __construct(EntityDatabase $database)
     {
-        $this->Connection   = $mapper->Connection;
-        $this->Mapper       = $mapper;
+        $this->Database = $database;
     }
 
     public function CreateQuery(object $entityType, Expression $expression = null) : IQueryable
@@ -37,8 +34,8 @@ class EntityQueryProvider implements IQueryProvider
         $translator->visit($expression);
         $slq = $translator->Out;
         
-        $this->Connection->open();
-        $command = $this->Connection->createCommand($slq);
+        $this->Database->Connection->open();
+        $command = $this->Database->Connection->createCommand($slq);
         if ($translator->OuterVariables)
         {
             $command->addParameters($translator->OuterVariables);
@@ -55,10 +52,10 @@ class EntityQueryProvider implements IQueryProvider
         foreach ($dbReader as $entity)
         {
             $entities[] = $entity;
-            $entry = $this->Mapper->EntityStateManager->getEntry($entity);
+            $entry = $this->Database->EntityStateManager->getEntry($entity);
             if ($entry)
             {
-                $this->Mapper->EntityStateManager->addEntry($entity);
+                $this->Database->EntityStateManager->addEntry($entity);
             }
         }
 

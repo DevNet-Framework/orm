@@ -9,34 +9,35 @@
 namespace Artister\Data\Entity\Internal;
 
 use Artister\Data\Entity\Metadata\EntityNavigation;
+use Artister\Data\Entity\Storage\EntityDatabase;
 use Artister\System\Collections\Enumerator;
 use Artister\System\Collections\IList;
 
 class EntityCollection implements IList
 {
     private EntityNavigation $Navigation;
-    private EntityMapper $Mapper;
+    private EntityDatabase $Database;
     private $KeyValue;
 
     public function __construct(
         EntityNavigation $navigation,
-        EntityMapper $mapper,
+        EntityDatabase $database,
         $keyValue
         )
     {
         $this->Navigation   = $navigation;
-        $this->Mapper       = $mapper;
+        $this->Database     = $database;
         $this->KeyValue     = $keyValue;
     }
 
     public function add($entity) : void
     {
-        $this->Mapper->add($entity);
+        $this->Database->add($entity);
     }
 
     public function remove($entity) : void
     {
-        $this->Mapper->remove($entity);
+        $this->Database->remove($entity);
     }
 
     public function contains($entity) : bool
@@ -54,7 +55,7 @@ class EntityCollection implements IList
 
     public function getIterator() : Enumerator
     {
-        return $this->Mapper->Finder->query($this->Navigation, $this->KeyValue);
+        return $this->Database->Finder->query($this->Navigation, $this->KeyValue);
     }
 
     public function first()
