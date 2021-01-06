@@ -25,7 +25,6 @@ class EntityFinder
     public function __construct(EntityDatabase $database)
     {
         $this->Database             = $database;
-        $this->Connection           = $database->Connection;
         $this->EntityStateManager   = $database->EntityStateManager;
     }
 

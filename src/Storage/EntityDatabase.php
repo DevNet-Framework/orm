@@ -20,7 +20,6 @@ use Artister\Data\Entity\IEntity;
 
 class EntityDatabase
 {
-    protected DbConnection $Connection;
     protected EntityModel $Model;
     protected IEntityDataProvider $DataProvider;
     protected EntityStateManager $EntityStateManager;
@@ -30,7 +29,6 @@ class EntityDatabase
     public function __construct(EntityOptions $options, EntityModel $model)
     {
         $this->Model                    = $model;
-        $this->Connection               = $options->Connection;
         $this->DataProvider             = $options->Provider;
         $this->EntityStateManager       = new EntityStateManager($model);
         $this->QueryProvider            = new EntityQueryProvider($this);
@@ -77,7 +75,7 @@ class EntityDatabase
 
     public function persiste($entries)
     {
-        $this->Connection->open();
+        $this->DataProvider->Connection->open();
         foreach ($entries as $entityType)
         {
             foreach ($entityType as $entry)
@@ -98,6 +96,6 @@ class EntityDatabase
             }
         }
 
-        $this->Connection->close();
+        $this->DataProvider->Connection->close();
     }
 }

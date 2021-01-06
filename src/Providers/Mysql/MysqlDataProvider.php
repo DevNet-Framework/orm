@@ -17,18 +17,20 @@ use Artister\System\Exceptions\PropertyException;
 class MysqlDataProvider implements IEntityDataProvider
 {   
     private string $Name = 'mysql';
+    private DbConnection $Connection;
     private IEntityPersister $Persister;
     private ExpressionVisitor $Visitor;
 
     public function __construct(DbConnection $connection)
     {
+        $this->Connection   = $connection;
         $this->Persister    = new MysqlEntityPersister($connection);
         $this->Visitor      = new MysqlQueryTranslator();
     }
 
     public function __get(string $name)
     {
-        if (!in_array($name, ['Name', 'Persister', 'Visitor']))
+        if (!in_array($name, ['Name', 'Connection', 'Persister', 'Visitor']))
         {
             throw PropertyException::undefinedPropery(self::class, $name);
         }

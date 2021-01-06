@@ -34,8 +34,8 @@ class EntityQueryProvider implements IQueryProvider
         $translator->visit($expression);
         $slq = $translator->Out;
         
-        $this->Database->Connection->open();
-        $command = $this->Database->Connection->createCommand($slq);
+        $this->Database->DataProvider->Connection->open();
+        $command = $this->Database->DataProvider->Connection->createCommand($slq);
         if ($translator->OuterVariables)
         {
             $command->addParameters($translator->OuterVariables);

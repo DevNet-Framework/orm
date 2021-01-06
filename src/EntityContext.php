@@ -35,7 +35,7 @@ class EntityContext
 
     public function beginTransaction()
     {
-        $this->Transaction = $this->Database->Connection->beginTransaction();
+        $this->Transaction = $this->Database->DataProvider->Connection->beginTransaction();
     }
 
     /** Registry pattern and singleton pattern. */

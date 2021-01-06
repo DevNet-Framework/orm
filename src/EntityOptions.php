@@ -10,25 +10,17 @@ namespace Artister\Data\Entity;
 
 use Artister\Data\Entity\Providers\Mysql\MysqlConnection;
 use Artister\Data\Entity\Providers\Mysql\MysqlDataProvider;
-use Artister\System\Database\DbConnection;
-use Artister\System\Database\DbConnectionStringBuilder;
+use Artister\Data\Entity\Storage\IEntityDataProvider;
 use Artister\System\Exceptions\ClassException;
 
 class EntityOptions
 {
-    private DbConnection $Connection;
     private string $ContextType = EntityContext::class;
-    private MysqlDataProvider $Provider;
+    private IEntityDataProvider $Provider;
 
     public function __get(string $name)
     {
         return $this->$name;
-    }
-
-    public function useMysql(string $connectionUri)
-    {
-        $this->Connection   = new MysqlConnection($connectionUri);
-        $this->Provider     = new MysqlDataProvider($this->Connection);
     }
 
     public function useContext(string $contextType)
@@ -44,5 +36,15 @@ class EntityOptions
         }
 
         $this->ContextType = $contextType;
+    }
+
+    public function useProvider(IEntityDataProvider $provider)
+    {
+        $this->Provider = $provider;
+    }
+
+    public function useMysql(string $connectionUri)
+    {
+        $this->useProvider(new MysqlDataProvider(new MysqlConnection($connectionUri)));
     }
 }

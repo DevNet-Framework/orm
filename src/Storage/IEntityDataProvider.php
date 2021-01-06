@@ -9,14 +9,16 @@
 namespace Artister\Data\Entity\Storage;
 
 use Artister\Data\Entity\Storage\IEntityPersister;
+use Artister\System\Database\DbConnection;
 use Artister\System\Compiler\ExpressionVisitor;
 use Artister\System\Exceptions\PropertyException;
 
 interface IEntityDataProvider
 {   
-        /**
+    /**
      * This method must retun the following properties.
      * @return string $Name (the database provider name ex: mysql, pgsql, sqlite, ...)
+     * @return DbConnection $Connection
      * @return IEntityPersister $Persister
      * @return ExpressionVisitor $Visitor
      * and must throw an exception if the property doesn't exist
