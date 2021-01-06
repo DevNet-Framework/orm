@@ -6,10 +6,10 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Providers\Mysql;
+namespace Artister\Entity\Providers\Mysql;
 
-use Artister\Data\Entity\Storage\IEntityPersister;
-use Artister\Data\Entity\Tracking\EntityEntry;
+use Artister\Entity\Storage\IEntityPersister;
+use Artister\Entity\Tracking\EntityEntry;
 use Artister\System\Database\DbConnection;
 
 class MysqlEntityPersister implements IEntityPersister

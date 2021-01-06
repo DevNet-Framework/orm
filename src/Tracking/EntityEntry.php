@@ -6,10 +6,10 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Tracking;
+namespace Artister\Entity\Tracking;
 
-use Artister\Data\Entity\IEntity;
-use Artister\Data\Entity\Metadata\EntityType;
+use Artister\Entity\IEntity;
+use Artister\Entity\Metadata\EntityType;
 use Artister\System\Exceptions\PropertyException;
 
 class EntityEntry

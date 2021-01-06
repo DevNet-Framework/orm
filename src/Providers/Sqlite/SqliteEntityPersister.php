@@ -6,10 +6,10 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Providers\Sqlite;
+namespace Artister\Entity\Providers\Sqlite;
 
-use Artister\Data\Entity\Storage\IEntityPersister;
-use Artister\Data\Entity\Tracking\EntityEntry;
+use Artister\Entity\Storage\IEntityPersister;
+use Artister\Entity\Tracking\EntityEntry;
 use Artister\System\Database\DbConnection;
 
 class SqliteEntityPersister implements IEntityPersister

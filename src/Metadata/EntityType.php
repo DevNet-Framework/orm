@@ -6,9 +6,9 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Metadata;
+namespace Artister\Entity\Metadata;
 
-use Artister\Data\Entity\IEntity;
+use Artister\Entity\IEntity;
 use Artister\System\Collections\IList;
 use Reflector;
 

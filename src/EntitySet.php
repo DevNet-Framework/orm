@@ -6,11 +6,11 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity;
+namespace Artister\Entity;
 
-use Artister\Data\Entity\IEntity;
-use Artister\Data\Entity\Query\EntityQuery;
-use Artister\Data\Entity\Storage\EntityDatabase;
+use Artister\Entity\IEntity;
+use Artister\Entity\Query\EntityQuery;
+use Artister\Entity\Storage\EntityDatabase;
 
 class EntitySet extends EntityQuery
 {

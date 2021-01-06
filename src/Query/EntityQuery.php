@@ -6,7 +6,7 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Query;
+namespace Artister\Entity\Query;
 
 use Artister\System\Collections\Enumerator;
 use Artister\System\Linq\Enumerables\TakeEnumerable;

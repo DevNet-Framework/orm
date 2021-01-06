@@ -6,10 +6,10 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Internal;
+namespace Artister\Entity\Internal;
 
-use Artister\Data\Entity\Metadata\EntityNavigation;
-use Artister\Data\Entity\Storage\EntityDatabase;
+use Artister\Entity\Metadata\EntityNavigation;
+use Artister\Entity\Storage\EntityDatabase;
 use Artister\System\Collections\Enumerator;
 use Artister\System\Collections\IList;
 

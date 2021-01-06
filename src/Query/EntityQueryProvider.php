@@ -6,9 +6,9 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Query;
+namespace Artister\Entity\Query;
 
-use Artister\Data\Entity\Storage\EntityDatabase;
+use Artister\Entity\Storage\EntityDatabase;
 use Artister\System\Linq\IQueryable;
 use Artister\System\Linq\IQueryProvider;
 use Artister\System\Compiler\Expressions\Expression;

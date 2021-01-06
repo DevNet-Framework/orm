@@ -6,17 +6,17 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Storage;
+namespace Artister\Entity\Storage;
 
-use Artister\Data\Entity\EntityOptions;
 use Artister\System\Database\DbConnection;
-use Artister\Data\Entity\Metadata\EntityModel;
-use Artister\Data\Entity\Storage\IEntityPersister;
-use Artister\Data\Entity\Tracking\EntityStateManager;
-use Artister\Data\Entity\Tracking\EntityState;
-use Artister\Data\Entity\Query\EntityQueryProvider;
-use Artister\Data\Entity\Internal\EntityFinder;
-use Artister\Data\Entity\IEntity;
+use Artister\Entity\EntityOptions;
+use Artister\Entity\Metadata\EntityModel;
+use Artister\Entity\Storage\IEntityPersister;
+use Artister\Entity\Tracking\EntityStateManager;
+use Artister\Entity\Tracking\EntityState;
+use Artister\Entity\Query\EntityQueryProvider;
+use Artister\Entity\Internal\EntityFinder;
+use Artister\Entity\IEntity;
 
 class EntityDatabase
 {

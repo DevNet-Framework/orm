@@ -6,9 +6,9 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Storage;
+namespace Artister\Entity\Storage;
 
-use Artister\Data\Entity\Storage\IEntityPersister;
+use Artister\Entity\Storage\IEntityPersister;
 use Artister\System\Database\DbConnection;
 use Artister\System\Compiler\ExpressionVisitor;
 use Artister\System\Exceptions\PropertyException;

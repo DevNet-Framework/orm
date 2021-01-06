@@ -6,9 +6,9 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Storage;
+namespace Artister\Entity\Storage;
 
-use Artister\Data\Entity\Tracking\EntityEntry;
+use Artister\Entity\Tracking\EntityEntry;
 use Artister\System\Database\DbConnection;
 
 interface IEntityPersister

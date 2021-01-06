@@ -6,9 +6,9 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Metadata;
+namespace Artister\Entity\Metadata;
 
-use Artister\Data\Entity\EntityModelBuilder;
+use Artister\Entity\EntityModelBuilder;
 
 class EntityModel
 {

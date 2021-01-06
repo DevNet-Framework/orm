@@ -6,7 +6,7 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Providers\Sqlite;
+namespace Artister\Entity\Providers\Sqlite;
 
 use Artister\System\Database\DbConnection;
 

@@ -6,7 +6,7 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Providers\Mysql;
+namespace Artister\Entity\Providers\Mysql;
 
 use Artister\System\Compiler\ExpressionVisitor;
 use Artister\System\Compiler\ExpressionStringBuilder;

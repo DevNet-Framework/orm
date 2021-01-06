@@ -6,11 +6,11 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity;
+namespace Artister\Entity;
 
-use Artister\Data\Entity\Metadata\EntityModel;
-use Artister\Data\Entity\Metadata\EntityTypeBuilder;
-use Artister\Data\Entity\Metadata\IEntityTypeConfiguration;
+use Artister\Entity\Metadata\EntityModel;
+use Artister\Entity\Metadata\EntityTypeBuilder;
+use Artister\Entity\Metadata\IEntityTypeConfiguration;
 
 class EntityModelBuilder
 {

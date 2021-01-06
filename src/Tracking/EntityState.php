@@ -6,7 +6,7 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Tracking;
+namespace Artister\Entity\Tracking;
 
 class EntityState
 {

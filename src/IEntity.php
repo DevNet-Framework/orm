@@ -6,7 +6,7 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity;
+namespace Artister\Entity;
 
 use Artister\System\Exceptions\PropertyException;
 

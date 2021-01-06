@@ -6,17 +6,17 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Internal;
+namespace Artister\Entity\Internal;
 
 use Artister\System\Linq;
 use Artister\System\Linq\IQueryable;
-use Artister\Data\Entity\IEntity;
 use Artister\System\Collections\Enumerator;
-use Artister\Data\Entity\Query\EntityQuery;
-use Artister\Data\Entity\Metadata\EntityType;
-use Artister\Data\Entity\Metadata\EntityNavigation;
-use Artister\Data\Entity\Storage\EntityDatabase;
-use Artister\Data\Entity\Tracking\EntityStateManager;
+use Artister\Entity\IEntity;
+use Artister\Entity\Query\EntityQuery;
+use Artister\Entity\Metadata\EntityType;
+use Artister\Entity\Metadata\EntityNavigation;
+use Artister\Entity\Storage\EntityDatabase;
+use Artister\Entity\Tracking\EntityStateManager;
 
 class EntityFinder
 {

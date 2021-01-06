@@ -6,10 +6,10 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity;
+namespace Artister\Entity;
 
-use Artister\Data\Entity\Metadata\EntityModel;
-use Artister\Data\Entity\Storage\EntityDatabase;
+use Artister\Entity\Metadata\EntityModel;
+use Artister\Entity\Storage\EntityDatabase;
 use Artister\System\Database\DbTransaction;
 
 class EntityContext

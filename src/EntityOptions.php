@@ -6,13 +6,13 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity;
+namespace Artister\Entity;
 
-use Artister\Data\Entity\Providers\Mysql\MysqlConnection;
-use Artister\Data\Entity\Providers\Mysql\MysqlDataProvider;
-use Artister\Data\Entity\Providers\Sqlite\SqliteDataProvider;
-use Artister\Data\Entity\Providers\Sqlite\SqlitelConnection;
-use Artister\Data\Entity\Storage\IEntityDataProvider;
+use Artister\Entity\Providers\Mysql\MysqlConnection;
+use Artister\Entity\Providers\Mysql\MysqlDataProvider;
+use Artister\Entity\Providers\Sqlite\SqliteDataProvider;
+use Artister\Entity\Providers\Sqlite\SqlitelConnection;
+use Artister\Entity\Storage\IEntityDataProvider;
 use Artister\System\Exceptions\ClassException;
 
 class EntityOptions

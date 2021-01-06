@@ -6,10 +6,10 @@
  * @link        https://github.com/artister
  */
 
-namespace Artister\Data\Entity\Providers\Mysql;
+namespace Artister\Entity\Providers\Mysql;
 
-use Artister\Data\Entity\Storage\IEntityDataProvider;
-use Artister\Data\Entity\Storage\IEntityPersister;
+use Artister\Entity\Storage\IEntityDataProvider;
+use Artister\Entity\Storage\IEntityPersister;
 use Artister\System\Database\DbConnection;
 use Artister\System\Compiler\ExpressionVisitor;
 use Artister\System\Exceptions\PropertyException;
