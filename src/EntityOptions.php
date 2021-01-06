@@ -10,6 +10,8 @@ namespace Artister\Data\Entity;
 
 use Artister\Data\Entity\Providers\Mysql\MysqlConnection;
 use Artister\Data\Entity\Providers\Mysql\MysqlDataProvider;
+use Artister\Data\Entity\Providers\Sqlite\SqliteDataProvider;
+use Artister\Data\Entity\Providers\Sqlite\SqlitelConnection;
 use Artister\Data\Entity\Storage\IEntityDataProvider;
 use Artister\System\Exceptions\ClassException;
 
@@ -41,6 +43,11 @@ class EntityOptions
     public function useProvider(IEntityDataProvider $provider)
     {
         $this->Provider = $provider;
+    }
+
+    public function useSqlite(string $connectionUri)
+    {
+        $this->useProvider(new SqliteDataProvider(new SqlitelConnection($connectionUri)));
     }
 
     public function useMysql(string $connectionUri)
