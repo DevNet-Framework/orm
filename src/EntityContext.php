@@ -10,7 +10,6 @@ namespace Artister\Data\Entity;
 
 use Artister\Data\Entity\Metadata\EntityModel;
 use Artister\Data\Entity\Storage\EntityDatabase;
-use Artister\System\Database\DbConnection;
 use Artister\System\Database\DbTransaction;
 
 class EntityContext
@@ -20,10 +19,10 @@ class EntityContext
     protected EntityModel $Model;
     protected array $Repositories = [];
 
-    public function __construct(DbConnection $connection)
+    public function __construct(EntityOptions $options)
     {
         $builder        = new EntityModelBuilder();
-        $this->Database = new EntityDatabase($connection, $builder->getModel());
+        $this->Database = new EntityDatabase($options, $builder->getModel());
         $this->Model    = $this->Database->Model;
         
         $this->onModelCreate($builder);

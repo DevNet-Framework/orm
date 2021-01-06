@@ -8,23 +8,28 @@
 
 namespace Artister\Data\Entity;
 
+use Artister\Data\Entity\Providers\Mysql\MysqlDataProvider;
+use Artister\System\Database\DbConnection;
 use Artister\System\Database\DbConnectionStringBuilder;
 use Artister\System\Exceptions\ClassException;
 
 class EntityOptions
 {
-    private ?string $Connection = null;
+    private DbConnection $Connection;
     private string $ContextType = EntityContext::class;
+    private MysqlDataProvider $Provider;
 
     public function __get(string $name)
     {
         return $this->$name;
     }
 
-    public function useConnection(string $connectionUri)
+    public function useMysql(string $connectionUri)
     {
         $builder = new DbConnectionStringBuilder($connectionUri);
-        $this->Connection = $builder->build();
+        $this->Connection = new DbConnection($builder->build());
+
+        $this->Provider = new MysqlDataProvider($this->Connection);
     }
 
     public function useContext(string $contextType)

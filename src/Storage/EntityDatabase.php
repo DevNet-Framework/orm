@@ -8,10 +8,10 @@
 
 namespace Artister\Data\Entity\Storage;
 
+use Artister\Data\Entity\EntityOptions;
 use Artister\System\Database\DbConnection;
 use Artister\Data\Entity\Metadata\EntityModel;
 use Artister\Data\Entity\Storage\IEntityPersister;
-use Artister\Data\Entity\Providers\Mysql\MysqlDataProvider;
 use Artister\Data\Entity\Tracking\EntityStateManager;
 use Artister\Data\Entity\Tracking\EntityState;
 use Artister\Data\Entity\Query\EntityQueryProvider;
@@ -27,11 +27,11 @@ class EntityDatabase
     protected EntityQueryProvider $QueryProvider;
     protected EntityFinder $Finder;
 
-    public function __construct(DbConnection $connection, EntityModel $model)
+    public function __construct(EntityOptions $options, EntityModel $model)
     {
-        $this->Connection               = $connection;
         $this->Model                    = $model;
-        $this->DataProvider             = new MysqlDataProvider($connection);
+        $this->Connection               = $options->Connection;
+        $this->DataProvider             = $options->Provider;
         $this->EntityStateManager       = new EntityStateManager($model);
         $this->QueryProvider            = new EntityQueryProvider($this);
         $this->Finder                   = new EntityFinder($this);
