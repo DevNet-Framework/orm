@@ -11,6 +11,7 @@ namespace Artister\Data\Entity\Internal;
 use Artister\System\Linq;
 use Artister\System\Linq\IQueryable;
 use Artister\Data\Entity\IEntity;
+use Artister\System\Collections\Enumerator;
 use Artister\Data\Entity\Query\EntityQuery;
 use Artister\Data\Entity\Metadata\EntityType;
 use Artister\Data\Entity\Metadata\EntityNavigation;
@@ -66,7 +67,7 @@ class EntityFinder
                 }
                 else
                 {
-                    $childEntity = $this->Query($navigation, $entity->$key)->current();
+                    $childEntity = $this->query($navigation, $entity->$key)->current();
                     if ($childEntity)
                     {
                         $navigation->PropertyInfo->setValue($entity, $childEntity);
@@ -76,11 +77,11 @@ class EntityFinder
         }
     }
 
-    public function Query(EntityNavigation $navigation, $keyValue) : IQueryable
+    public function query(EntityNavigation $navigation, $keyValue) : Enumerator
     {
         $query      = new EntityQuery($navigation->MetadataReference, $this->Database->QueryProvider);
         $foreignKey = $navigation->getForeignKey();
 
-        return $query->where(fn($entity) => $entity->$foreignKey ==  $keyValue);
+        return $query->where(fn($entity) => $entity->$foreignKey ==  $keyValue)->getIterator();
     }
 }
