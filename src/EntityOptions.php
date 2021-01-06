@@ -8,6 +8,7 @@
 
 namespace Artister\Data\Entity;
 
+use Artister\Data\Entity\Providers\Mysql\MysqlConnection;
 use Artister\Data\Entity\Providers\Mysql\MysqlDataProvider;
 use Artister\System\Database\DbConnection;
 use Artister\System\Database\DbConnectionStringBuilder;
@@ -26,10 +27,8 @@ class EntityOptions
 
     public function useMysql(string $connectionUri)
     {
-        $builder = new DbConnectionStringBuilder($connectionUri);
-        $this->Connection = new DbConnection($builder->build());
-
-        $this->Provider = new MysqlDataProvider($this->Connection);
+        $this->Connection   = new MysqlConnection($connectionUri);
+        $this->Provider     = new MysqlDataProvider($this->Connection);
     }
 
     public function useContext(string $contextType)
