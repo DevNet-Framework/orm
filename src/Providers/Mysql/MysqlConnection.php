@@ -14,13 +14,19 @@ class MysqlConnection extends DbConnection
 {
     public function __construct(string $connectionUrl)
     {
-        $segments   = parse_url($connectionUrl);
-        $username   = $segments['user'] ?? "";
-        $password   = $segments['pass'] ?? "";
-        $host       = $segments['host'] ? "host=".$segments['host'] : "";
-        $port       = $segments['port'] ? ":".$segments['port'] : "";
-        $database   = $segments['path'] ? substr(strrchr($segments['path'], "/"), 1) : "";
-        $options    = $segments['query'] ? str_replace("&", ";", $segments['query']).";" : "";
+        $username   = parse_url($connectionUrl, PHP_URL_USER);
+        $password   = parse_url($connectionUrl, PHP_URL_PASS);
+        $host       = parse_url($connectionUrl, PHP_URL_HOST);
+        $port       = parse_url($connectionUrl, PHP_URL_PORT);
+        $path       = parse_url($connectionUrl, PHP_URL_PATH);
+        $query      = parse_url($connectionUrl, PHP_URL_QUERY);
+
+        $username   = $username ? $username : "";
+        $password   = $password ? $password : "";
+        $host       = $host ? "host=".$host : "";
+        $port       = $port ? ":".$port : "";
+        $database   = $path ? substr(strrchr($path, "/"), 1) : "";
+        $options    = $query ? str_replace("&", ";", $query).";" : "";
 
         $datasource = "mysql:".$host.$port.";"."dbname=".$database.";".$options;
 
