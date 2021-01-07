@@ -10,6 +10,8 @@ namespace Artister\Entity;
 
 use Artister\Entity\Providers\Mysql\MysqlConnection;
 use Artister\Entity\Providers\Mysql\MysqlDataProvider;
+use Artister\Entity\Providers\Postgresql\PostgresqlDataProvider;
+use Artister\Entity\Providers\Postgresql\PostgresqlConnection;
 use Artister\Entity\Providers\Sqlite\SqliteDataProvider;
 use Artister\Entity\Providers\Sqlite\SqlitelConnection;
 use Artister\Entity\Storage\IEntityDataProvider;
@@ -53,5 +55,10 @@ class EntityOptions
     public function useMysql(string $connectionUri)
     {
         $this->useProvider(new MysqlDataProvider(new MysqlConnection($connectionUri)));
+    }
+
+    public function usePgsql(string $connectionUri)
+    {
+        $this->useProvider(new PostgresqlDataProvider(new PostgresqlConnection ($connectionUri)));
     }
 }
