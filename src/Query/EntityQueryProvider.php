@@ -62,9 +62,9 @@ class EntityQueryProvider implements IQueryProvider
         return new Enumerator($entities);
     }
 
-    public function GetQueryText(Expression $expression) : string
+    public function getQueryText(Expression $expression) : string
     {
-        $translator = new EntityQueryTranslator();
+        $translator = $this->Database->DataProvider->Visitor;
         $translator->visit($expression);
         return $translator->Out;
     }
