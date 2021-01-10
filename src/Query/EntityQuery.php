@@ -52,18 +52,6 @@ class EntityQuery implements IQueryable
         return $this->Provider->GetQueryText($this->Expression);
     }
 
-    public function first()
-    {
-        $array = $this->toArray();
-        return reset($array);
-    }
-
-    public function last()
-    {
-        $array = $this->toArray();
-        return end($array);
-    }
-
     public function asEnumerable()
     {
         return new TakeEnumerable($this);
