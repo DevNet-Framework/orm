@@ -30,15 +30,14 @@ class EntityQueryProvider implements IQueryProvider
 
     public function execute(object $entityType, Expression $expression)
     {
-        $translator = $this->Database->DataProvider->Visitor;
-        $translator->visit($expression);
-        $slq = $translator->Out;
-        
         $this->Database->DataProvider->Connection->open();
-        $command = $this->Database->DataProvider->Connection->createCommand($slq);
-        if ($translator->OuterVariables)
+        $slq        = $this->getQueryText($expression);
+        $command    = $this->Database->DataProvider->Connection->createCommand($slq);
+        $variables  = $this->Database->DataProvider->Visitor->OuterVariables;
+
+        if ($variables)
         {
-            $command->addParameters($translator->OuterVariables);
+            $command->addParameters($variables);
         }
 
         $dbReader = $command->executeReader($entityType->getName());
@@ -66,6 +65,6 @@ class EntityQueryProvider implements IQueryProvider
     {
         $translator = $this->Database->DataProvider->Visitor;
         $translator->visit($expression);
-        return $translator->Out;
+        return $translator->__toString();
     }
 }
