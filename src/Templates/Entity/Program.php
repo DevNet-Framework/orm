@@ -72,7 +72,7 @@ class Program
         $context->appendLine();
         $context->appendLine("namespace {$namespace};");
         $context->appendLine();
-        $context->appendLine("use Artister\Data\Entity\IEntity;");
+        $context->appendLine("use Artister\Entity\IEntity;");
         $context->appendLine();
         $context->appendLine("class {$className} implements IEntity");
         $context->appendLine("{");
