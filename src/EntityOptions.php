@@ -19,6 +19,8 @@ use Artister\System\Exceptions\ClassException;
 
 class EntityOptions
 {
+    use \Artister\System\Extension\ExtensionTrait;
+    
     private string $ContextType = EntityContext::class;
     private IEntityDataProvider $Provider;
 
