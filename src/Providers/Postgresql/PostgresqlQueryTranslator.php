@@ -173,7 +173,7 @@ class PostgresqlQueryTranslator extends ExpressionVisitor
     {
         if (in_array($expression->Parameter->Name, $this->Parameters))
         {
-            $this->Sql[] = '"'.$expression->Property.'"';
+            $this->Sql[] = "\"{$expression->Property}\"";
         }
         else
         {
@@ -198,7 +198,7 @@ class PostgresqlQueryTranslator extends ExpressionVisitor
     {
         if ($expression->Value instanceof IQueryable)
         {
-            $this->Sql[] = "SELECT * FROM {$expression->Value->EntityType->getTableName()}";
+            $this->Sql[] = "SELECT * FROM \"{$expression->Value->EntityType->getTableName()}\"";
             $this->LastMethod = "from";
         }
         else
