@@ -30,13 +30,13 @@ class MysqlEntityPersister implements IEntityPersister
         foreach ($entry->Values as $name => $value)
         {
             $placeHolders[] = '?';
-            $culomns[] = $name;
+            $culomns[] = "`{$name}`";
             $values[] = $value;
         }
         
         $culomns = implode(', ', $culomns);
         $placeHolders = implode(', ', $placeHolders);
-        $dbCommand = $this->Connection->createCommand("INSERT INTO {$entityType->getTableName()} ($culomns) VALUES ({$placeHolders})");
+        $dbCommand = $this->Connection->createCommand("INSERT INTO `{$entityType->getTableName()}` ($culomns) VALUES ({$placeHolders})");
         $dbCommand->addParameters($values);
         $dbCommand->execute();
     }
@@ -50,13 +50,13 @@ class MysqlEntityPersister implements IEntityPersister
 
         foreach ($entry->Values as $name => $value)
         {
-            $placeHolders[] = "$name = ?";
+            $placeHolders[] = "`{$name}` = ?";
             $values[]       = $value;
         }
 
         $values[]       = $entry->Entity->$key;
         $placeHolders   = implode(', ', $placeHolders);
-        $dbCommand      = $this->Connection->createCommand("UPDATE {$entityType->getTableName()} SET {$placeHolders} WHERE {$key} = ?");
+        $dbCommand      = $this->Connection->createCommand("UPDATE `{$entityType->getTableName()}` SET {$placeHolders} WHERE {$key} = ?");
         
         $dbCommand->addParameters($values);
         $dbCommand->execute();
@@ -67,7 +67,7 @@ class MysqlEntityPersister implements IEntityPersister
         $entityType = $entry->Metadata;
         $key        = $entityType->getPrimaryKey();
         $values[]   = $entry->Entity->$key;
-        $dbCommand  = $this->Connection->createCommand("DELETE FROM {$entityType->getTableName()} WHERE {$key} = ?");
+        $dbCommand  = $this->Connection->createCommand("DELETE FROM `{$entityType->getTableName()}` WHERE {$key} = ?");
         
         $dbCommand->addParameters($values);
         $dbCommand->execute();
