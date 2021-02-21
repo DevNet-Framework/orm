@@ -48,19 +48,4 @@ class EntityOptions
     {
         $this->Provider = $provider;
     }
-
-    public function useSqlite(string $connectionUri)
-    {
-        $this->useProvider(new SqliteDataProvider(new SqlitelConnection($connectionUri)));
-    }
-
-    public function useMysql(string $connectionUri)
-    {
-        $this->useProvider(new MysqlDataProvider(new MysqlConnection($connectionUri)));
-    }
-
-    public function usePgsql(string $connectionUri)
-    {
-        $this->useProvider(new PostgresqlDataProvider(new PostgresqlConnection ($connectionUri)));
-    }
 }
