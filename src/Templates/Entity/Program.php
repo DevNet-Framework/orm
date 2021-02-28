@@ -17,10 +17,10 @@ class Program
 {
     public static function main(array $args = [])
     {
-        $rootPath = getcwd();
-        $className  = null;
-        $basePath   = "Models";
-        $namespace  = "Application";
+        $rootPath  = getcwd();
+        $className = null;
+        $basePath  = "Models";
+        $namespace = "Application";
 
         $parser = new CommandParser();
         $parser->addParameter('name');
@@ -64,8 +64,8 @@ class Program
 
     public static function createClass($path, $namespace, $className) : bool
     {
-        $namespace  = ucwords($namespace, "\\");
-        $className  = ucfirst($className);
+        $namespace = ucwords($namespace, "\\");
+        $className = ucfirst($className);
 
         $context = new StringBuilder();
         $context->appendLine("<?php");
@@ -85,13 +85,13 @@ class Program
         $context->appendLine();
         $context->appendLine("    public function __set(string \$name, \$value)");
         $context->appendLine("    {");
-        $context->appendLine("         \$this->\$name = \$value;");
+        $context->appendLine("        \$this->\$name = \$value;");
         $context->appendLine("    }");
         $context->append("}");
 
-        $myfile     = fopen($path."/".$className.".php", "w");
-        $size       = fwrite($myfile, $context->__toString());
-        $status     = fclose($myfile);
+        $myfile = fopen($path."/".$className.".php", "w");
+        $size   = fwrite($myfile, $context->__toString());
+        $status = fclose($myfile);
 
         if ($size && $status) {
             return true;
