@@ -66,15 +66,17 @@ class EntityDatabase
         $this->entry($entity)->State = EntityState::Deleted;
     }
     
-    public function save()
+    public function save() : int
     {
         $entries = $this->EntityStateManager->getEntries();
-        $this->persiste($entries);
+        $count   = $this->persiste($entries);
         $this->EntityStateManager->clearEntries();
+        return $count;
     }
 
-    public function persiste($entries)
+    public function persiste($entries) : int
     {
+        $count = 0;
         $this->DataProvider->Connection->open();
         foreach ($entries as $entityType)
         {
@@ -84,18 +86,19 @@ class EntityDatabase
                 switch ($entry->State)
                 {
                     case EntityState::Added:
-                        $this->DataProvider->Persister->insert($entry);
+                        $count += $this->DataProvider->Persister->insert($entry);
                         break;
                     case EntityState::Modified:
-                        $this->DataProvider->Persister->update($entry);
+                        $count += $this->DataProvider->Persister->update($entry);
                         break;
                     case EntityState::Deleted:
-                        $this->DataProvider->Persister->delete($entry);
+                        $count += $this->DataProvider->Persister->delete($entry);
                         break;
                 }
             }
         }
 
         $this->DataProvider->Connection->close();
+        return $count;
     }
 }

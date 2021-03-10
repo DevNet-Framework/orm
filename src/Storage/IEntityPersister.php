@@ -15,9 +15,9 @@ interface IEntityPersister
 {   
     public function __construct(DbConnection $connection);
 
-    public function insert(EntityEntry $entry);
+    public function insert(EntityEntry $entry) : int;
 
-    public function update(EntityEntry $entry);
+    public function update(EntityEntry $entry) : int;
 
-    public function delete(EntityEntry $entry);
+    public function delete(EntityEntry $entry) : int;
 }

@@ -52,7 +52,7 @@ class EntityContext
         return $this->Repositories[$entityType];
     }
 
-    public function save()
+    public function save() : int
     {
         return $this->Database->save();
     }
