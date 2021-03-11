@@ -40,30 +40,23 @@ class EntityQueryProvider implements IQueryProvider
             $command->addParameters($variables);
         }
 
+        $entities = new Enumerator();
         $dbReader = $command->executeReader($entityType->getName());
-
-        if (!$dbReader)
+        
+        if ($dbReader)
         {
-            return new Enumerator();
+            $entities = $dbReader->getIterator();
         }
-
-        $entities = [];
-        foreach ($dbReader as $entity)
-        {
-            $entities[] = $entity;
-            $entry = $this->Database->EntityStateManager->getEntry($entity);
-            if ($entry)
-            {
-                $this->Database->EntityStateManager->addEntry($entity);
-            }
-        }
-
-        return new Enumerator($entities);
+        
+        $this->Database->DataProvider->Connection->close();
+        
+        return $entities;
     }
 
     public function getQueryText(Expression $expression) : string
     {
         $translator = $this->Database->DataProvider->Visitor;
+        $translator->Sql = [];
         $translator->visit($expression);
         return $translator->__toString();
     }
