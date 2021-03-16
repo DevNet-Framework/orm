@@ -16,8 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Artister\\Entity\\" : "src/",
-            "Artister\\Templates\\" : "src/Templates/"
+            "Artister\\Entity\\" : "src/"
         }
     }
 }
