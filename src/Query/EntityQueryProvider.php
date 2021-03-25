@@ -57,6 +57,7 @@ class EntityQueryProvider implements IQueryProvider
     {
         $translator = $this->Database->DataProvider->Visitor;
         $translator->Sql = [];
+        $translator->OuterVariables = [];
         $translator->visit($expression);
         return $translator->__toString();
     }
