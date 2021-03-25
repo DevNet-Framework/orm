@@ -40,7 +40,14 @@ class EntityFinder
         $query  = new EntityQuery($entityType, $this->Database->QueryProvider);
         $key    = $entityType->getPrimaryKey();
 
-        return $query->where(fn($entity) => $entity->$key ==  $id)->first();
+        $entity = $query->where(fn($entity) => $entity->$key == $id)->first();
+
+        if ($entity)
+        {
+            $this->load($entity);
+        }
+
+        return $entity;
     }
 
     public function load(IEntity $entity)
