@@ -55,7 +55,14 @@ class EntityCollection implements IList
 
     public function getIterator() : Enumerator
     {
-        return $this->Database->Finder->query($this->Navigation, $this->KeyValue);
+        $entities = $this->Database->Finder->query($this->Navigation, $this->KeyValue);
+
+        foreach ($entities as $entity)
+        {
+            $this->Database->Finder->load($entity);
+        }
+
+        return $entities;
     }
 
     public function first()
