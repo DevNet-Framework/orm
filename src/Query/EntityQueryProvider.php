@@ -31,26 +31,37 @@ class EntityQueryProvider implements IQueryProvider
     public function execute(object $entityType, Expression $expression)
     {
         $this->Database->DataProvider->Connection->open();
-        $slq        = $this->getQueryText($expression);
-        $command    = $this->Database->DataProvider->Connection->createCommand($slq);
-        $variables  = $this->Database->DataProvider->Visitor->OuterVariables;
+        $slq       = $this->getQueryText($expression);
+        $command   = $this->Database->DataProvider->Connection->createCommand($slq);
+        $variables = $this->Database->DataProvider->Visitor->OuterVariables;
 
         if ($variables)
         {
             $command->addParameters($variables);
         }
 
-        $entities = new Enumerator();
+        $entities = [];
         $dbReader = $command->executeReader($entityType->getName());
         
         if ($dbReader)
         {
-            $entities = $dbReader->getIterator();
+            while ($dbReader->read())
+            {
+                $entity = $entityType->getName();
+                $entity = new $entity();
+
+                foreach ($entityType->Properties as $property)
+                {
+                    $propertyName = $property->PropertyInfo->getName();
+                    $entity->$propertyName = $dbReader->getValue($property->Column['Name']);
+                }
+
+                $entities[] = $entity;
+            }
         }
         
         $this->Database->DataProvider->Connection->close();
-        
-        return $entities;
+        return new Enumerator($entities);
     }
 
     public function getQueryText(Expression $expression) : string
