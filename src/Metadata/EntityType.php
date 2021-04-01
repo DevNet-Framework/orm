@@ -11,6 +11,7 @@ namespace Artister\Entity\Metadata;
 use Artister\Entity\IEntity;
 use Artister\System\Collections\IList;
 use Reflector;
+use DateTime;
 
 class EntityType
 {
@@ -18,7 +19,7 @@ class EntityType
     private string $EntityName;
     private Reflector $EntityInfo;
     private string $TableName;
-    private string $PropertyKey  = 'key';
+    private string $PropertyKey = 'key';
     private array $ForeignKeys  = [];
     private array $Properties   = [];
     private array $Navigations  = [];
@@ -37,16 +38,17 @@ class EntityType
             {
                 $propertyName = $PropertyInfo->getName();
                 $propertyType = $PropertyInfo->getType()->getName();
-                if (in_array(strtolower($propertyType), $scalarTypes))
+                if (in_array(strtolower($propertyType), $scalarTypes) || $propertyType === DateTime::class)
                 {
                     $this->Properties[$propertyName] = new EntityProperty($this, $PropertyInfo);
-                    if (strtolower($propertyName) == 'id'){
+                    if (strtolower($propertyName) === 'id')
+                    {
                         $this->PropertyKey = $propertyName;
                     }
                 }
                 else
                 {
-                    if ($propertyType == IList::class)
+                    if ($propertyType === IList::class)
                     {
                         // later add conventional code here
                         $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo); //new EntityNavigation($this);
@@ -98,7 +100,7 @@ class EntityType
         {
             $propertyName = $this->ForeignKeys[$entityReference];
             $property = $this->getProperty($propertyName);
-            return $property->Column['Name'];
+            return $property->Column['Name'] ?? null;
         }
         
         return null;
