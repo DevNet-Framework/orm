@@ -11,6 +11,7 @@ namespace Artister\Entity\Tracking;
 use Artister\Entity\IEntity;
 use Artister\Entity\Metadata\EntityType;
 use Artister\System\Exceptions\PropertyException;
+use DateTime;
 
 class EntityEntry
 {
@@ -36,7 +37,12 @@ class EntityEntry
                 $property->PropertyInfo->setAccessible(true);
                 if ($property->PropertyInfo->isInitialized($this->Entity))
                 {
-                    $this->Values[$propertyName] = $property->PropertyInfo->getValue($this->Entity);
+                    $value = $property->PropertyInfo->getValue($this->Entity);
+                    if ($value instanceof DateTime)
+                    {
+                        $value = $value->format('y-m-d h:m:s');
+                    }
+                    $this->Values[$propertyName] = $value;
                 }
                 else
                 {

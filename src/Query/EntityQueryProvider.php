@@ -13,6 +13,7 @@ use Artister\System\Linq\IQueryable;
 use Artister\System\Linq\IQueryProvider;
 use Artister\System\Compiler\Expressions\Expression;
 use Artister\System\Collections\Enumerator;
+use DateTime;
 
 class EntityQueryProvider implements IQueryProvider
 {
@@ -53,7 +54,17 @@ class EntityQueryProvider implements IQueryProvider
                 foreach ($entityType->Properties as $property)
                 {
                     $propertyName = $property->PropertyInfo->getName();
-                    $entity->$propertyName = $dbReader->getValue($property->Column['Name']);
+                    $propertyType = $property->PropertyInfo->getType();
+
+                    if ($propertyType == DateTime::class)
+                    {
+                        $dateTime = new DateTime($dbReader->getValue($property->Column['Name']));
+                        $entity->$propertyName = $dateTime;
+                    }
+                    else
+                    {
+                        $entity->$propertyName = $dbReader->getValue($property->Column['Name']);
+                    }
                 }
 
                 $entities[] = $entity;
