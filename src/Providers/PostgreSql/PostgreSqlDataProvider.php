@@ -24,8 +24,8 @@ class PostgreSqlDataProvider implements IEntityDataProvider
     public function __construct(DbConnection $connection)
     {
         $this->Connection = $connection;
-        $this->Persister  = new PostgresqlEntityPersister($connection);
-        $this->Visitor    = new PostgresqlQueryTranslator();
+        $this->Persister  = new PostgreSqlEntityPersister($connection);
+        $this->Visitor    = new PostgreSqlQueryTranslator();
     }
 
     public function __get(string $name)

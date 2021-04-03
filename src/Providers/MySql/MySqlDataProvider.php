@@ -24,8 +24,8 @@ class MySqlDataProvider implements IEntityDataProvider
     public function __construct(DbConnection $connection)
     {
         $this->Connection = $connection;
-        $this->Persister  = new MysqlEntityPersister($connection);
-        $this->Visitor    = new MysqlQueryTranslator();
+        $this->Persister  = new MySqlEntityPersister($connection);
+        $this->Visitor    = new MySqlQueryTranslator();
     }
 
     public function __get(string $name)
