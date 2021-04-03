@@ -55,6 +55,7 @@ class EntityQueryProvider implements IQueryProvider
                 {
                     $propertyName = $property->PropertyInfo->getName();
                     $propertyType = $property->PropertyInfo->getType();
+                    $propertyType = $propertyType ? $propertyType->getName() : null;
 
                     if ($propertyType == DateTime::class)
                     {
