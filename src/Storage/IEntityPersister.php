@@ -3,13 +3,13 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Storage;
+namespace DevNet\Entity\Storage;
 
-use Artister\Entity\Tracking\EntityEntry;
-use Artister\System\Database\DbConnection;
+use DevNet\Entity\Tracking\EntityEntry;
+use DevNet\System\Database\DbConnection;
 
 interface IEntityPersister
 {   

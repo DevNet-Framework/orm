@@ -3,15 +3,15 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Storage;
+namespace DevNet\Entity\Storage;
 
-use Artister\Entity\Storage\IEntityPersister;
-use Artister\System\Database\DbConnection;
-use Artister\System\Compiler\ExpressionVisitor;
-use Artister\System\Exceptions\PropertyException;
+use DevNet\Entity\Storage\IEntityPersister;
+use DevNet\System\Database\DbConnection;
+use DevNet\System\Compiler\ExpressionVisitor;
+use DevNet\System\Exceptions\PropertyException;
 
 interface IEntityDataProvider
 {   

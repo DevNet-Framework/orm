@@ -3,20 +3,20 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Storage;
+namespace DevNet\Entity\Storage;
 
-use Artister\System\Database\DbConnection;
-use Artister\Entity\EntityOptions;
-use Artister\Entity\Metadata\EntityModel;
-use Artister\Entity\Storage\IEntityPersister;
-use Artister\Entity\Tracking\EntityStateManager;
-use Artister\Entity\Tracking\EntityState;
-use Artister\Entity\Query\EntityQueryProvider;
-use Artister\Entity\Internal\EntityFinder;
-use Artister\Entity\IEntity;
+use DevNet\System\Database\DbConnection;
+use DevNet\Entity\EntityOptions;
+use DevNet\Entity\Metadata\EntityModel;
+use DevNet\Entity\Storage\IEntityPersister;
+use DevNet\Entity\Tracking\EntityStateManager;
+use DevNet\Entity\Tracking\EntityState;
+use DevNet\Entity\Query\EntityQueryProvider;
+use DevNet\Entity\Internal\EntityFinder;
+use DevNet\Entity\IEntity;
 
 class EntityDatabase
 {
@@ -28,11 +28,11 @@ class EntityDatabase
 
     public function __construct(EntityOptions $options, EntityModel $model)
     {
-        $this->Model                    = $model;
-        $this->DataProvider             = $options->Provider;
-        $this->EntityStateManager       = new EntityStateManager($model);
-        $this->QueryProvider            = new EntityQueryProvider($this);
-        $this->Finder                   = new EntityFinder($this);
+        $this->Model              = $model;
+        $this->DataProvider       = $options->Provider;
+        $this->EntityStateManager = new EntityStateManager($model);
+        $this->QueryProvider      = new EntityQueryProvider($this);
+        $this->Finder             = new EntityFinder($this);
     }
 
     public function __get(string $name)

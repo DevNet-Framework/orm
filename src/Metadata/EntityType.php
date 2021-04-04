@@ -3,13 +3,13 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Metadata;
+namespace DevNet\Entity\Metadata;
 
-use Artister\Entity\IEntity;
-use Artister\System\Collections\IList;
+use DevNet\Entity\IEntity;
+use DevNet\System\Collections\IList;
 use Reflector;
 use DateTime;
 
@@ -26,10 +26,10 @@ class EntityType
 
     public function __construct(string $entityName, EntityModel $model)
     {
-        $this->Model = $model;
+        $this->Model      = $model;
         $this->EntityName = $entityName;
         $this->EntityInfo = new \ReflectionClass($entityName);
-        $this->TableName = $this->EntityInfo->getShortName();
+        $this->TableName  = $this->EntityInfo->getShortName();
 
         $scalarTypes = ['bool', 'int', 'float', 'string'];
         foreach ($this->EntityInfo->getProperties() as $PropertyInfo)

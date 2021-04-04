@@ -3,20 +3,20 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Internal;
+namespace DevNet\Entity\Internal;
 
-use Artister\System\Linq;
-use Artister\System\Linq\IQueryable;
-use Artister\System\Collections\Enumerator;
-use Artister\Entity\IEntity;
-use Artister\Entity\Query\EntityQuery;
-use Artister\Entity\Metadata\EntityType;
-use Artister\Entity\Metadata\EntityNavigation;
-use Artister\Entity\Storage\EntityDatabase;
-use Artister\Entity\Tracking\EntityStateManager;
+use DevNet\System\Linq;
+use DevNet\System\Linq\IQueryable;
+use DevNet\System\Collections\Enumerator;
+use DevNet\Entity\IEntity;
+use DevNet\Entity\Query\EntityQuery;
+use DevNet\Entity\Metadata\EntityType;
+use DevNet\Entity\Metadata\EntityNavigation;
+use DevNet\Entity\Storage\EntityDatabase;
+use DevNet\Entity\Tracking\EntityStateManager;
 
 class EntityFinder
 {
@@ -25,8 +25,8 @@ class EntityFinder
 
     public function __construct(EntityDatabase $database)
     {
-        $this->Database             = $database;
-        $this->EntityStateManager   = $database->EntityStateManager;
+        $this->Database           = $database;
+        $this->EntityStateManager = $database->EntityStateManager;
     }
 
     public function find(EntityType $entityType, $id) : ?IEntity
@@ -39,7 +39,6 @@ class EntityFinder
 
         $query  = new EntityQuery($entityType, $this->Database->QueryProvider);
         $key    = $entityType->getPrimaryKey();
-
         $entity = $query->where(fn($entity) => $entity->$key == $id)->first();
 
         if ($entity)

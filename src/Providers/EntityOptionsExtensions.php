@@ -3,18 +3,18 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Providers;
+namespace DevNet\Entity\Providers;
 
-use Artister\Entity\EntityOptions;
-use Artister\Entity\Providers\MySql\MySqlConnection;
-use Artister\Entity\Providers\MySql\MySqlDataProvider;
-use Artister\Entity\Providers\PostgreSql\PostgreSqlConnection;
-use Artister\Entity\Providers\PostgreSql\PostgreSqlDataProvider;
-use Artister\Entity\Providers\Sqlite\SqliteDataProvider;
-use Artister\Entity\Providers\Sqlite\SqlitelConnection;
+use DevNet\Entity\EntityOptions;
+use DevNet\Entity\Providers\MySql\MySqlConnection;
+use DevNet\Entity\Providers\MySql\MySqlDataProvider;
+use DevNet\Entity\Providers\PostgreSql\PostgreSqlConnection;
+use DevNet\Entity\Providers\PostgreSql\PostgreSqlDataProvider;
+use DevNet\Entity\Providers\Sqlite\SqliteDataProvider;
+use DevNet\Entity\Providers\Sqlite\SqlitelConnection;
 
 class EntityOptionsExtensions
 {

@@ -3,10 +3,10 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Metadata;
+namespace DevNet\Entity\Metadata;
 
 use ReflectionProperty;
 
@@ -20,8 +20,8 @@ class EntityProperty
 
     public function __construct(EntityType $entityType, ReflectionProperty $propertyInfo)
     {
-        $this->Metadata = $entityType;
-        $this->PropertyInfo = $propertyInfo;
+        $this->Metadata       = $entityType;
+        $this->PropertyInfo   = $propertyInfo;
         $this->Column['Name'] = $propertyInfo->getName();
     }
 
@@ -32,8 +32,8 @@ class EntityProperty
 
     public function hasColumn(string $name, string $type = null, int $lenth = null)
     {
-        $this->Column['Name'] = $name;
-        $this->Column['Type'] = $type;
+        $this->Column['Name']  = $name;
+        $this->Column['Type']  = $type;
         $this->Column['Lenth'] = $lenth;
     }
 

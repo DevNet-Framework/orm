@@ -3,15 +3,15 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Internal;
+namespace DevNet\Entity\Internal;
 
-use Artister\Entity\Metadata\EntityNavigation;
-use Artister\Entity\Storage\EntityDatabase;
-use Artister\System\Collections\Enumerator;
-use Artister\System\Collections\IList;
+use DevNet\Entity\Metadata\EntityNavigation;
+use DevNet\Entity\Storage\EntityDatabase;
+use DevNet\System\Collections\Enumerator;
+use DevNet\System\Collections\IList;
 
 class EntityCollection implements IList
 {
@@ -25,9 +25,9 @@ class EntityCollection implements IList
         $keyValue
         )
     {
-        $this->Navigation   = $navigation;
-        $this->Database     = $database;
-        $this->KeyValue     = $keyValue;
+        $this->Navigation = $navigation;
+        $this->Database   = $database;
+        $this->KeyValue   = $keyValue;
     }
 
     public function add($entity) : void

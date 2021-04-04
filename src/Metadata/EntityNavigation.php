@@ -3,10 +3,10 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Metadata;
+namespace DevNet\Entity\Metadata;
 
 use ReflectionProperty;
 
@@ -22,8 +22,8 @@ class EntityNavigation
 
     public function __construct(EntityType $entityType, ReflectionProperty $propertyInfo)
     {
-        $this->Metadata         = $entityType;
-        $this->PropertyInfo     = $propertyInfo;
+        $this->Metadata     = $entityType;
+        $this->PropertyInfo = $propertyInfo;
     }
 
     public function __get(string $name)
@@ -33,14 +33,14 @@ class EntityNavigation
 
     public function hasMany(string $EntityReference)
     {
-        $this->MetadataReference    = $this->Metadata->Model->getEntityType($EntityReference);
-        $this->NavigationType       = 2;
+        $this->MetadataReference = $this->Metadata->Model->getEntityType($EntityReference);
+        $this->NavigationType    = 2;
     }
 
     public function hasOne(string $EntityReference)
     {
-        $this->MetadataReference    = $this->Metadata->Model->getEntityType($EntityReference);
-        $this->NavigationType       = 1;
+        $this->MetadataReference = $this->Metadata->Model->getEntityType($EntityReference);
+        $this->NavigationType    = 1;
     }
 
     public function getForeignKey() : ?string

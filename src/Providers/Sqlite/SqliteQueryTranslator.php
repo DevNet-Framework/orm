@@ -3,15 +3,15 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Providers\Sqlite;
+namespace DevNet\Entity\Providers\Sqlite;
 
-use Artister\System\Compiler\ExpressionVisitor;
-use Artister\System\Compiler\ExpressionStringBuilder;
-use Artister\System\Compiler\Expressions\Expression;
-use Artister\System\Linq\IQueryable;
+use DevNet\System\Compiler\ExpressionVisitor;
+use DevNet\System\Compiler\ExpressionStringBuilder;
+use DevNet\System\Compiler\Expressions\Expression;
+use DevNet\System\Linq\IQueryable;
 
 class SqliteQueryTranslator extends ExpressionVisitor
 {

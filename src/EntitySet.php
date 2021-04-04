@@ -3,14 +3,14 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity;
+namespace DevNet\Entity;
 
-use Artister\Entity\IEntity;
-use Artister\Entity\Query\EntityQuery;
-use Artister\Entity\Storage\EntityDatabase;
+use DevNet\Entity\IEntity;
+use DevNet\Entity\Query\EntityQuery;
+use DevNet\Entity\Storage\EntityDatabase;
 
 class EntitySet extends EntityQuery
 {

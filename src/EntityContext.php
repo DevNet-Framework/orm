@@ -3,14 +3,14 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity;
+namespace DevNet\Entity;
 
-use Artister\Entity\Metadata\EntityModel;
-use Artister\Entity\Storage\EntityDatabase;
-use Artister\System\Database\DbTransaction;
+use DevNet\Entity\Metadata\EntityModel;
+use DevNet\Entity\Storage\EntityDatabase;
+use DevNet\System\Database\DbTransaction;
 
 class EntityContext
 {

@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Artister\\Entity\\" : "src/"
+            "DevNet\\Entity\\" : "src/"
         }
     }
 }

@@ -3,13 +3,13 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Tracking;
+namespace DevNet\Entity\Tracking;
 
-use Artister\Entity\IEntity;
-use Artister\Entity\Metadata\EntityModel;
+use DevNet\Entity\IEntity;
+use DevNet\Entity\Metadata\EntityModel;
 
 class EntityStateManager
 {
@@ -25,7 +25,7 @@ class EntityStateManager
     {
         $entityName = get_class($entity);
         $entityType = $this->Model->getEntityType($entityName);
-        $entry = $this->getEntry($entity);
+        $entry      = $this->getEntry($entity);
         if ($entry)
         {
             return $entry;

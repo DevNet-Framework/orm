@@ -3,16 +3,16 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Query;
+namespace DevNet\Entity\Query;
 
-use Artister\Entity\Storage\EntityDatabase;
-use Artister\System\Linq\IQueryable;
-use Artister\System\Linq\IQueryProvider;
-use Artister\System\Compiler\Expressions\Expression;
-use Artister\System\Collections\Enumerator;
+use DevNet\Entity\Storage\EntityDatabase;
+use DevNet\System\Linq\IQueryable;
+use DevNet\System\Linq\IQueryProvider;
+use DevNet\System\Compiler\Expressions\Expression;
+use DevNet\System\Collections\Enumerator;
 use DateTime;
 
 class EntityQueryProvider implements IQueryProvider

@@ -3,17 +3,17 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity;
+namespace DevNet\Entity;
 
-use Artister\Entity\Storage\IEntityDataProvider;
-use Artister\System\Exceptions\ClassException;
+use DevNet\Entity\Storage\IEntityDataProvider;
+use DevNet\System\Exceptions\ClassException;
 
 class EntityOptions
 {
-    use \Artister\System\Extension\ExtensionTrait;
+    use \DevNet\System\Extension\ExtensionTrait;
     
     private string $ContextType = EntityContext::class;
     private IEntityDataProvider $Provider;

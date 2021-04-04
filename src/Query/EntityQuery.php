@@ -3,23 +3,23 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Query;
+namespace DevNet\Entity\Query;
 
-use Artister\System\Collections\Enumerator;
-use Artister\System\Linq\Enumerables\TakeEnumerable;
-use Artister\System\Compiler\Expressions\Expression;
-use Artister\System\Linq\IQueryProvider;
-use Artister\System\Linq\IQueryable;
+use DevNet\System\Collections\Enumerator;
+use DevNet\System\Linq\Enumerables\TakeEnumerable;
+use DevNet\System\Compiler\Expressions\Expression;
+use DevNet\System\Linq\IQueryProvider;
+use DevNet\System\Linq\IQueryable;
 
 /**
  * create expression from method and passe it to queryProvider.
  */
 class EntityQuery implements IQueryable
 {
-    use \Artister\System\Extension\ExtensionTrait;
+    use \DevNet\System\Extension\ExtensionTrait;
 
     private object $EntityType;
     private IQueryProvider $Provider;
@@ -27,9 +27,9 @@ class EntityQuery implements IQueryable
 
     public function __construct(object $entityType, IQueryProvider $provider, Expression $expression = null)
     {
-        $this->EntityType       = $entityType;
-        $this->Provider         = $provider;
-        $this->Expression       = ($expression == null) ? Expression::constant($this) : $expression;
+        $this->EntityType = $entityType;
+        $this->Provider   = $provider;
+        $this->Expression = ($expression == null) ? Expression::constant($this) : $expression;
     }
 
     public function __get(string $name)

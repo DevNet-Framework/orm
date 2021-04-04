@@ -3,14 +3,14 @@
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
  * @license     MIT License. For full license information see LICENSE file in the project root.
- * @link        https://github.com/artister
+ * @link        https://github.com/DevNet-Framework
  */
 
-namespace Artister\Entity\Providers\PostgreSql;
+namespace DevNet\Entity\Providers\PostgreSql;
 
-use Artister\Entity\Storage\IEntityPersister;
-use Artister\Entity\Tracking\EntityEntry;
-use Artister\System\Database\DbConnection;
+use DevNet\Entity\Storage\IEntityPersister;
+use DevNet\Entity\Tracking\EntityEntry;
+use DevNet\System\Database\DbConnection;
 
 class PostgreSqlEntityPersister implements IEntityPersister
 {   
