@@ -11,8 +11,8 @@ namespace DevNet\Entity\Query;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Linq\IQueryable;
 use DevNet\System\Linq\IQueryProvider;
-use DevNet\System\Compiler\Expressions\Expression;
 use DevNet\System\Collections\Enumerator;
+use DevNet\System\Compiler\Expressions\Expression;
 use DateTime;
 
 class EntityQueryProvider implements IQueryProvider
@@ -54,18 +54,35 @@ class EntityQueryProvider implements IQueryProvider
                 foreach ($entityType->Properties as $property)
                 {
                     $propertyName = $property->PropertyInfo->getName();
-                    $propertyType = $property->PropertyInfo->getType();
-                    $propertyType = $propertyType ? $propertyType->getName() : null;
+                    $value = null;
 
-                    if ($propertyType == DateTime::class)
+                    if ($property->PropertyInfo->hasType())
                     {
-                        $dateTime = new DateTime($dbReader->getValue($property->Column['Name']));
-                        $entity->$propertyName = $dateTime;
+                        $propertyType = $property->PropertyInfo->getType();
+
+                        if ($propertyType == DateTime::class)
+                        {
+                            $value = new DateTime($dbReader->getValue($property->Column['Name']));
+                        }
+                        else if ($propertyType == "bool")
+                        {
+                            $value = (bool)$dbReader->getValue($property->Column['Name']);
+                        }
+                        else if ($propertyType == "int")
+                        {
+                            $value = (int)$dbReader->getValue($property->Column['Name']);
+                        }
+                        else if ($propertyType == "float")
+                        {
+                            $value = (float)$dbReader->getValue($property->Column['Name']);
+                        }
+                        else
+                        {
+                            $value = $dbReader->getValue($property->Column['Name']);
+                        }
                     }
-                    else
-                    {
-                        $entity->$propertyName = $dbReader->getValue($property->Column['Name']);
-                    }
+
+                    $entity->$propertyName = $value;
                 }
 
                 $entities[] = $entity;
