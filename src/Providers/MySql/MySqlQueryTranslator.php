@@ -177,6 +177,8 @@ class MySqlQueryTranslator extends ExpressionVisitor
         }
         else
         {
+            $property = $name = $expression->Property;
+            $this->OuterVariables[] = $expression->Parameter->Value->$property;
             $this->Sql[] = "?";
         }
     }
