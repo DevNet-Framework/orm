@@ -177,6 +177,8 @@ class SqliteQueryTranslator extends ExpressionVisitor
         }
         else
         {
+            $property = $expression->Property;
+            $this->OuterVariables[] = $expression->Parameter->Value->$property;
             $this->Sql[] = "?";
         }
     }
