@@ -8,13 +8,16 @@
 
 namespace DevNet\Entity\Providers\PostgreSql;
 
+use DevNet\Entity\Metadata\EntityType;
 use DevNet\System\Compiler\ExpressionVisitor;
 use DevNet\System\Compiler\ExpressionStringBuilder;
 use DevNet\System\Compiler\Expressions\Expression;
+use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\Linq\IQueryable;
 
 class PostgreSqlQueryTranslator extends ExpressionVisitor
 {
+    private EntityType $EntityType;
     public string $Method         = '';
     public string $LastMethod     = '';
     private array $Parameters     = [];
@@ -173,7 +176,12 @@ class PostgreSqlQueryTranslator extends ExpressionVisitor
     {
         if (in_array($expression->Parameter->Name, $this->Parameters))
         {
-            $this->Sql[] = "\"{$expression->Property}\"";
+            $propertyType = $this->EntityType->getProperty($expression->Property);
+            if (!$propertyType)
+            {
+                throw new PropertyException("undefined property {$this->EntityType->EntityName}::{$expression->Property}");
+            }
+            $this->Sql[] = "\"{$propertyType->Column['Name']}\"";
         }
         else
         {
@@ -200,7 +208,8 @@ class PostgreSqlQueryTranslator extends ExpressionVisitor
     {
         if ($expression->Value instanceof IQueryable)
         {
-            $this->Sql[] = "SELECT * FROM \"{$expression->Value->EntityType->getTableName()}\"";
+            $this->EntityType = $expression->Value->EntityType;
+            $this->Sql[] = "SELECT * FROM \"{$this->EntityType->getTableName()}\"";
             $this->LastMethod = "from";
         }
         else
