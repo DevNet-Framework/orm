@@ -17,27 +17,20 @@ class EntityTypeBuilder
         $this->Metadata = $entityType;
     }
 
-    public function toTable(string $name)
+    public function toTable(string $tableName)
     {
-        $this->Metadata->setTableName($name);
+        $this->Metadata->setTableName($tableName);
         return $this;
     }
 
     public function property(string $propertyName)
     {
-        $property = $this->Metadata->getProperty($propertyName);
-
-        if ($property)
-        {
-            return $property;
-        }
-
-        throw new \Exception("Property Dose not exist");
+        return $this->Metadata->getProperty($propertyName);
     }
 
-    public function hasKey(string $key)
+    public function hasKey(string $propertyName)
     {
-        $this->Metadata->setPrimaryKey($key);
+        $this->Metadata->setPrimaryKey($propertyName);
         return $this;
     }
 
@@ -50,11 +43,6 @@ class EntityTypeBuilder
     public function hasMany(string $navigationName, string $EntityReference)
     {
         $navigation = $this->Metadata->getNavigation($navigationName);
-        
-        if (!$navigation)
-        {
-            throw new \Exception("Navigation Property {$navigationName} dose not exist or it's not of IList type");
-        }
 
         $navigation->hasMany($EntityReference);
         return $this;
@@ -63,11 +51,6 @@ class EntityTypeBuilder
     public function hasOne(string $navigationName, string $entityReference)
     {
         $navigation = $this->Metadata->getNavigation($navigationName);
-        
-        if (!$navigation)
-        {
-            throw new \Exception("Navigation Property {$navigationName} dose not exist or it's not of IEntity type");
-        }
 
         $navigation->hasOne($entityReference);
         return $this;

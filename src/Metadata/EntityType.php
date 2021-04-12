@@ -10,6 +10,8 @@ namespace DevNet\Entity\Metadata;
 
 use DevNet\Entity\IEntity;
 use DevNet\System\Collections\IList;
+use DevNet\System\Exceptions\ClassException;
+use DevNet\System\Exceptions\PropertyException;
 use Reflector;
 use DateTime;
 
@@ -19,7 +21,7 @@ class EntityType
     private string $EntityName;
     private Reflector $EntityInfo;
     private string $TableName;
-    private string $PropertyKey = 'key';
+    private string $PropertyKey = 'Id';
     private array $ForeignKeys  = [];
     private array $Properties   = [];
     private array $Navigations  = [];
@@ -96,24 +98,21 @@ class EntityType
 
     public function getForeignKey(string $entityReference) : ?string
     {
-        if (isset($this->ForeignKeys[$entityReference]))
-        {
-            $propertyName = $this->ForeignKeys[$entityReference];
-            $property = $this->getProperty($propertyName);
-            return $property->Column['Name'] ?? null;
-        }
-        
-        return null;
+        $propertyName = $this->ForeignKeys[$entityReference] ?? throw new \Exception("Entity {$this->EntityName} Has no relation with {$entityReference}");
+        $propertyName = $this->ForeignKeys[$entityReference];
+        $property     = $this->getProperty($propertyName);
+
+        return $property->Column['Name'] ?? null;
     }
 
     public function getProperty(string $propertyName)
     {
-        return $this->Properties[$propertyName] ?? null;
+        return $this->Properties[$propertyName] ?? throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
     }
 
     public function getNavigation(string $navigationName)
     {
-        return $this->Navigations[$navigationName] ?? null;
+        return $this->Navigations[$navigationName] ?? throw new PropertyException("Undefined property {$this->EntityName}::{$navigationName}");
     }
 
     public function setTableName(string $name)
@@ -123,6 +122,11 @@ class EntityType
 
     public function setPrimaryKey(string $propertyName)
     {
+        if (!property_exists($this->EntityName, $propertyName))
+        {
+            throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
+        }
+        
         $property = $this->getProperty($propertyName);
         if ($property)
         {
@@ -132,6 +136,16 @@ class EntityType
 
     public function addForeignKey(string $propertyName, string $entityReference)
     {
+        if (!property_exists($this->EntityName, $propertyName))
+        {
+            throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
+        }
+
+        if (!class_exists($entityReference))
+        {
+            throw new ClassException("Class {$entityReference} not found");
+        }
+
         $this->ForeignKeys[$entityReference] = $propertyName;
     }
 }
