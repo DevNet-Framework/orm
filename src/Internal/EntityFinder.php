@@ -52,15 +52,14 @@ class EntityFinder
     public function load(IEntity $entity)
     {
         $this->Database->attach($entity);
-
+        
         $entityType = $this->Database->Model->getEntityType(get_class($entity));
-        $key = $entityType->PropertyKey;
-
         foreach ($entityType->Navigations as $navigation)
         {
             $navigation->PropertyInfo->setAccessible(true);
             if ($navigation->NavigationType == 2)
             {
+                $key = $entityType->getPrimaryKey();
                 $navigation->PropertyInfo->setValue($entity, new EntityCollection($navigation, $this->Database, $entity->$key));
             }
             else if ($navigation->NavigationType == 1)
@@ -73,6 +72,7 @@ class EntityFinder
                 }
                 else
                 {
+                    $key = $entityType->getPrimaryKey();
                     $childEntity = $this->query($navigation, $entity->$key)->current();
                     if ($childEntity)
                     {
