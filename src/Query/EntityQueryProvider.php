@@ -53,16 +53,18 @@ class EntityQueryProvider implements IQueryProvider
 
                 foreach ($entityType->Properties as $property)
                 {
-                    $propertyName = $property->PropertyInfo->getName();
                     $value = null;
-
+                    $propertyName = $property->PropertyInfo->getName();
                     if ($property->PropertyInfo->hasType())
                     {
-                        $propertyType = $property->PropertyInfo->getType();
-
+                        $propertyType = $property->PropertyInfo->getType()->getName();
                         if ($propertyType == DateTime::class)
                         {
-                            $value = new DateTime($dbReader->getValue($property->Column['Name']));
+                            $date = $dbReader->getValue($property->Column['Name']);
+                            if ($date)
+                            {
+                                $value = new DateTime($date);
+                            }
                         }
                         else if ($propertyType == "bool")
                         {
