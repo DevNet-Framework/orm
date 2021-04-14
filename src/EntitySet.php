@@ -38,10 +38,15 @@ class EntitySet extends EntityQuery
         $this->Database->remove($entity);
     }
 
-    public function create()
+    public function update(IEntity $entity) : void
+    {
+        $this->Database->attach($entity);
+    }
+
+    public function create() : IEntity
     {
         $entityName = $this->EntityType->getName();
-        $entity = new $entityName();
+        $entity     = new $entityName();
         $this->add($entity);
         return $entity;
     }
