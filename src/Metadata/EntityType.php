@@ -98,21 +98,36 @@ class EntityType
 
     public function getForeignKey(string $entityReference) : ?string
     {
-        $propertyName = $this->ForeignKeys[$entityReference] ?? throw new \Exception("Entity {$this->EntityName} Has no relation with {$entityReference}");
-        $propertyName = $this->ForeignKeys[$entityReference];
-        $property     = $this->getProperty($propertyName);
+        $propertyName = $this->ForeignKeys[$entityReference] ?? null;
+        if (!$propertyName)
+        {
+            throw new \Exception("Entity {$this->EntityName} Has no relation with {$entityReference}");
+        }
 
+        $property = $this->getProperty($propertyName);
         return $property->Column['Name'] ?? null;
     }
 
     public function getProperty(string $propertyName)
     {
-        return $this->Properties[$propertyName] ?? throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
+        $propery = $this->Properties[$propertyName] ?? null;
+        if (!$propery)
+        {
+            throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
+        }
+
+        return $propery;
     }
 
     public function getNavigation(string $navigationName)
     {
-        return $this->Navigations[$navigationName] ?? throw new PropertyException("Undefined property {$this->EntityName}::{$navigationName}");
+        $navigation = $this->Navigations[$navigationName] ?? null;
+        if(!$navigation)
+        {
+            throw new PropertyException("Undefined property {$this->EntityName}::{$navigationName}");
+        }
+
+        return $navigation;
     }
 
     public function setTableName(string $name)
