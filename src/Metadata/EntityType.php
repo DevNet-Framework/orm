@@ -18,8 +18,8 @@ use DateTime;
 class EntityType
 {
     private EntityModel $Model;
-    private string $EntityName;
     private Reflector $EntityInfo;
+    private string $EntityName;
     private string $TableName;
     private string $PropertyKey = 'Id';
     private array $ForeignKeys  = [];
@@ -101,7 +101,7 @@ class EntityType
         $propertyName = $this->ForeignKeys[$entityReference] ?? null;
         if (!$propertyName)
         {
-            throw new \Exception("Entity {$this->EntityName} Has no relation with {$entityReference}");
+            return null;
         }
 
         $property = $this->getProperty($propertyName);

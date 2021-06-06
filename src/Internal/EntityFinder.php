@@ -10,7 +10,6 @@ namespace DevNet\Entity\Internal;
 
 use DevNet\System\Linq;
 use DevNet\System\Linq\IQueryable;
-use DevNet\System\Collections\Enumerator;
 use DevNet\Entity\IEntity;
 use DevNet\Entity\Query\EntityQuery;
 use DevNet\Entity\Metadata\EntityType;
@@ -73,7 +72,7 @@ class EntityFinder
                 else
                 {
                     $key = $entityType->getPrimaryKey();
-                    $childEntity = $this->query($navigation, $entity->$key)->current();
+                    $childEntity = $this->query($navigation, $entity->$key)->first();
                     if ($childEntity)
                     {
                         $navigation->PropertyInfo->setValue($entity, $childEntity);
@@ -83,11 +82,11 @@ class EntityFinder
         }
     }
 
-    public function query(EntityNavigation $navigation, $keyValue) : Enumerator
+    public function query(EntityNavigation $navigation, $keyValue) : IQueryable
     {
         $query      = new EntityQuery($navigation->MetadataReference, $this->Database->QueryProvider);
         $foreignKey = $navigation->getForeignKey();
 
-        return $query->where(fn($entity) => $entity->$foreignKey ==  $keyValue)->getIterator();
+        return $query->where(fn($entity) => $entity->$foreignKey ==  $keyValue);
     }
 }
