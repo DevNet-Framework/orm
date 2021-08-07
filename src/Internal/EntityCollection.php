@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -23,29 +24,26 @@ class EntityCollection implements IList
         EntityNavigation $navigation,
         EntityDatabase $database,
         $keyValue
-        )
-    {
+    ) {
         $this->Navigation = $navigation;
         $this->Database   = $database;
         $this->KeyValue   = $keyValue;
     }
 
-    public function add($entity) : void
+    public function add($entity): void
     {
         $this->Database->add($entity);
     }
 
-    public function remove($entity) : void
+    public function remove($entity): void
     {
         $this->Database->remove($entity);
     }
 
-    public function contains($entity) : bool
+    public function contains($entity): bool
     {
-        foreach ($this as $entity)
-        {
-            if ($entity == $entity)
-            {
+        foreach ($this as $entity) {
+            if ($entity == $entity) {
                 return true;
             }
         }
@@ -53,12 +51,11 @@ class EntityCollection implements IList
         return false;
     }
 
-    public function getIterator() : Enumerator
+    public function getIterator(): Enumerator
     {
         $entities = $this->Database->Finder->query($this->Navigation, $this->KeyValue)->getIterator();
 
-        foreach ($entities as $entity)
-        {
+        foreach ($entities as $entity) {
             $this->Database->Finder->load($entity);
         }
 
@@ -67,22 +64,20 @@ class EntityCollection implements IList
 
     public function first()
     {
-        foreach ($this->getIterator() as $element)
-        {
+        foreach ($this->getIterator() as $element) {
             return $element;
         }
     }
 
     public function last()
     {
-        foreach ($this->getIterator() as $element)
-        {
+        foreach ($this->getIterator() as $element) {
             $last = $element;
         }
         return $last;
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
         return $this->getIterator()->toArray();
     }
