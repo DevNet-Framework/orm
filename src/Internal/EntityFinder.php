@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -28,20 +29,18 @@ class EntityFinder
         $this->EntityStateManager = $database->EntityStateManager;
     }
 
-    public function find(EntityType $entityType, $id) : ?IEntity
+    public function find(EntityType $entityType, $id): ?IEntity
     {
         $entry = $this->EntityStateManager->getEntry($entityType->getName(), $id);
-        if ($entry)
-        {
+        if ($entry) {
             return $entry->Entity;
         }
 
         $query  = new EntityQuery($entityType, $this->Database->QueryProvider);
         $key    = $entityType->getPrimaryKey();
-        $entity = $query->where(fn($entity) => $entity->$key == $id)->first();
+        $entity = $query->where(fn ($entity) => $entity->$key == $id)->first();
 
-        if ($entity)
-        {
+        if ($entity) {
             $this->load($entity);
         }
 
@@ -51,30 +50,22 @@ class EntityFinder
     public function load(IEntity $entity)
     {
         $this->Database->attach($entity);
-        
+
         $entityType = $this->Database->Model->getEntityType(get_class($entity));
-        foreach ($entityType->Navigations as $navigation)
-        {
+        foreach ($entityType->Navigations as $navigation) {
             $navigation->PropertyInfo->setAccessible(true);
-            if ($navigation->NavigationType == 2)
-            {
+            if ($navigation->NavigationType == 2) {
                 $key = $entityType->getPrimaryKey();
                 $navigation->PropertyInfo->setValue($entity, new EntityCollection($navigation, $this->Database, $entity->$key));
-            }
-            else if ($navigation->NavigationType == 1)
-            {
+            } else if ($navigation->NavigationType == 1) {
                 $foreignKey = $navigation->Metadata->getForeignKey($navigation->MetadataReference->getName());
-                if ($foreignKey)
-                {
+                if ($foreignKey) {
                     $ParentEntity = $this->find($navigation->MetadataReference, $entity->$foreignKey);
                     $navigation->PropertyInfo->setValue($entity, $ParentEntity);
-                }
-                else
-                {
+                } else {
                     $key = $entityType->getPrimaryKey();
                     $childEntity = $this->query($navigation, $entity->$key)->first();
-                    if ($childEntity)
-                    {
+                    if ($childEntity) {
                         $navigation->PropertyInfo->setValue($entity, $childEntity);
                     }
                 }
@@ -82,11 +73,11 @@ class EntityFinder
         }
     }
 
-    public function query(EntityNavigation $navigation, $keyValue) : IQueryable
+    public function query(EntityNavigation $navigation, $keyValue): IQueryable
     {
         $query      = new EntityQuery($navigation->MetadataReference, $this->Database->QueryProvider);
         $foreignKey = $navigation->getForeignKey();
 
-        return $query->where(fn($entity) => $entity->$foreignKey ==  $keyValue);
+        return $query->where(fn ($entity) => $entity->$foreignKey == $keyValue);
     }
 }
