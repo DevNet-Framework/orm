@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -32,8 +33,7 @@ class EntityModel
 
     public function getEntityType(string $entityName)
     {
-        if (isset($this->EntityModel[$entityName]))
-        {
+        if (isset($this->EntityModel[$entityName])) {
             return $this->EntityModel[$entityName];
         }
 
