@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -11,7 +12,7 @@ namespace DevNet\Entity\Metadata;
 use ReflectionProperty;
 
 class EntityNavigation
-{   
+{
     const NavigationReference  = 1;
     const NavigationCollection = 2;
 
@@ -43,7 +44,7 @@ class EntityNavigation
         $this->NavigationType    = 1;
     }
 
-    public function getForeignKey() : ?string
+    public function getForeignKey(): ?string
     {
         return $this->MetadataReference->getForeignKey($this->Metadata->getName());
     }
