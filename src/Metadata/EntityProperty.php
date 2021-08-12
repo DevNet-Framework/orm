@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -11,7 +12,7 @@ namespace DevNet\Entity\Metadata;
 use ReflectionProperty;
 
 class EntityProperty
-{   
+{
     private EntityType $Metadata;
     private ReflectionProperty $PropertyInfo;
     private string $TableReference;
@@ -37,7 +38,7 @@ class EntityProperty
         $this->Column['Lenth'] = $lenth;
     }
 
-    public function getColumnName() : string
+    public function getColumnName(): string
     {
         return $this->Column['Name'];
     }
