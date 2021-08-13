@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -34,34 +35,23 @@ class EntityType
         $this->TableName  = $this->EntityInfo->getShortName();
 
         $scalarTypes = ['bool', 'int', 'float', 'string'];
-        foreach ($this->EntityInfo->getProperties() as $PropertyInfo)
-        {
-            if ($PropertyInfo->hasType())
-            {
+        foreach ($this->EntityInfo->getProperties() as $PropertyInfo) {
+            if ($PropertyInfo->hasType()) {
                 $propertyName = $PropertyInfo->getName();
                 $propertyType = $PropertyInfo->getType()->getName();
-                if (in_array(strtolower($propertyType), $scalarTypes) || $propertyType === DateTime::class)
-                {
+                if (in_array(strtolower($propertyType), $scalarTypes) || $propertyType === DateTime::class) {
                     $this->Properties[$propertyName] = new EntityProperty($this, $PropertyInfo);
-                    if (strtolower($propertyName) === 'id')
-                    {
+                    if (strtolower($propertyName) === 'id') {
                         $this->PropertyKey = $propertyName;
                     }
-                }
-                else
-                {
-                    if ($propertyType === IList::class)
-                    {
+                } else {
+                    if ($propertyType === IList::class) {
                         // later add conventional code here
                         $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo); //new EntityNavigation($this);
-                    }
-                    else
-                    {
-                        if (class_exists($propertyType))
-                        {
+                    } else {
+                        if (class_exists($propertyType)) {
                             $interfaces = class_implements($propertyType);
-                            if (in_array(IEntity::class, $interfaces))
-                            {
+                            if (in_array(IEntity::class, $interfaces)) {
                                 // later add conventional code here
                                 $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo); //new EntityNavigation($this);
                             }
@@ -82,25 +72,23 @@ class EntityType
         return $this->EntityName;
     }
 
-    public function getTableName() : string
+    public function getTableName(): string
     {
         return $this->TableName;
     }
 
-    public function getPrimaryKey() : string
+    public function getPrimaryKey(): string
     {
         $property = $this->getProperty($this->PropertyKey);
-        if ($property)
-        {
+        if ($property) {
             return $property->Column['Name'];
         }
     }
 
-    public function getForeignKey(string $entityReference) : ?string
+    public function getForeignKey(string $entityReference): ?string
     {
         $propertyName = $this->ForeignKeys[$entityReference] ?? null;
-        if (!$propertyName)
-        {
+        if (!$propertyName) {
             return null;
         }
 
@@ -111,8 +99,7 @@ class EntityType
     public function getProperty(string $propertyName)
     {
         $propery = $this->Properties[$propertyName] ?? null;
-        if (!$propery)
-        {
+        if (!$propery) {
             throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
         }
 
@@ -122,8 +109,7 @@ class EntityType
     public function getNavigation(string $navigationName)
     {
         $navigation = $this->Navigations[$navigationName] ?? null;
-        if(!$navigation)
-        {
+        if (!$navigation) {
             throw new PropertyException("Undefined property {$this->EntityName}::{$navigationName}");
         }
 
@@ -137,27 +123,23 @@ class EntityType
 
     public function setPrimaryKey(string $propertyName)
     {
-        if (!property_exists($this->EntityName, $propertyName))
-        {
+        if (!property_exists($this->EntityName, $propertyName)) {
             throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
         }
-        
+
         $property = $this->getProperty($propertyName);
-        if ($property)
-        {
+        if ($property) {
             $this->PropertyKey = $propertyName;
         }
     }
 
     public function addForeignKey(string $propertyName, string $entityReference)
     {
-        if (!property_exists($this->EntityName, $propertyName))
-        {
+        if (!property_exists($this->EntityName, $propertyName)) {
             throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
         }
 
-        if (!class_exists($entityReference))
-        {
+        if (!class_exists($entityReference)) {
             throw new ClassException("Class {$entityReference} not found");
         }
 
