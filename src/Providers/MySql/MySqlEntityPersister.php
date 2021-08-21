@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -13,7 +14,7 @@ use DevNet\Entity\Tracking\EntityEntry;
 use DevNet\System\Database\DbConnection;
 
 class MySqlEntityPersister implements IEntityPersister
-{   
+{
     private DbConnection $Connection;
 
     public function __construct(DbConnection $connection)
@@ -21,19 +22,18 @@ class MySqlEntityPersister implements IEntityPersister
         $this->Connection = $connection;
     }
 
-    public function insert(EntityEntry $entry) : int
+    public function insert(EntityEntry $entry): int
     {
         $entityType   = $entry->Metadata;
         $placeHolders = [];
         $culomns      = [];
         $values       = [];
-        foreach ($entry->Values as $name => $value)
-        {
+        foreach ($entry->Values as $name => $value) {
             $placeHolders[] = '?';
             $culomns[]      = "`{$name}`";
             $values[]       = $value;
         }
-        
+
         $placeHolders = implode(', ', $placeHolders);
         $culomns      = implode(', ', $culomns);
         $dbCommand    = $this->Connection->createCommand("INSERT INTO `{$entityType->getTableName()}` ($culomns) VALUES ({$placeHolders})");
@@ -41,15 +41,14 @@ class MySqlEntityPersister implements IEntityPersister
         return $dbCommand->execute();
     }
 
-    public function update(EntityEntry $entry) : int
+    public function update(EntityEntry $entry): int
     {
         $entityType   = $entry->Metadata;
         $key          = $entityType->getPrimaryKey();
         $placeHolders = [];
         $values       = [];
 
-        foreach ($entry->Values as $name => $value)
-        {
+        foreach ($entry->Values as $name => $value) {
             $placeHolders[] = "`{$name}` = ?";
             $values[]       = $value;
         }
@@ -57,18 +56,18 @@ class MySqlEntityPersister implements IEntityPersister
         $placeHolders = implode(', ', $placeHolders);
         $values[]     = $entry->Entity->$key;
         $dbCommand    = $this->Connection->createCommand("UPDATE `{$entityType->getTableName()}` SET {$placeHolders} WHERE {$key} = ?");
-        
+
         $dbCommand->addParameters($values);
         return $dbCommand->execute();
     }
 
-    public function delete(EntityEntry $entry) : int
+    public function delete(EntityEntry $entry): int
     {
         $entityType = $entry->Metadata;
         $key        = $entityType->getPrimaryKey();
         $values[]   = $entry->Entity->$key;
         $dbCommand  = $this->Connection->createCommand("DELETE FROM `{$entityType->getTableName()}` WHERE {$key} = ?");
-        
+
         $dbCommand->addParameters($values);
         return $dbCommand->execute();
     }
