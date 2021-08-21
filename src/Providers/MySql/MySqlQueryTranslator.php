@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -24,7 +25,7 @@ class MySqlQueryTranslator extends ExpressionVisitor
     public array $OuterVariables = [];
     public array $Sql            = [];
 
-    public static function expressionToString(Expression $expression) : string
+    public static function expressionToString(Expression $expression): string
     {
         $visitor = new ExpressionStringBuilder();
         $visitor->visit($expression);
@@ -41,14 +42,12 @@ class MySqlQueryTranslator extends ExpressionVisitor
     {
         $arguments = $expression->Arguments;
         $lastExpression = array_shift($arguments);
-        if ($lastExpression)
-        {
+        if ($lastExpression) {
             $this->visit($lastExpression);
         }
 
         $this->Method = strtolower($expression->Method);
-        switch ($this->Method)
-        {
+        switch ($this->Method) {
             case 'where':
                 $this->Sql[] = 'WHERE';
                 break;
@@ -66,11 +65,9 @@ class MySqlQueryTranslator extends ExpressionVisitor
                 $this->Sql[] = ",";
                 break;
             case 'skip':
-                if ($this->LastMethod === "take")
-                {
+                if ($this->LastMethod === "take") {
                     $this->Sql[] = "OFFSET";
-                }
-                else{
+                } else {
                     $this->Sql[] = "LIMIT";
                     $this->Sql[] = 18446744073709551615;
                     $this->Sql[] = "OFFSET";
@@ -86,34 +83,27 @@ class MySqlQueryTranslator extends ExpressionVisitor
                 # code...
                 break;
         }
-        
-        foreach ($arguments as $argument)
-        {
+
+        foreach ($arguments as $argument) {
             $this->visit($argument);
         }
 
-        if ($this->Method === "orderby" || $this->Method === "thenby")
-        {
+        if ($this->Method === "orderby" || $this->Method === "thenby") {
             $this->Sql[] = "ASC";
-        }
-        else if ($this->Method === "orderbydescending" || $this->Method === "thenbydescending")
-        {
+        } else if ($this->Method === "orderbydescending" || $this->Method === "thenbydescending") {
             $this->Sql[] = "DESC";
         }
 
-        if ($this->Method === "take" && $this->LastMethod === "skip")
-        {
+        if ($this->Method === "take" && $this->LastMethod === "skip") {
             $stack = [];
 
-            for ($i = 0; $i < 3 ; $i++)
-            { 
+            for ($i = 0; $i < 3; $i++) {
                 $swap    = array_pop($this->Sql);
                 $stack[] = array_pop($this->Sql);
                 $stack[] = $swap;
             }
 
-            for ($i = 0; $i < 4; $i++)
-            { 
+            for ($i = 0; $i < 4; $i++) {
                 $this->Sql[] = array_shift($stack);
             }
         }
@@ -129,10 +119,9 @@ class MySqlQueryTranslator extends ExpressionVisitor
     }
 
     public function visitBinary(Expression $expression)
-    {   
+    {
         $negation = null;
-        switch ($expression->Name)
-        {
+        switch ($expression->Name) {
             case "!=":
                 $operator = "=";
                 $negation = "NOT";
@@ -150,9 +139,8 @@ class MySqlQueryTranslator extends ExpressionVisitor
                 $operator = $expression->Name;
                 break;
         }
-        
-        if ($negation)
-        {
+
+        if ($negation) {
             $this->Sql[] = $negation;
         }
         $this->visit($expression->Left);
@@ -163,8 +151,7 @@ class MySqlQueryTranslator extends ExpressionVisitor
     public function visitUnary(Expression $expression)
     {
         $operator = $expression->Name;
-        if ($expression->Name === "!")
-        {
+        if ($expression->Name === "!") {
             $operator = "NOT ";
         }
 
@@ -174,17 +161,13 @@ class MySqlQueryTranslator extends ExpressionVisitor
 
     public function visitProperty(Expression $expression)
     {
-        if (in_array($expression->Parameter->Name, $this->Parameters))
-        {
+        if (in_array($expression->Parameter->Name, $this->Parameters)) {
             $propertyType = $this->EntityType->getProperty($expression->Property);
-            if (!$propertyType)
-            {
+            if (!$propertyType) {
                 throw new PropertyException("undefined property {$this->EntityType->EntityName}::{$expression->Property}");
             }
             $this->Sql[] = "`{$propertyType->Column['Name']}`";
-        }
-        else
-        {
+        } else {
             $property = $expression->Property;
             $this->OuterVariables[] = $expression->Parameter->Value->$property;
             $this->Sql[] = "?";
@@ -193,12 +176,9 @@ class MySqlQueryTranslator extends ExpressionVisitor
 
     public function visitParameter(Expression $expression)
     {
-        if (in_array($expression->Name, $this->Parameters))
-        {
+        if (in_array($expression->Name, $this->Parameters)) {
             $this->Sql[] = $expression->Name;
-        }
-        else
-        {
+        } else {
             $this->OuterVariables[] = $expression->Value;
             $this->Sql[] = "?";
         }
@@ -206,18 +186,14 @@ class MySqlQueryTranslator extends ExpressionVisitor
 
     public function visitConstant(Expression $expression)
     {
-        if ($expression->Value instanceof IQueryable)
-        {
+        if ($expression->Value instanceof IQueryable) {
             $this->EntityType = $expression->Value->EntityType;
             $this->Sql[] = "SELECT * FROM `{$this->EntityType->getTableName()}`";
             $this->LastMethod = "from";
-        }
-        else
-        {
-            switch ($this->Method)
-            {
+        } else {
+            switch ($this->Method) {
                 case 'str_contains':
-                    $this->Sql[] = "'%".$expression->Value."%'";
+                    $this->Sql[] = "'%" . $expression->Value . "%'";
                     break;
                 case 'str_starts_with':
                     $this->Sql[] = "{$expression->Value}%";
@@ -226,13 +202,10 @@ class MySqlQueryTranslator extends ExpressionVisitor
                     $this->Sql[] = "%{$expression->Value}";
                     break;
                 default:
-                    if ($expression->Type === "string")
-                    {
+                    if ($expression->Type === "string") {
                         $this->Sql[] = "'{$expression->Value}'";
                         break;
-                    }
-                    else if ($expression->Type === "bool")
-                    {
+                    } else if ($expression->Type === "bool") {
                         $this->Sql[] = $expression->Value == true ? "true" : "false";
                         break;
                     }
