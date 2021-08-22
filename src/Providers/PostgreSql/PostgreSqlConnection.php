@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -23,12 +24,12 @@ class PostgreSqlConnection extends DbConnection
 
         $username = $username ? $username : "";
         $password = $password ? $password : "";
-        $host     = $host ? "host=".$host : "";
-        $port     = $port ? ",".$port : "";
+        $host     = $host ? "host=" . $host : "";
+        $port     = $port ? "," . $port : "";
         $database = $path ? substr(strrchr($path, "/"), 1) : "";
-        $options  = $query ? str_replace("&", ";", $query).";" : "";
+        $options  = $query ? str_replace("&", ";", $query) . ";" : "";
 
-        $datasource = "pgsql:".$host.$port.";"."dbname=".$database.";".$options;
+        $datasource = "pgsql:" . $host . $port . ";" . "dbname=" . $database . ";" . $options;
 
         parent::__construct($datasource, $username, $password);
     }
