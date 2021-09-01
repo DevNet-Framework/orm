@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -15,7 +16,7 @@ use DevNet\System\Compiler\ExpressionVisitor;
 use DevNet\System\Exceptions\PropertyException;
 
 class SqliteDataProvider implements IEntityDataProvider
-{   
+{
     private string $Name = 'Sqlite';
     private DbConnection $Connection;
     private IEntityPersister $Persister;
@@ -30,8 +31,7 @@ class SqliteDataProvider implements IEntityDataProvider
 
     public function __get(string $name)
     {
-        if (!in_array($name, ['Name', 'Connection', 'Persister', 'Visitor']))
-        {
+        if (!in_array($name, ['Name', 'Connection', 'Persister', 'Visitor'])) {
             throw PropertyException::undefinedPropery(self::class, $name);
         }
 
