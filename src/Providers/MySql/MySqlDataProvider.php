@@ -12,8 +12,8 @@ namespace DevNet\Entity\Providers\MySql;
 use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\Entity\Storage\IEntityPersister;
 use DevNet\System\Database\DbConnection;
-use DevNet\System\Compiler\ExpressionVisitor;
 use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 
 class MySqlDataProvider implements IEntityDataProvider
 {
