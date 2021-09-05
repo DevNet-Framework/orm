@@ -10,7 +10,7 @@
 namespace DevNet\Entity\Providers\PostgreSql;
 
 use DevNet\Entity\Metadata\EntityType;
-use DevNet\System\Compiler\ExpressionVisitor;
+use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Compiler\ExpressionStringBuilder;
 use DevNet\System\Compiler\Expressions\Expression;
 use DevNet\System\Exceptions\PropertyException;
@@ -19,11 +19,11 @@ use DevNet\System\Linq\IQueryable;
 class PostgreSqlQueryTranslator extends ExpressionVisitor
 {
     private EntityType $EntityType;
-    public string $Method         = '';
-    public string $LastMethod     = '';
-    private array $Parameters     = [];
-    public array $OuterVariables  = [];
-    public array $Sql             = [];
+    public string $Method        = '';
+    public string $LastMethod    = '';
+    private array $Parameters    = [];
+    public array $OuterVariables = [];
+    public array $Sql            = [];
 
     public static function expressionToString(Expression $expression): string
     {
@@ -98,9 +98,9 @@ class PostgreSqlQueryTranslator extends ExpressionVisitor
             $stack = [];
 
             for ($i = 0; $i < 3; $i++) {
-                $swap       = array_pop($this->Sql);
-                $stack[]    = array_pop($this->Sql);
-                $stack[]    = $swap;
+                $swap    = array_pop($this->Sql);
+                $stack[] = array_pop($this->Sql);
+                $stack[] = $swap;
             }
 
             for ($i = 0; $i < 4; $i++) {
