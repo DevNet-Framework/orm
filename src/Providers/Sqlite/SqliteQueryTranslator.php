@@ -10,9 +10,9 @@
 namespace DevNet\Entity\Providers\Sqlite;
 
 use DevNet\Entity\Metadata\EntityType;
-use DevNet\System\Compiler\ExpressionVisitor;
 use DevNet\System\Compiler\ExpressionStringBuilder;
 use DevNet\System\Compiler\Expressions\Expression;
+use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\Linq\IQueryable;
 
