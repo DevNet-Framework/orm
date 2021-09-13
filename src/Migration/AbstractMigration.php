@@ -9,39 +9,37 @@
 
 namespace DevNet\Entity\Migration;
 
-use DevNet\Entity\Migration\Operations\Operation;
-
 abstract class AbstractMigration
 {
-    protected Operation $UpOperation;
-    protected Operation $DownOperation;
+    protected array $UpOperations;
+    protected array $DownOperations;
 
     public function __get(string $name)
     {
-        if ($name == 'UpOperation') {
+        if ($name == 'UpOperations') {
             return $this->build('up');
         }
 
-        if ($name == 'DownOperation') {
+        if ($name == 'DownOperations') {
             return $this->build('down');
         }
 
         return $this->$name;
     }
 
-    public function build(string $action): Schema
+    public function build(string $action): array
     {
         if ($action != 'up' && $action != 'down') {
             throw new \Exception("Method {$action} not supoerted");
         }
 
-        $schema = Operation::createSchema();
-        $this->$action($schema);
+        $builder = new MigrationBuilder();
+        $this->$action($builder);
 
-        return $schema;
+        return $builder->Operations;
     }
 
-    abstract public function up(Schema $schema): void;
+    abstract public function up(MigrationBuilder $builder): void;
 
-    abstract public function down(Schema $schema): void;
+    abstract public function down(MigrationBuilder $builder): void;
 }
