@@ -9,14 +9,27 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-use DevNet\Entity\Migration\Schema;
-
 abstract class Operation
 {
     abstract public function accept(OperationVisitor $expressionVisitor): void;
 
-    public static function createSchema(): Schema
+    public static function createTable(string $name): CreateTable
     {
-        return new Schema();
+        return new CreateTable($name);
+    }
+
+    public static function alterTable(string $name): AlterTable
+    {
+        return new AlterTable($name);
+    }
+
+    public static function renameTable(string $name, string $rename): renameTable
+    {
+        return new renameTable($name, $rename);
+    }
+
+    public static function dropTable(string $name): dropTable
+    {
+        return new dropTable($name);
     }
 }
