@@ -23,13 +23,11 @@ abstract class OperationVisitor
         $operation->accept($this);
     }
 
-    abstract public function visitSchema(Operation $operation): void;
-
     abstract public function visitCreateTable(Operation $operation): void;
 
-    abstract public function visitRenameTable(Operation $operation): void;
-
     abstract public function visitAlterTable(Operation $operation): void;
+    
+    abstract public function visitRenameTable(Operation $operation): void;
 
     abstract public function visitDropTable(Operation $operation): void;
 
@@ -37,9 +35,9 @@ abstract class OperationVisitor
 
     abstract public function visitAddColumn(Operation $operation): void;
 
-    abstract public function visitRenameColumn(Operation $operation): void;
-
     abstract public function visitAlterColumn(Operation $operation): void;
+    
+    abstract public function visitRenameColumn(Operation $operation): void;
 
     abstract public function visitDropColumn(Operation $operation): void;
 
