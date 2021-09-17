@@ -14,8 +14,6 @@ class Column extends Operation
     protected string $Table;
     protected string $Name;
     protected string $Type;
-    protected ?int $Precision = null;
-    protected ?int $Scale = null;
     protected bool $Nullable = true;
     protected bool $Identity = false; // auto increment
     protected $Default = null;
@@ -31,12 +29,9 @@ class Column extends Operation
         return $this->$name;
     }
 
-    public function type(string $type, int $precision = null, int $scale = null): Column
+    public function type(string $type): Column
     {
-        $this->Type      = strtolower($type);
-        $this->Precision = $precision;
-        $this->Scale     = $scale;
-
+        $this->Type = strtolower($type);
         return $this;
     }
 
