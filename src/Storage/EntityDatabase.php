@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -60,13 +61,13 @@ class EntityDatabase
     {
         $this->entry($entity)->State = EntityState::Added;
     }
-    
+
     public function remove(IEntity $entity)
     {
         $this->entry($entity)->State = EntityState::Deleted;
     }
-    
-    public function save() : int
+
+    public function save(): int
     {
         $entries = $this->EntityStateManager->getEntries();
         $count   = $this->persiste($entries);
@@ -74,17 +75,14 @@ class EntityDatabase
         return $count;
     }
 
-    public function persiste($entries) : int
+    public function persiste($entries): int
     {
         $count = 0;
         $this->DataProvider->Connection->open();
-        foreach ($entries as $entityType)
-        {
-            foreach ($entityType as $entry)
-            {
+        foreach ($entries as $entityType) {
+            foreach ($entityType as $entry) {
                 $entry->detectChanges();
-                switch ($entry->State)
-                {
+                switch ($entry->State) {
                     case EntityState::Added:
                         $count += $this->DataProvider->Persister->insert($entry);
                         break;
