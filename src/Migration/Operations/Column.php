@@ -35,9 +35,9 @@ class Column extends Operation
         return $this;
     }
 
-    public function notNull(): Column
+    public function nullable(bool $nullable = true): Column
     {
-        $this->Nullable = false;
+        $this->Nullable = $nullable;
         return $this;
     }
 
