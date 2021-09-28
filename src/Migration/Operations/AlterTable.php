@@ -11,9 +11,9 @@ namespace DevNet\Entity\Migration\Operations;
 
 class AlterTable extends Table
 {
-    public function addColumn(string $name, string $type, int $lenth = null): AddColumn
+    public function addColumn(string $name): AddColumn
     {
-        $column = new AddColumn($this->Name, $name, $type, $lenth);
+        $column = new AddColumn($this->Name, $name);
         $this->Columns[] = $column;
         return $column;
     }
