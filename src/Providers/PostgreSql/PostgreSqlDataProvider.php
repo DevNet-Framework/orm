@@ -9,6 +9,7 @@
 
 namespace DevNet\Entity\Providers\PostgreSql;
 
+use DevNet\Entity\Migration\Operations\OperationVisitor;
 use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\Entity\Storage\IEntityPersister;
 use DevNet\System\Database\DbConnection;
@@ -21,17 +22,19 @@ class PostgreSqlDataProvider implements IEntityDataProvider
     private DbConnection $Connection;
     private IEntityPersister $Persister;
     private ExpressionVisitor $Visitor;
+    private OperationVisitor $SchemaGenerator;
 
     public function __construct(DbConnection $connection)
     {
-        $this->Connection = $connection;
-        $this->Persister  = new PostgreSqlEntityPersister($connection);
-        $this->Visitor    = new PostgreSqlQueryTranslator();
+        $this->Connection      = $connection;
+        $this->Persister       = new PostgreSqlEntityPersister($connection);
+        $this->Visitor         = new PostgreSqlQueryTranslator();
+        $this->SchemaGenerator = new PostgreSqlSchemaGenerator();
     }
 
     public function __get(string $name)
     {
-        if (!in_array($name, ['Name', 'Connection', 'Persister', 'Visitor'])) {
+        if (!in_array($name, ['Name', 'Connection', 'Persister', 'Visitor', 'SchemaGenerator'])) {
             throw PropertyException::undefinedPropery(self::class, $name);
         }
 
