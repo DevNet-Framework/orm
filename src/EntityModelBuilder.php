@@ -20,8 +20,13 @@ class EntityModelBuilder
     {
         $this->Model = new EntityModel($this);
     }
+
+    public function hasSchema(string $name): void
+    {
+        $this->Model->setSchema($name);
+    }
     
-    public function entity(string $entityName) : EntityTypeBuilder
+    public function entity(string $entityName): EntityTypeBuilder
     {
         $entityType = $this->Model->getEntityType($entityName);
 
