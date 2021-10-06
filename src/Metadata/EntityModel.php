@@ -15,6 +15,7 @@ class EntityModel
 {
     private EntityModelBuilder $Builder;
     private array $EntityModel = [];
+    private ?string $Schema = null;
 
     public function __construct(EntityModelBuilder $builder)
     {
@@ -24,6 +25,11 @@ class EntityModel
     public function __get(string $name)
     {
         return $this->$name;
+    }
+
+    public function setSchema(string $name)
+    {
+        $this->Schema = $name;
     }
 
     public function addEntityType(EntityType $entityType)
