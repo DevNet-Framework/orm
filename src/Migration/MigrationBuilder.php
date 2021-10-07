@@ -14,6 +14,7 @@ use Closure;
 
 class MigrationBuilder
 {
+    protected ?string $Schema;
     protected array $Operations = [];
 
     public function __get(string $name)
@@ -21,27 +22,32 @@ class MigrationBuilder
         return $this->$name;
     }
 
+    public function __construct(?string $schema = null)
+    {
+        $this->Schema = $schema;
+    }
+
     public function createTable(string $tableName, Closure $builder): void
     {
-        $table = Operation::createTable($tableName);
+        $table = Operation::createTable($tableName, $this->Schema);
         $builder($table);
         $this->Operations[$tableName] = $table;
     }
 
     public function alterTable(string $tableName, Closure $builder): void
     {
-        $table = Operation::alterTable($tableName);
+        $table = Operation::alterTable($tableName, $this->Schema);
         $builder($table);
         $this->Operations[$tableName] = $table;
     }
 
     public function RenameTable(string $tableName, string $rename): void
     {
-        $this->Operations[$tableName] = Operation::renameTable($tableName, $rename);
+        $this->Operations[$tableName] = Operation::renameTable($tableName, $rename, $this->Schema);
     }
 
     public function dropTable(string $tableName): void
     {
-        $this->Operations[$tableName] = Operation::dropTable($tableName);
+        $this->Operations[$tableName] = Operation::dropTable($tableName, $this->Schema);
     }
 }
