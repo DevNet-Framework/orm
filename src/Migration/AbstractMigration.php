@@ -11,6 +11,7 @@ namespace DevNet\Entity\Migration;
 
 abstract class AbstractMigration
 {
+    protected ?string $Schema;
     protected array $UpOperations;
     protected array $DownOperations;
 
@@ -27,13 +28,18 @@ abstract class AbstractMigration
         return $this->$name;
     }
 
+    public function __construct(?string $schema = null)
+    {
+        $this->Schema = $schema;
+    }
+
     public function build(string $action): array
     {
         if ($action != 'up' && $action != 'down') {
-            throw new \Exception("Method {$action} not supoerted");
+            throw new \Exception("Method {$action} not supported");
         }
 
-        $builder = new MigrationBuilder();
+        $builder = new MigrationBuilder($this->Schema);
         $this->$action($builder);
 
         return $builder->Operations;
