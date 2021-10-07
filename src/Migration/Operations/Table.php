@@ -11,7 +11,7 @@ namespace DevNet\Entity\Migration\Operations;
 
 abstract class Table extends Operation
 {
-    protected ?string $Schema = null;
+    protected ?string $Schema;
     protected string $Name;
     protected array $Columns = [];
     protected array $Constraints = [];
