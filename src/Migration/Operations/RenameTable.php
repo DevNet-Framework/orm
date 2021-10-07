@@ -13,15 +13,11 @@ class RenameTable extends Table
 {
     protected string $Rename;
 
-    public function __construct(string $name, string $rename)
+    public function __construct(string $name, string $rename, ?string $schema = null)
     {
-        $schema = explode(".", $name);
-        $table  = array_pop($schema);
-        $schema = implode(".", $schema);
-
-        $this->Name   = $table;
-        $this->Schema = $schema;
+        $this->Name   = $name;
         $this->Rename = $rename;
+        $this->Schema = $schema;
     }
 
     public function accept(OperationVisitor $visitor): void
