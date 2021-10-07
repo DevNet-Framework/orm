@@ -11,8 +11,8 @@ namespace DevNet\Entity\Migration\Operations;
 
 abstract class Table extends Operation
 {
+    protected ?string $Schema = null;
     protected string $Name;
-    protected string $Schema;
     protected array $Columns = [];
     protected array $Constraints = [];
 
@@ -21,13 +21,9 @@ abstract class Table extends Operation
         return $this->$name;
     }
 
-    public function __construct(string $name)
-    {
-        $schema = explode(".", $name);
-        $table  = array_pop($schema);
-        $schema = implode(".", $schema);
-
-        $this->Name = $table;
+    public function __construct(string $name, ?string $schema = null)
+    {        
+        $this->Name   = $name;
         $this->Schema = $schema;
     }
 }
