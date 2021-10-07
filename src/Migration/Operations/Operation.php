@@ -13,23 +13,23 @@ abstract class Operation
 {
     abstract public function accept(OperationVisitor $expressionVisitor): void;
 
-    public static function createTable(string $name): CreateTable
+    public static function createTable(string $name, ?string $schema = null): CreateTable
     {
-        return new CreateTable($name);
+        return new CreateTable($name, $schema);
     }
 
-    public static function alterTable(string $name): AlterTable
+    public static function alterTable(string $name, ?string $schema = null): AlterTable
     {
-        return new AlterTable($name);
+        return new AlterTable($name, $schema);
     }
 
-    public static function renameTable(string $name, string $rename): renameTable
+    public static function renameTable(string $name, string $rename, ?string $schema = null): renameTable
     {
-        return new renameTable($name, $rename);
+        return new renameTable($name, $rename, $schema);
     }
 
-    public static function dropTable(string $name): dropTable
+    public static function dropTable(string $name, ?string $schema = null): dropTable
     {
-        return new dropTable($name);
+        return new dropTable($name, $schema);
     }
 }
