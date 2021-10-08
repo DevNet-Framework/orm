@@ -16,7 +16,7 @@ use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\Linq\IQueryable;
 
-class SqliteQueryTranslator extends ExpressionVisitor
+class SqliteQueryGenerator extends ExpressionVisitor
 {
     private EntityType $EntityType;
     public string $Method         = '';
