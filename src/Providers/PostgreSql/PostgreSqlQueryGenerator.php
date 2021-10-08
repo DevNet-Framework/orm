@@ -16,7 +16,7 @@ use DevNet\System\Compiler\Expressions\Expression;
 use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\Linq\IQueryable;
 
-class PostgreSqlQueryTranslator extends ExpressionVisitor
+class PostgreSqlQueryGenerator extends ExpressionVisitor
 {
     private EntityType $EntityType;
     public string $Method        = '';
@@ -78,9 +78,6 @@ class PostgreSqlQueryTranslator extends ExpressionVisitor
                 break;
             case 'groupby':
                 $this->Sql[] = 'GROUP BY';
-                break;
-            default:
-                # code...
                 break;
         }
 
