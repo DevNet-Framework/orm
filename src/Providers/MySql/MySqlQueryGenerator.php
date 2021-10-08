@@ -16,7 +16,7 @@ use DevNet\System\Compiler\Expressions\Expression;
 use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\Linq\IQueryable;
 
-class MySqlQueryTranslator extends ExpressionVisitor
+class MySqlQueryGenerator extends ExpressionVisitor
 {
     private EntityType $EntityType;
     public string $Method        = '';
@@ -78,9 +78,6 @@ class MySqlQueryTranslator extends ExpressionVisitor
                 break;
             case 'groupby':
                 $this->Sql[] = 'GROUP BY';
-                break;
-            default:
-                # code...
                 break;
         }
 
