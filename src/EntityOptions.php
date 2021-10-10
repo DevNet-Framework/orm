@@ -8,7 +8,7 @@
 
 namespace DevNet\Entity;
 
-use DevNet\Entity\Storage\IEntityDataProvider;
+use DevNet\Entity\Providers\IEntityDataProvider;
 use DevNet\System\Exceptions\ClassException;
 
 class EntityOptions
