@@ -10,7 +10,7 @@ namespace DevNet\Entity\Providers\Sqlite;
 
 use DevNet\System\Database\DbConnection;
 
-class SqlitelConnection extends DbConnection
+class SqliteConnection extends DbConnection
 {
     public function __construct(string $connectionUrl)
     {
