@@ -9,32 +9,31 @@
 
 namespace DevNet\Entity\Providers\PostgreSql;
 
+use DevNet\Entity\Providers\IEntityDataProvider;
+use DevNet\Entity\Storage\ISqlGenerationHelper;
 use DevNet\Entity\Migration\Operations\OperationVisitor;
-use DevNet\Entity\Storage\IEntityDataProvider;
-use DevNet\Entity\Storage\IEntityPersister;
+use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Database\DbConnection;
 use DevNet\System\Exceptions\PropertyException;
-use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 
 class PostgreSqlDataProvider implements IEntityDataProvider
 {
-    private string $Name = 'PostgreSql';
     private DbConnection $Connection;
-    private IEntityPersister $Persister;
-    private ExpressionVisitor $Visitor;
-    private OperationVisitor $SchemaGenerator;
+    private ISqlGenerationHelper $SqlHelper;
+    private ExpressionVisitor $QueryGenerator;
+    private OperationVisitor $MigrationGenerator;
 
     public function __construct(DbConnection $connection)
     {
-        $this->Connection      = $connection;
-        $this->Persister       = new PostgreSqlEntityPersister($connection);
-        $this->Visitor         = new PostgreSqlQueryTranslator();
-        $this->SchemaGenerator = new PostgreSqlSchemaGenerator();
+        $this->Connection         = $connection;
+        $this->SqlHelper          = new PostgreSqlHelper();
+        $this->QueryGenerator     = new PostgreSqlQueryGenerator();
+        $this->MigrationGenerator = new PostgreSqlMigrationGenerator();
     }
 
     public function __get(string $name)
     {
-        if (!in_array($name, ['Name', 'Connection', 'Persister', 'Visitor', 'SchemaGenerator'])) {
+        if (!in_array($name, ['Connection', 'SqlHelper', 'QueryGenerator', 'MigrationGenerator'])) {
             throw PropertyException::undefinedPropery(self::class, $name);
         }
 
