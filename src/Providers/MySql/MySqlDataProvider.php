@@ -9,32 +9,31 @@
 
 namespace DevNet\Entity\Providers\MySql;
 
+use DevNet\Entity\Providers\IEntityDataProvider;
+use DevNet\Entity\Storage\ISqlGenerationHelper;
 use DevNet\Entity\Migration\Operations\OperationVisitor;
-use DevNet\Entity\Storage\IEntityDataProvider;
-use DevNet\Entity\Storage\IEntityPersister;
+use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Database\DbConnection;
 use DevNet\System\Exceptions\PropertyException;
-use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 
 class MySqlDataProvider implements IEntityDataProvider
 {
-    private string $Name = 'MySql';
     private DbConnection $Connection;
-    private IEntityPersister $Persister;
-    private ExpressionVisitor $Visitor;
-    private OperationVisitor $SchemaGenerator;
+    private ISqlGenerationHelper $SqlHelper;
+    private ExpressionVisitor $QueryGenerator;
+    private OperationVisitor $MigrationGenerator;
 
     public function __construct(DbConnection $connection)
     {
-        $this->Connection      = $connection;
-        $this->Persister       = new MySqlEntityPersister($connection);
-        $this->Visitor         = new MySqlQueryTranslator();
-        $this->SchemaGenerator = new MySqlSchemaGenerator();
+        $this->Connection         = $connection;
+        $this->SqlHelper          = new MySqlHelper();
+        $this->QueryGenerator     = new MySqlQueryGenerator();
+        $this->MigrationGenerator = new MySqlMigrationGenerator();
     }
 
     public function __get(string $name)
     {
-        if (!in_array($name, ['Name', 'Connection', 'Persister', 'Visitor', 'SchemaGenerator'])) {
+        if (!in_array($name, ['Connection', 'SqlHelper', 'QueryGenerator', 'MigrationGenerator'])) {
             throw PropertyException::undefinedPropery(self::class, $name);
         }
 
