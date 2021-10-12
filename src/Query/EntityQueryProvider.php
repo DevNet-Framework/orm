@@ -35,7 +35,7 @@ class EntityQueryProvider implements IQueryProvider
         $this->Database->DataProvider->Connection->open();
         $slq       = $this->getQueryText($expression);
         $command   = $this->Database->DataProvider->Connection->createCommand($slq);
-        $variables = $this->Database->DataProvider->Visitor->OuterVariables;
+        $variables = $this->Database->DataProvider->QueryGenerator->OuterVariables;
 
         if ($variables) {
             $command->addParameters($variables);
@@ -83,10 +83,10 @@ class EntityQueryProvider implements IQueryProvider
 
     public function getQueryText(Expression $expression): string
     {
-        $translator = $this->Database->DataProvider->Visitor;
-        $translator->Sql = [];
-        $translator->OuterVariables = [];
-        $translator->visit($expression);
-        return $translator->__toString();
+        $queryGenerator = $this->Database->DataProvider->QueryGenerator;
+        $queryGenerator->Sql = [];
+        $queryGenerator->OuterVariables = [];
+        $queryGenerator->visit($expression);
+        return $queryGenerator;
     }
 }
