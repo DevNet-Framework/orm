@@ -58,4 +58,10 @@ abstract class OperationVisitor
     abstract public function visitAddUniqueConstraint(Operation $operation): void;
 
     abstract public function visitDropUniqueConstraint(Operation $operation): void;
+
+    abstract public function visitInsertData(Operation $operation): void;
+
+    abstract public function visitUpdateData(Operation $operation): void;
+
+    abstract public function visitDeleteData(Operation $operation): void;
 }
