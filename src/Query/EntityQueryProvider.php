@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -24,7 +25,7 @@ class EntityQueryProvider implements IQueryProvider
         $this->Database = $database;
     }
 
-    public function CreateQuery(object $entityType, Expression $expression = null) : IQueryable
+    public function createQuery(object $entityType, Expression $expression = null): IQueryable
     {
         return new EntityQuery($entityType, $this, $expression);
     }
@@ -36,50 +37,35 @@ class EntityQueryProvider implements IQueryProvider
         $command   = $this->Database->DataProvider->Connection->createCommand($slq);
         $variables = $this->Database->DataProvider->Visitor->OuterVariables;
 
-        if ($variables)
-        {
+        if ($variables) {
             $command->addParameters($variables);
         }
 
         $entities = [];
         $dbReader = $command->executeReader($entityType->getName());
-        
-        if ($dbReader)
-        {
-            while ($dbReader->read())
-            {
+
+        if ($dbReader) {
+            while ($dbReader->read()) {
                 $entity = $entityType->getName();
                 $entity = new $entity();
 
-                foreach ($entityType->Properties as $property)
-                {
+                foreach ($entityType->Properties as $property) {
                     $value = null;
                     $propertyName = $property->PropertyInfo->getName();
-                    if ($property->PropertyInfo->hasType())
-                    {
+                    if ($property->PropertyInfo->hasType()) {
                         $propertyType = $property->PropertyInfo->getType()->getName();
-                        if ($propertyType == DateTime::class)
-                        {
+                        if ($propertyType == DateTime::class) {
                             $date = $dbReader->getValue($property->Column['Name']);
-                            if ($date)
-                            {
+                            if ($date) {
                                 $value = new DateTime($date);
                             }
-                        }
-                        else if ($propertyType == "bool")
-                        {
+                        } else if ($propertyType == "bool") {
                             $value = (bool)$dbReader->getValue($property->Column['Name']);
-                        }
-                        else if ($propertyType == "int")
-                        {
+                        } else if ($propertyType == "int") {
                             $value = (int)$dbReader->getValue($property->Column['Name']);
-                        }
-                        else if ($propertyType == "float")
-                        {
+                        } else if ($propertyType == "float") {
                             $value = (float)$dbReader->getValue($property->Column['Name']);
-                        }
-                        else
-                        {
+                        } else {
                             $value = $dbReader->getValue($property->Column['Name']);
                         }
                     }
@@ -90,12 +76,12 @@ class EntityQueryProvider implements IQueryProvider
                 $entities[] = $entity;
             }
         }
-        
+
         $this->Database->DataProvider->Connection->close();
         return new Enumerator($entities);
     }
 
-    public function getQueryText(Expression $expression) : string
+    public function getQueryText(Expression $expression): string
     {
         $translator = $this->Database->DataProvider->Visitor;
         $translator->Sql = [];
