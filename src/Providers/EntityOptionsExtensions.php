@@ -15,7 +15,7 @@ use DevNet\Entity\Providers\MySql\MySqlDataProvider;
 use DevNet\Entity\Providers\PostgreSql\PostgreSqlConnection;
 use DevNet\Entity\Providers\PostgreSql\PostgreSqlDataProvider;
 use DevNet\Entity\Providers\Sqlite\SqliteDataProvider;
-use DevNet\Entity\Providers\Sqlite\SqlitelConnection;
+use DevNet\Entity\Providers\Sqlite\SqliteConnection;
 
 class EntityOptionsExtensions
 {
@@ -31,6 +31,6 @@ class EntityOptionsExtensions
 
     public static function useSqlite(EntityOptions $options, string $connectionUri)
     {
-        $options->useProvider(new SqliteDataProvider(new SqlitelConnection($connectionUri)));
+        $options->useProvider(new SqliteDataProvider(new SqliteConnection($connectionUri)));
     }
 }
