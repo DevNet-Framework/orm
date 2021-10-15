@@ -27,27 +27,42 @@ class MigrationBuilder
         $this->Schema = $schema;
     }
 
-    public function createTable(string $tableName, Closure $builder): void
+    public function createTable(string $name, Closure $builder): void
     {
-        $table = Operation::createTable($tableName, $this->Schema);
+        $table = Operation::createTable($this->Schema, $name);
         $builder($table);
-        $this->Operations[$tableName] = $table;
+        $this->Operations[] = $table;
     }
 
-    public function alterTable(string $tableName, Closure $builder): void
+    public function alterTable(string $name, Closure $builder): void
     {
-        $table = Operation::alterTable($tableName, $this->Schema);
+        $table = Operation::alterTable($this->Schema, $name);
         $builder($table);
-        $this->Operations[$tableName] = $table;
+        $this->Operations[] = $table;
     }
 
-    public function RenameTable(string $tableName, string $rename): void
+    public function RenameTable(string $name, string $rename): void
     {
-        $this->Operations[$tableName] = Operation::renameTable($tableName, $rename, $this->Schema);
+        $this->Operations[] = Operation::renameTable($this->Schema, $name, $rename);
     }
 
-    public function dropTable(string $tableName): void
+    public function dropTable(string $name): void
     {
-        $this->Operations[$tableName] = Operation::dropTable($tableName, $this->Schema);
+        $this->Operations[] = Operation::dropTable($this->Schema, $name);
+    }
+
+    public function insertData(string $table, array $columns): void
+    {
+        $this->Operations[] = Operation::insertData($this->Schema, $table, $columns);
+    }
+
+    public function updateData(string $table, array $columns, array $keys): void
+    {
+        $this->Operations[] = Operation::updateData($this->Schema, $table, $columns, $keys);
+    }
+
+    public function deleteData(string $table, array $keys): void
+    {
+        $this->Operations[] = Operation::deleteData($this->Schema, $table, $keys);
     }
 }
