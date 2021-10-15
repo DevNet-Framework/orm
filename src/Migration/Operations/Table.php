@@ -21,9 +21,9 @@ abstract class Table extends Operation
         return $this->$name;
     }
 
-    public function __construct(string $name, ?string $schema = null)
+    public function __construct(?string $schema, string $name)
     {        
-        $this->Name   = $name;
         $this->Schema = $schema;
+        $this->Name   = $name;
     }
 }
