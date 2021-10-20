@@ -14,6 +14,8 @@ class Column extends Operation
     protected string $Table;
     protected string $Name;
     protected string $Type;
+    protected ?int $Max;
+    protected ?int $Scale;
     protected bool $Nullable = true;
     protected bool $Identity = false; // auto increment
     protected $Default = null;
@@ -29,9 +31,11 @@ class Column extends Operation
         return $this->$name;
     }
 
-    public function type(string $type): Column
+    public function type(string $type, ?int $max = null, ?int $scale = null): Column
     {
-        $this->Type = strtolower($type);
+        $this->Type  = strtolower($type);
+        $this->Max   = $max;
+        $this->Scale = $scale;
         return $this;
     }
 
