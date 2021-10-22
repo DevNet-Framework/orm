@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -37,19 +38,19 @@ class EntityQuery implements IQueryable
         return $this->$name;
     }
 
-    public function getIterator() : Enumerator
+    public function getIterator(): Enumerator
     {
         return $this->Provider->execute($this->EntityType, $this->Expression);
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
         return $this->getIterator()->toArray();
     }
 
     public function __toString()
     {
-        return $this->Provider->GetQueryText($this->Expression);
+        return $this->Provider->getQueryText($this->Expression);
     }
 
     public function asEnumerable()
