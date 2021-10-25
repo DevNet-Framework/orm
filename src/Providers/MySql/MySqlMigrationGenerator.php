@@ -107,15 +107,27 @@ class MySqlMigrationGenerator extends OperationVisitor
             case 'bool':
                 $this->SqlBuilder->append(' TINYINT(1)');
                 break;
-            case 'integer':
-                $this->SqlBuilder->append(' INT');
-                break;
             case 'string':
-                $this->SqlBuilder->append(' TEXT');
+                if ($operation->Max) {
+                    $this->SqlBuilder->append(' VARCHAR(');
+                    $this->SqlBuilder->append($operation->Max);
+                    $this->SqlBuilder->append(')');
+                } else {
+                    $this->SqlBuilder->append(' TEXT');
+                }
                 break;
             default:
                 $this->SqlBuilder->append(' ');
                 $this->SqlBuilder->append(strtoupper($operation->Type));
+                if ($operation->Max) {
+                    $this->SqlBuilder->append('(');
+                    $this->SqlBuilder->append($operation->Max);
+                    if ($operation->Scale) {
+                        $this->SqlBuilder->append(', ');
+                        $this->SqlBuilder->append($operation->Scale);
+                    }
+                    $this->SqlBuilder->append(')');
+                }
                 break;
         }
 
