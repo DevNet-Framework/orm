@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -29,23 +30,17 @@ class EntityEntry
 
     public function __get(string $name)
     {
-        if ($name == "Values")
-        {
-            foreach ($this->Metadata->Properties as $property)
-            {
+        if ($name == "Values") {
+            foreach ($this->Metadata->Properties as $property) {
                 $propertyName = $property->PropertyInfo->getName();
                 $property->PropertyInfo->setAccessible(true);
-                if ($property->PropertyInfo->isInitialized($this->Entity))
-                {
+                if ($property->PropertyInfo->isInitialized($this->Entity)) {
                     $value = $property->PropertyInfo->getValue($this->Entity);
-                    if ($value instanceof DateTime)
-                    {
+                    if ($value instanceof DateTime) {
                         $value = $value->format('y-m-d h:m:s');
                     }
                     $this->Values[$propertyName] = $value;
-                }
-                else
-                {
+                } else {
                     $this->Values[$propertyName] = null;
                 }
             }
@@ -56,8 +51,7 @@ class EntityEntry
 
     public function __set(string $name, $value)
     {
-        switch ($name)
-        {
+        switch ($name) {
             case 'entity':
             case 'metadata':
             case 'values':
@@ -66,28 +60,23 @@ class EntityEntry
                 throw PropertyException::privateProperty(self::class, $name);
                 break;
         }
-        
+
         $this->$name = $value;
     }
 
     public function detectChanges()
     {
         $values = [];
-        foreach ($this->Metadata->Properties as $property)
-        {
+        foreach ($this->Metadata->Properties as $property) {
             $propertyName = $property->PropertyInfo->getName();
-            if (isset($this->Entity->$propertyName))
-            {
+            if (isset($this->Entity->$propertyName)) {
                 $values[$propertyName] = $this->Entity->$propertyName;
-            }
-            else
-            {
+            } else {
                 $this->Values[$propertyName] = null;
             }
         }
 
-        if ($this->Values != $values && $this->State == EntityState::Attached)
-        {
+        if ($this->Values != $values && $this->State == EntityState::Attached) {
             $this->State = EntityState::Modified;
             $this->Values = $values;
         }
