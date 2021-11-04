@@ -48,6 +48,7 @@ class Column extends Operation
     public function identity(): Column
     {
         $this->Identity = true;
+        $this->Nullable = false;
         return $this;
     }
 
