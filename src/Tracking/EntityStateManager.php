@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -26,8 +27,7 @@ class EntityStateManager
         $entityName = get_class($entity);
         $entityType = $this->Model->getEntityType($entityName);
         $entry      = $this->getEntry($entity);
-        if ($entry)
-        {
+        if ($entry) {
             return $entry;
         }
 
@@ -46,27 +46,21 @@ class EntityStateManager
 
     public function getEntry($entity, int $id = null)
     {
-        if (is_string($entity))
-        {
-            if (isset($this->IdentityMap[$entity]))
-            {
-                foreach ($this->IdentityMap[$entity] as $entry)
-                {
+        if (is_string($entity)) {
+            if (isset($this->IdentityMap[$entity])) {
+                foreach ($this->IdentityMap[$entity] as $entry) {
                     $key = $entry->Metadata->PropertyKey;
-                    if ($entry->Entity->$key == $id)
-                    {
+                    if ($entry->Entity->$key == $id) {
                         return $entry;
                     }
                 }
             }
         }
 
-        if ($entity instanceof IEntity)
-        {
+        if ($entity instanceof IEntity) {
             $entityName = get_class($entity);
             $entityHash = spl_object_hash($entity);
-            if (isset($this->IdentityMap[$entityName][$entityHash]))
-            {
+            if (isset($this->IdentityMap[$entityName][$entityHash])) {
                 return $this->IdentityMap[$entityName][$entityHash];
             }
         }
@@ -74,7 +68,7 @@ class EntityStateManager
         return null;
     }
 
-    public function getEntries() : array
+    public function getEntries(): array
     {
         return $this->IdentityMap;
     }
