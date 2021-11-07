@@ -16,6 +16,8 @@ class ForeignKey extends Operation
     protected string $ReferencedTable;
     protected string $ReferencedColumn;
     protected string $Constraint;
+    protected ?string $OnUpdate = null;
+    protected ?string $OnDelete = null;
 
     public function __get(string $name)
     {
@@ -36,9 +38,22 @@ class ForeignKey extends Operation
         return $this;
     }
 
-    public function constraint(string $name): void
+    public function constraint(string $name): ForeignKey
     {
         $this->Constraint = $name;
+        return $this;
+    }
+
+    public function onUpdate(string $option): ForeignKey
+    {
+        $this->OnUpdate = $option;
+        return $this;
+    }
+
+    public function onDelete(string $option): ForeignKey
+    {
+        $this->OnUpdate = $option;
+        return $this;
     }
 
     public function accept(OperationVisitor $visitor): void
