@@ -214,12 +214,25 @@ class SqliteMigrationGenerator extends OperationVisitor
         $this->SqlBuilder->append($constraint);
         $this->SqlBuilder->append(' FOREIGN KEY (');
         $this->SqlBuilder->append($key);
-        $this->SqlBuilder->append(') ');
+        $this->SqlBuilder->append(')');
+        $this->SqlBuilder->appendLine();
         $this->SqlBuilder->append('REFERENCES ');
         $this->SqlBuilder->append($refTable);
         $this->SqlBuilder->append(' (');
         $this->SqlBuilder->append($refColumn);
         $this->SqlBuilder->append(')');
+
+        if ($operation->OnUpdate) {
+            $this->SqlBuilder->appendLine();
+            $this->SqlBuilder->append('ON UPDATE ');
+            $this->SqlBuilder->append($operation->OnUpdate);
+        }
+
+        if ($operation->OnDelete) {
+            $this->SqlBuilder->appendLine();
+            $this->SqlBuilder->append('ON DELETE ');
+            $this->SqlBuilder->append($operation->OnDelete);
+        }
     }
 
     public function visitAddForeignKey(Operation $operation): void
