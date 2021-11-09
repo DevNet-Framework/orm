@@ -38,7 +38,12 @@ class MigrationHistory implements IEnumerable
 
         $script   = $this->getSelectScript();
         $command  = $connection->createCommand($script);
-        $dbReader = $command->executeReader();
+
+        try {
+            $dbReader = $command->executeReader();
+        } catch (\Exception $e) {
+            $dbReader = null;
+        }
 
         if ($dbReader) {
             $this->Existence = true;

@@ -99,22 +99,15 @@ class Migrator
         if (!$this->History->exists() && $commands) {
             $createScript = $this->History->getCreateScript();
             $command = $connection->createCommand($createScript);
-            $result = $command->execute();
-            if ($result === null) {
-                throw new \Exception("MigrationHistory table could not be created!");
-            }
+            $command->execute();
         }
 
         try {
             foreach ($commands as $command) {
-                $result = $command->execute();
-                if ($result === null) {
-                    throw new \Exception("Something went wrong with the Sql Command!{$command->Sql}");
-                }
+                $command->execute();
             }
-
             $transaction->commit();
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $transaction->rollback();
             throw $e;
         }
