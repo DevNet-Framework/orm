@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -24,7 +25,7 @@ class EntityContext
         $builder        = new EntityModelBuilder();
         $this->Database = new EntityDatabase($options, $builder->getModel());
         $this->Model    = $this->Database->Model;
-        
+
         $this->onModelCreate($builder);
     }
 
@@ -41,8 +42,7 @@ class EntityContext
     /** Registry pattern and singleton pattern. */
     public function set(string $entityType)
     {
-        if (isset($this->Repositories[$entityType]))
-        {
+        if (isset($this->Repositories[$entityType])) {
             return $this->Repositories[$entityType];
         }
 
@@ -52,7 +52,7 @@ class EntityContext
         return $this->Repositories[$entityType];
     }
 
-    public function save() : int
+    public function save(): int
     {
         return $this->Database->save();
     }
