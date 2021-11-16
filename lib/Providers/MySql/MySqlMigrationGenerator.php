@@ -91,11 +91,9 @@ class MySqlMigrationGenerator extends OperationVisitor
     public function visitDropTable(Operation $operation): void
     {
         $table = $this->SqlHelper->delimitIdentifier($operation->Name, $operation->Schema);
-        $this->SqlBuilder->appendLine('SET foreign_key_checks = 0;');
         $this->SqlBuilder->append('DROP TABLE ');
         $this->SqlBuilder->append($table);
         $this->SqlBuilder->append(';');
-        $this->SqlBuilder->appendLine('SET foreign_key_checks = 1;');
     }
 
     public function visitColumn(Operation $operation): void
