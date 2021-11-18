@@ -77,6 +77,11 @@ class EntityType
         return $this->TableName;
     }
 
+    public function getSchemaName(): ?string
+    {
+        return $this->Model->Schema;
+    }
+
     public function getPrimaryKey(): string
     {
         $property = $this->getProperty($this->PropertyKey);
