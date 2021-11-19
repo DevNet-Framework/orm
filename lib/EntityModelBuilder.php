@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -25,7 +26,7 @@ class EntityModelBuilder
     {
         $this->Model->setSchema($name);
     }
-    
+
     public function entity(string $entityName): EntityTypeBuilder
     {
         $entityType = $this->Model->getEntityType($entityName);
