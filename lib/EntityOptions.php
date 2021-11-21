@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -14,7 +15,7 @@ use DevNet\System\Exceptions\ClassException;
 class EntityOptions
 {
     use \DevNet\System\Extension\ExtensionTrait;
-    
+
     private string $ContextType = EntityContext::class;
     private IEntityDataProvider $Provider;
 
@@ -25,14 +26,13 @@ class EntityOptions
 
     public function useContext(string $contextType)
     {
-        if (!class_exists($contextType))
-        {
+        if (!class_exists($contextType)) {
             throw ClassException::classNotFound($contextType);
         }
 
         $parents = class_parents($contextType);
         if (!in_array(EntityContext::class, $parents)) {
-            throw new \Exception("Custom EntityContext must inherent from ".EntityContext::class);
+            throw new \Exception("Custom EntityContext must inherent from " . EntityContext::class);
         }
 
         $this->ContextType = $contextType;
