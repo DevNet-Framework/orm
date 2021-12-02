@@ -93,7 +93,7 @@ class PostgreSqlMigrationGenerator extends OperationVisitor
         $table = $this->SqlHelper->delimitIdentifier($operation->Name, $operation->Schema);
         $this->SqlBuilder->append('DROP TABLE ');
         $this->SqlBuilder->append($table);
-        $this->SqlBuilder->appendLine(' CASCADE;');
+        $this->SqlBuilder->append(';');
     }
 
     public function visitColumn(Operation $operation): void
