@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php
+
 /**
  * @author      Mohammed Moussaoui
  * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
@@ -23,27 +24,27 @@ class EntitySet extends EntityQuery
         parent::__construct($database->Model->getEntityType($entityName), $database->QueryProvider);
     }
 
-    public function find(int $id) : ?IEntity
+    public function find(int $id): ?IEntity
     {
         return $this->Database->Finder->find($this->EntityType, $id);
     }
 
-    public function add(IEntity $entity) : void
+    public function add(IEntity $entity): void
     {
         $this->Database->add($entity);
     }
 
-    public function remove(IEntity $entity) : void
+    public function remove(IEntity $entity): void
     {
         $this->Database->remove($entity);
     }
 
-    public function update(IEntity $entity) : void
+    public function update(IEntity $entity): void
     {
         $this->Database->attach($entity);
     }
 
-    public function create() : IEntity
+    public function create(): IEntity
     {
         $entityName = $this->EntityType->getName();
         $entity     = new $entityName();
