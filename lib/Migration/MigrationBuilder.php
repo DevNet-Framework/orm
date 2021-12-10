@@ -61,7 +61,7 @@ class MigrationBuilder
         $this->Operations[] = Operation::updateData($this->Schema, $table, $columns, $keys);
     }
 
-    public function deleteData(string $table, array $keys): void
+    public function deleteData(string $table, array $keys = []): void
     {
         $this->Operations[] = Operation::deleteData($this->Schema, $table, $keys);
     }
