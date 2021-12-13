@@ -351,8 +351,10 @@ class SqliteMigrationGenerator extends OperationVisitor
 
         $this->SqlBuilder->append('DELETE FROM ');
         $this->SqlBuilder->append($table);
-        $this->SqlBuilder->append(' WHERE ');
-        $this->SqlBuilder->append($keys);
+        if ($keys) {
+            $this->SqlBuilder->append(' WHERE ');
+            $this->SqlBuilder->append($keys);
+        }
         $this->SqlBuilder->append(';');
     }
 }
