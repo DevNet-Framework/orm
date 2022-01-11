@@ -20,7 +20,7 @@ use DevNet\System\Linq\IQueryable;
  */
 class EntityQuery implements IQueryable
 {
-    use \DevNet\System\Extension\ExtensionTrait;
+    use \DevNet\System\Extension\ExtenderTrait;
 
     private object $EntityType;
     private IQueryProvider $Provider;

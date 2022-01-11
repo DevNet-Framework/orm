@@ -19,7 +19,7 @@ use stdClass;
 
 class MigrationHistory implements IEnumerable
 {
-    use \DevNet\System\Extension\ExtensionTrait;
+    use \DevNet\System\Extension\ExtenderTrait;
 
     private EntityDatabase $Database;
     
