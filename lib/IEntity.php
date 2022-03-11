@@ -14,16 +14,9 @@ use DevNet\System\Exceptions\PropertyException;
 interface IEntity
 {
     /**
-     * @return mixed return the field value
-     * @throws PropertyException undefined Propery | private Property | protected Property
-     * throwing PropertyException is optionnel.
+     * Only the public typed properties will be maped as fields.
+     * protected, private or untyped properties, will be ignored, but can be used in your private code.
+     * Single navigation property must have the type of the referenced entity
+     * Collection navigation property must be of type: IList
      */
-    public function __get(string $name);
-
-    /**
-     * set the field value
-     * @throws PropertyException Invalid Value Type | private Property | protected Property
-     * throwing PropertyException is optionnel.
-     */
-    public function __set(string $name, $value);
 }
