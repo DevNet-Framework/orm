@@ -36,7 +36,8 @@ class EntityType
 
         $scalarTypes = ['bool', 'int', 'float', 'string'];
         foreach ($this->EntityInfo->getProperties() as $PropertyInfo) {
-            if ($PropertyInfo->hasType()) {
+            // map only public typed properties
+            if ($PropertyInfo->isPublic() && $PropertyInfo->hasType()) {
                 $propertyName = $PropertyInfo->getName();
                 $propertyType = $PropertyInfo->getType()->getName();
                 if (in_array(strtolower($propertyType), $scalarTypes) || $propertyType === DateTime::class) {
@@ -46,13 +47,13 @@ class EntityType
                     }
                 } else {
                     if ($propertyType === IList::class) {
-                        // later add conventional code here
+                        // conventional navigation collection property feature will be add in the future release
                         $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo); //new EntityNavigation($this);
                     } else {
                         if (class_exists($propertyType)) {
                             $interfaces = class_implements($propertyType);
                             if (in_array(IEntity::class, $interfaces)) {
-                                // later add conventional code here
+                                // conventional navigation single property feature will be add in the future release
                                 $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo); //new EntityNavigation($this);
                             }
                         }
@@ -67,7 +68,7 @@ class EntityType
         return $this->$name;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->EntityName;
     }
@@ -101,7 +102,7 @@ class EntityType
         return $property->Column['Name'] ?? null;
     }
 
-    public function getProperty(string $propertyName)
+    public function getProperty(string $propertyName): EntityProperty
     {
         $propery = $this->Properties[$propertyName] ?? null;
         if (!$propery) {
@@ -111,7 +112,7 @@ class EntityType
         return $propery;
     }
 
-    public function getNavigation(string $navigationName)
+    public function getNavigation(string $navigationName): EntityNavigation
     {
         $navigation = $this->Navigations[$navigationName] ?? null;
         if (!$navigation) {
@@ -121,12 +122,12 @@ class EntityType
         return $navigation;
     }
 
-    public function setTableName(string $name)
+    public function setTableName(string $name): void
     {
         $this->TableName = $name;
     }
 
-    public function setPrimaryKey(string $propertyName)
+    public function setPrimaryKey(string $propertyName): void
     {
         if (!property_exists($this->EntityName, $propertyName)) {
             throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
@@ -138,7 +139,7 @@ class EntityType
         }
     }
 
-    public function addForeignKey(string $propertyName, string $entityReference)
+    public function addForeignKey(string $propertyName, string $entityReference): void
     {
         if (!property_exists($this->EntityName, $propertyName)) {
             throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
