@@ -9,7 +9,6 @@
 
 namespace DevNet\Entity;
 
-use DevNet\Entity\IEntity;
 use DevNet\Entity\Query\EntityQuery;
 use DevNet\Entity\Storage\EntityDatabase;
 
@@ -24,27 +23,27 @@ class EntitySet extends EntityQuery
         parent::__construct($database->Model->getEntityType($entityName), $database->QueryProvider);
     }
 
-    public function find(int $id): ?IEntity
+    public function find(int $id): ?object
     {
         return $this->Database->Finder->find($this->EntityType, $id);
     }
 
-    public function add(IEntity $entity): void
+    public function add(object $entity): void
     {
         $this->Database->add($entity);
     }
 
-    public function remove(IEntity $entity): void
+    public function remove(object $entity): void
     {
         $this->Database->remove($entity);
     }
 
-    public function update(IEntity $entity): void
+    public function update(object $entity): void
     {
         $this->Database->attach($entity);
     }
 
-    public function create(): IEntity
+    public function create(): object
     {
         $entityName = $this->EntityType->getName();
         $entity     = new $entityName();

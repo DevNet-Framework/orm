@@ -11,7 +11,6 @@ namespace DevNet\Entity\Internal;
 
 use DevNet\System\Linq;
 use DevNet\System\Linq\IQueryable;
-use DevNet\Entity\IEntity;
 use DevNet\Entity\Query\EntityQuery;
 use DevNet\Entity\Metadata\EntityType;
 use DevNet\Entity\Metadata\EntityNavigation;
@@ -29,7 +28,7 @@ class EntityFinder
         $this->EntityStateManager = $database->EntityStateManager;
     }
 
-    public function find(EntityType $entityType, $id): ?IEntity
+    public function find(EntityType $entityType, $id): ?object
     {
         $entry = $this->EntityStateManager->getEntry($entityType->getName(), $id);
         if ($entry) {
@@ -47,7 +46,7 @@ class EntityFinder
         return $entity;
     }
 
-    public function load(IEntity $entity)
+    public function load(object $entity)
     {
         $this->Database->attach($entity);
 

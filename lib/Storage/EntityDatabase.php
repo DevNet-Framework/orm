@@ -15,9 +15,9 @@ use DevNet\Entity\Internal\EntityFinder;
 use DevNet\Entity\Providers\IEntityDataProvider;
 use DevNet\Entity\Query\EntityQueryProvider;
 use DevNet\Entity\Storage\EntityDataPersister;
+use DevNet\Entity\Tracking\EntityEntry;
 use DevNet\Entity\Tracking\EntityStateManager;
 use DevNet\Entity\Tracking\EntityState;
-use DevNet\Entity\IEntity;
 
 class EntityDatabase
 {
@@ -43,28 +43,28 @@ class EntityDatabase
         return $this->$name;
     }
 
-    public function finder(string $entityName)
+    public function finder(string $entityName): object
     {
         $entityType = $this->Model->getEntityType($entityName);
         return $this->EntityFinderFactory->create($entityType);
     }
 
-    public function entry(IEntity $entity)
+    public function entry(object $entity): EntityEntry
     {
         return $this->EntityStateManager->getOrCreateEntry($entity);
     }
 
-    public function attach(IEntity $entity)
+    public function attach(object $entity): void
     {
         $this->entry($entity);
     }
 
-    public function add(IEntity $entity)
+    public function add(object $entity): void
     {
         $this->entry($entity)->State = EntityState::Added;
     }
 
-    public function remove(IEntity $entity)
+    public function remove(object $entity): void
     {
         $this->entry($entity)->State = EntityState::Deleted;
     }

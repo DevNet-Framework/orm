@@ -9,7 +9,6 @@
 
 namespace DevNet\Entity\Metadata;
 
-use DevNet\Entity\IEntity;
 use DevNet\System\Collections\IList;
 use DevNet\System\Exceptions\ClassException;
 use DevNet\System\Exceptions\PropertyException;
@@ -47,15 +46,12 @@ class EntityType
                     }
                 } else {
                     if ($propertyType === IList::class) {
-                        // conventional navigation collection property feature will be add in the future release
-                        $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo); //new EntityNavigation($this);
+                        // conventional collection navigation property feature will be added in the future release
+                        $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo);
                     } else {
                         if (class_exists($propertyType)) {
-                            $interfaces = class_implements($propertyType);
-                            if (in_array(IEntity::class, $interfaces)) {
-                                // conventional navigation single property feature will be add in the future release
-                                $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo); //new EntityNavigation($this);
-                            }
+                            // conventional reference navigation property feature will be added in the future release
+                            $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo);
                         }
                     }
                 }

@@ -9,7 +9,6 @@
 
 namespace DevNet\Entity\Tracking;
 
-use DevNet\Entity\IEntity;
 use DevNet\Entity\Metadata\EntityModel;
 
 class EntityStateManager
@@ -22,7 +21,7 @@ class EntityStateManager
         $this->Model = $model;
     }
 
-    public function getOrCreateEntry(IEntity $entity)
+    public function getOrCreateEntry(object $entity): EntityEntry
     {
         $entityName = get_class($entity);
         $entityType = $this->Model->getEntityType($entityName);
@@ -36,7 +35,7 @@ class EntityStateManager
         return $entry;
     }
 
-    public function addEntry(EntityEntry $entry)
+    public function addEntry(EntityEntry $entry): void
     {
         $entity = $entry->Entity;
         $entityHash = spl_object_hash($entity);
@@ -44,7 +43,7 @@ class EntityStateManager
         $this->IdentityMap[$entityName][$entityHash] = $entry;
     }
 
-    public function getEntry($entity, int $id = null)
+    public function getEntry($entity, int $id = null): EntityEntry
     {
         if (is_string($entity)) {
             if (isset($this->IdentityMap[$entity])) {
@@ -57,7 +56,7 @@ class EntityStateManager
             }
         }
 
-        if ($entity instanceof IEntity) {
+        if (is_object($entity)) {
             $entityName = get_class($entity);
             $entityHash = spl_object_hash($entity);
             if (isset($this->IdentityMap[$entityName][$entityHash])) {
@@ -73,7 +72,7 @@ class EntityStateManager
         return $this->IdentityMap;
     }
 
-    public function clearEntries()
+    public function clearEntries(): void
     {
         $this->IdentityMap = [];
     }

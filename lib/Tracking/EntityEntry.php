@@ -9,19 +9,18 @@
 
 namespace DevNet\Entity\Tracking;
 
-use DevNet\Entity\IEntity;
 use DevNet\Entity\Metadata\EntityType;
 use DevNet\System\Exceptions\PropertyException;
 use DateTime;
 
 class EntityEntry
 {
-    private IEntity $Entity;
     private EntityType $Metadata;
+    private object $Entity;
     private int $State;
     private array $Values = [];
 
-    public function __construct(IEntity $entity, EntityType $entityType)
+    public function __construct(object $entity, EntityType $entityType)
     {
         $this->Entity   = $entity;
         $this->Metadata = $entityType;
@@ -33,7 +32,6 @@ class EntityEntry
         if ($name == "Values") {
             foreach ($this->Metadata->Properties as $property) {
                 $propertyName = $property->PropertyInfo->getName();
-                $property->PropertyInfo->setAccessible(true);
                 if ($property->PropertyInfo->isInitialized($this->Entity)) {
                     $value = $property->PropertyInfo->getValue($this->Entity);
                     if ($value instanceof DateTime) {
