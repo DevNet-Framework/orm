@@ -9,11 +9,13 @@
 
 namespace DevNet\Entity\Migration;
 
+use DevNet\System\Exceptions\PropertyException;
+
 abstract class AbstractMigration
 {
-    protected ?string $Schema;
-    protected array $UpOperations;
-    protected array $DownOperations;
+    private ?string $schema;
+    private array $upOperations;
+    private array $downOperations;
 
     public function __get(string $name)
     {
@@ -25,12 +27,16 @@ abstract class AbstractMigration
             return $this->build('down');
         }
 
-        return $this->$name;
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
     }
 
     public function __construct(?string $schema = null)
     {
-        $this->Schema = $schema;
+        $this->schema = $schema;
     }
 
     public function build(string $action): array
@@ -39,7 +45,7 @@ abstract class AbstractMigration
             throw new \Exception("Method {$action} not supported");
         }
 
-        $builder = new MigrationBuilder($this->Schema);
+        $builder = new MigrationBuilder($this->schema);
         $this->$action($builder);
 
         return $builder->Operations;

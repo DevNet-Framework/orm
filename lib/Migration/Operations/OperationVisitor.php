@@ -9,18 +9,20 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
+use DevNet\System\Text\StringBuilder;
+
 abstract class OperationVisitor
 {
-    protected array $statment;
-
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
+    protected StringBuilder $SqlBuilder;
 
     public function visit(Operation $operation): void
     {
         $operation->accept($this);
+    }
+
+    public function __toString(): string
+    {
+        return $this->SqlBuilder;
     }
 
     abstract public function visitCreateTable(Operation $operation): void;

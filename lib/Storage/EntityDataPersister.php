@@ -14,13 +14,13 @@ use DevNet\System\Database\DbConnection;
 
 class EntityDataPersister
 {
-    private DbConnection $Connection;
-    private ISqlGenerationHelper $SqlHelper;
+    private DbConnection $connection;
+    private ISqlGenerationHelper $sqlHelper;
 
     public function __construct(DbConnection $connection, ISqlGenerationHelper $sqlHelper)
     {
-        $this->Connection = $connection;
-        $this->SqlHelper  = $sqlHelper;
+        $this->connection = $connection;
+        $this->sqlHelper  = $sqlHelper;
     }
 
     public function insert(EntityEntry $entry): int
@@ -31,14 +31,14 @@ class EntityDataPersister
         $values       = [];
         foreach ($entry->Values as $name => $value) {
             $placeHolders[] = '?';
-            $culomns[]      = $this->SqlHelper->delimitIdentifier($name);
+            $culomns[]      = $this->sqlHelper->delimitIdentifier($name);
             $values[]       = $value;
         }
 
-        $table        = $this->SqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
+        $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $placeHolders = implode(', ', $placeHolders);
         $culomns      = implode(', ', $culomns);
-        $dbCommand    = $this->Connection->createCommand("INSERT INTO {$table} ($culomns) VALUES ({$placeHolders})");
+        $dbCommand    = $this->connection->createCommand("INSERT INTO {$table} ($culomns) VALUES ({$placeHolders})");
         $dbCommand->addParameters($values);
         return $dbCommand->execute();
     }
@@ -51,15 +51,15 @@ class EntityDataPersister
         $values       = [];
 
         foreach ($entry->Values as $name => $value) {
-            $placeHolders[] = $this->SqlHelper->delimitIdentifier($name) . " = ?";
+            $placeHolders[] = $this->sqlHelper->delimitIdentifier($name) . " = ?";
             $values[]       = $value;
         }
 
-        $table        = $this->SqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
+        $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $placeHolders = implode(', ', $placeHolders);
         $values[]     = $entry->Entity->$key;
-        $key          = $this->SqlHelper->delimitIdentifier($key);
-        $dbCommand    = $this->Connection->createCommand("UPDATE {$table} SET {$placeHolders} WHERE {$key} = ?");
+        $key          = $this->sqlHelper->delimitIdentifier($key);
+        $dbCommand    = $this->connection->createCommand("UPDATE {$table} SET {$placeHolders} WHERE {$key} = ?");
 
         $dbCommand->addParameters($values);
         return $dbCommand->execute();
@@ -68,10 +68,10 @@ class EntityDataPersister
     public function delete(EntityEntry $entry): int
     {
         $entityType = $entry->Metadata;
-        $key        = $this->SqlHelper->delimitIdentifier($entityType->getPrimaryKey());
+        $key        = $this->sqlHelper->delimitIdentifier($entityType->getPrimaryKey());
         $values[]   = $entry->Entity->$key;
-        $table      = $this->SqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
-        $dbCommand  = $this->Connection->createCommand("DELETE FROM {$table} WHERE {$key} = ?");
+        $table      = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
+        $dbCommand  = $this->connection->createCommand("DELETE FROM {$table} WHERE {$key} = ?");
 
         $dbCommand->addParameters($values);
         return $dbCommand->execute();

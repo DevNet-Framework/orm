@@ -17,7 +17,7 @@ class MigrationAssembly implements IEnumerable
 {
     use \DevNet\System\Extension\ExtenderTrait;
 
-    private array $Migrations = [];
+    private array $migrations = [];
 
     public function __construct(string $namespace, string $directory)
     {
@@ -39,7 +39,7 @@ class MigrationAssembly implements IEnumerable
                         $migration->Id = (int)$matches[1];
                         $migration->Name = $matches[2];
                         $migration->Type = $class;
-                        $this->Migrations[] = $migration;
+                        $this->migrations[] = $migration;
                     }
                 }
             }
@@ -52,7 +52,7 @@ class MigrationAssembly implements IEnumerable
             return 0;
         }
 
-        foreach ($this->Migrations as $migration) {
+        foreach ($this->migrations as $migration) {
             if (str_starts_with($target, $migration->Id)) {
                 return $migration->Id;
             }
@@ -62,6 +62,6 @@ class MigrationAssembly implements IEnumerable
 
     public function getIterator(): Enumerator
     {
-        return new Enumerator($this->Migrations);
+        return new Enumerator($this->migrations);
     }
 }

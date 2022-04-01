@@ -12,6 +12,7 @@ namespace DevNet\Entity\Query;
 use DevNet\System\Collections\Enumerator;
 use DevNet\System\Linq\Enumerables\TakeEnumerable;
 use DevNet\System\Compiler\Expressions\Expression;
+use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\Linq\IQueryProvider;
 use DevNet\System\Linq\IQueryable;
 
@@ -22,25 +23,34 @@ class EntityQuery implements IQueryable
 {
     use \DevNet\System\Extension\ExtenderTrait;
 
-    private object $EntityType;
-    private IQueryProvider $Provider;
-    private Expression $Expression;
-
-    public function __construct(object $entityType, IQueryProvider $provider, Expression $expression = null)
-    {
-        $this->EntityType = $entityType;
-        $this->Provider   = $provider;
-        $this->Expression = ($expression == null) ? Expression::constant($this) : $expression;
-    }
+    private object $entityType;
+    private IQueryProvider $provider;
+    private Expression $expression;
 
     public function __get(string $name)
     {
-        return $this->$name;
+        if (in_array($name, ['EntityType', 'Provider', 'Expression'])) {
+            $property = lcfirst($name);
+            return $this->$property;
+        }
+
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
+    }
+
+    public function __construct(object $entityType, IQueryProvider $provider, Expression $expression = null)
+    {
+        $this->entityType = $entityType;
+        $this->provider   = $provider;
+        $this->expression = ($expression == null) ? Expression::constant($this) : $expression;
     }
 
     public function getIterator(): Enumerator
     {
-        return $this->Provider->execute($this->EntityType, $this->Expression);
+        return $this->provider->execute($this->entityType, $this->expression);
     }
 
     public function toArray(): array
@@ -50,7 +60,7 @@ class EntityQuery implements IQueryable
 
     public function __toString()
     {
-        return $this->Provider->getQueryText($this->Expression);
+        return $this->provider->getQueryText($this->expression);
     }
 
     public function asEnumerable()

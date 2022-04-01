@@ -18,10 +18,10 @@ use DevNet\System\Linq\IQueryable;
 
 class PostgreSqlQueryGenerator extends ExpressionVisitor
 {
-    private EntityType $EntityType;
-    public string $Method        = '';
-    public string $LastMethod    = '';
-    private array $Parameters    = [];
+    private EntityType $entityType;
+    private string $method        = '';
+    private string $lastMethod    = '';
+    private array $parameters    = [];
     public array $OuterVariables = [];
     public array $Sql            = [];
 
@@ -34,7 +34,7 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
 
     public function visitLambda(Expression $expression)
     {
-        $this->Parameters = $expression->Parameters;
+        $this->parameters = $expression->Parameters;
         $this->visit($expression->Body);
     }
 
@@ -46,8 +46,8 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
             $this->visit($lastExpression);
         }
 
-        $this->Method = strtolower($expression->Method);
-        switch ($this->Method) {
+        $this->method = strtolower($expression->Method);
+        switch ($this->method) {
             case 'where':
                 $this->Sql[] = 'WHERE';
                 break;
@@ -65,7 +65,7 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
                 $this->Sql[] = ",";
                 break;
             case 'skip':
-                if ($this->LastMethod === "take") {
+                if ($this->lastMethod === "take") {
                     $this->Sql[] = "OFFSET";
                 } else {
                     $this->Sql[] = "LIMIT";
@@ -85,13 +85,13 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
             $this->visit($argument);
         }
 
-        if ($this->Method === "orderby" || $this->Method === "thenby") {
+        if ($this->method === "orderby" || $this->method === "thenby") {
             $this->Sql[] = "ASC";
-        } else if ($this->Method === "orderbydescending" || $this->Method === "thenbydescending") {
+        } else if ($this->method === "orderbydescending" || $this->method === "thenbydescending") {
             $this->Sql[] = "DESC";
         }
 
-        if ($this->Method === "take" && $this->LastMethod === "skip") {
+        if ($this->method === "take" && $this->lastMethod === "skip") {
             $stack = [];
 
             for ($i = 0; $i < 3; $i++) {
@@ -105,7 +105,7 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
             }
         }
 
-        $this->LastMethod = $expression->Method;
+        $this->lastMethod = $expression->Method;
     }
 
     public function visitGroup(Expression $expression)
@@ -158,10 +158,10 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
 
     public function visitProperty(Expression $expression)
     {
-        if (in_array($expression->Parameter->Name, $this->Parameters)) {
-            $propertyType = $this->EntityType->getProperty($expression->Property);
+        if (in_array($expression->Parameter->Name, $this->parameters)) {
+            $propertyType = $this->entityType->getProperty($expression->Property);
             if (!$propertyType) {
-                throw new PropertyException("undefined property {$this->EntityType->EntityName}::{$expression->Property}");
+                throw new PropertyException("undefined property {$this->entityType->EntityName}::{$expression->Property}");
             }
             $this->Sql[] = "\"{$propertyType->Column['Name']}\"";
         } else {
@@ -173,7 +173,7 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
 
     public function visitParameter(Expression $expression)
     {
-        if (in_array($expression->Name, $this->Parameters)) {
+        if (in_array($expression->Name, $this->parameters)) {
             $this->Sql[] = $expression->Name;
         } else {
             $this->OuterVariables[] = $expression->Value;
@@ -184,11 +184,11 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
     public function visitConstant(Expression $expression)
     {
         if ($expression->Value instanceof IQueryable) {
-            $this->EntityType = $expression->Value->EntityType;
-            $this->Sql[] = "SELECT * FROM \"{$this->EntityType->getTableName()}\"";
-            $this->LastMethod = "from";
+            $this->entityType = $expression->Value->EntityType;
+            $this->Sql[] = "SELECT * FROM \"{$this->entityType->getTableName()}\"";
+            $this->lastMethod = "from";
         } else {
-            switch ($this->Method) {
+            switch ($this->method) {
                 case 'str_contains':
                     $this->Sql[] = "'%" . $expression->Value . "%'";
                     break;

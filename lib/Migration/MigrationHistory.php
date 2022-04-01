@@ -22,22 +22,21 @@ class MigrationHistory implements IEnumerable
     use \DevNet\System\Extension\ExtenderTrait;
 
     private EntityDatabase $Database;
-    
-    private ?string $Schema   = null;
-    private string $Table     = 'MigrationHistory';
-    private array $Migrations = [];
-    private bool $Existence   = false;
+    private ?string $schema   = null;
+    private string $table     = 'MigrationHistory';
+    private array $migrations = [];
+    private bool $existence   = false;
 
     public function __construct(EntityDatabase $database, string $namespace, string $directory)
     {
-        $this->Schema   = $database->Model->Schema;
-        $this->Database = $database;
+        $this->schema   = $database->Model->Schema;
+        $this->database = $database;
 
         $connection = $database->DataProvider->Connection;
         $connection->open();
 
-        $script   = $this->getSelectScript();
-        $command  = $connection->createCommand($script);
+        $script  = $this->getSelectScript();
+        $command = $connection->createCommand($script);
 
         try {
             $dbReader = $command->executeReader();
@@ -55,7 +54,7 @@ class MigrationHistory implements IEnumerable
                     $migration->Id = (int)$dbReader->getValue("Id");
                     $migration->Name = $dbReader->getValue("Name");
                     $migration->Type = $namespace . "\\" . $dbReader->getValue("Name");
-                    $this->Migrations[] = $migration;
+                    $this->migrations[] = $migration;
                 } else {
                     throw new \Exception("Not found File: {$file}");
                 }
@@ -72,20 +71,20 @@ class MigrationHistory implements IEnumerable
 
     public function getSelectScript(): string
     {
-        $sqlHelper = $this->Database->DataProvider->SqlHelper;
-        $table     = $sqlHelper->delimitIdentifier($this->Table, $this->Schema);
+        $sqlHelper = $this->database->DataProvider->SqlHelper;
+        $table = $sqlHelper->delimitIdentifier($this->table, $this->schema);
 
         return "SELECT * FROM {$table}";
     }
 
     public function getCreateScript(): string
     {
-        $table = new CreateTable($this->Schema, 'MigrationHistory');
+        $table = new CreateTable($this->schema, 'MigrationHistory');
         $table->column('Id')->type('bigint')->nullable(false);
         $table->column('Name')->type('varchar(45)')->nullable(false);
         $table->primaryKey('Id');
 
-        $migrationGenerator = new $this->Database->DataProvider->MigrationGenerator;
+        $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
         $migrationGenerator->visit($table);
 
         return $migrationGenerator->__toString();
@@ -93,8 +92,8 @@ class MigrationHistory implements IEnumerable
 
     public function getInsertScript(string $id, string $name): string
     {
-        $data = new InsertData($this->Schema, $this->Table, ['Id' => $id, 'Name' => $name]);
-        $migrationGenerator = new $this->Database->DataProvider->MigrationGenerator;
+        $data = new InsertData($this->schema, $this->table, ['Id' => $id, 'Name' => $name]);
+        $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
         $migrationGenerator->visit($data);
 
         return $migrationGenerator->__toString();
@@ -102,8 +101,8 @@ class MigrationHistory implements IEnumerable
 
     public function getDeleteScript(string $id): string
     {
-        $data = new DeleteData($this->Schema, $this->Table, ['Id' => $id]);
-        $migrationGenerator = new $this->Database->DataProvider->MigrationGenerator;
+        $data = new DeleteData($this->schema, $this->table, ['Id' => $id]);
+        $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
         $migrationGenerator->visit($data);
 
         return $migrationGenerator->__toString();
@@ -111,6 +110,6 @@ class MigrationHistory implements IEnumerable
 
     public function getIterator(): Enumerator
     {
-        return new Enumerator($this->Migrations);
+        return new Enumerator($this->migrations);
     }
 }

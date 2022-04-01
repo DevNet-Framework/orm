@@ -9,37 +9,47 @@
 
 namespace DevNet\Entity\Metadata;
 
+use DevNet\System\Exceptions\PropertyException;
 use ReflectionProperty;
 
 class EntityProperty
 {
-    private EntityType $Metadata;
-    private ReflectionProperty $PropertyInfo;
-    private string $TableReference;
-    private array $Column = [];
-    private ?EntityNavigation $Navigation = null;
-
-    public function __construct(EntityType $entityType, ReflectionProperty $propertyInfo)
-    {
-        $this->Metadata       = $entityType;
-        $this->PropertyInfo   = $propertyInfo;
-        $this->Column['Name'] = $propertyInfo->getName();
-    }
+    private EntityType $metadata;
+    private ReflectionProperty $propertyInfo;
+    private string $tableReference;
+    private array $column = [];
+    private ?EntityNavigation $navigation = null;
 
     public function __get(string $name)
     {
-        return $this->$name;
+        if (in_array($name, ['Metadata', 'PropertyInfo', 'TableReference', 'Column', 'Navigation'])) {
+            $property = lcfirst($name);
+            return $this->$property;
+        }
+
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
+    }
+
+    public function __construct(EntityType $entityType, ReflectionProperty $propertyInfo)
+    {
+        $this->metadata       = $entityType;
+        $this->propertyInfo   = $propertyInfo;
+        $this->column['Name'] = $propertyInfo->getName();
     }
 
     public function hasColumn(string $name, string $type = null, int $lenth = null)
     {
-        $this->Column['Name']  = $name;
-        $this->Column['Type']  = $type;
-        $this->Column['Lenth'] = $lenth;
+        $this->column['Name']  = $name;
+        $this->column['Type']  = $type;
+        $this->column['Lenth'] = $lenth;
     }
 
     public function getColumnName(): string
     {
-        return $this->Column['Name'];
+        return $this->column['Name'];
     }
 }

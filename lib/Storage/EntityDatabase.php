@@ -18,40 +18,50 @@ use DevNet\Entity\Storage\EntityDataPersister;
 use DevNet\Entity\Tracking\EntityEntry;
 use DevNet\Entity\Tracking\EntityStateManager;
 use DevNet\Entity\Tracking\EntityState;
+use DevNet\System\Exceptions\PropertyException;
 
 class EntityDatabase
 {
-    protected EntityModel $Model;
-    protected EntityFinder $Finder;
-    protected IEntityDataProvider $DataProvider;
-    protected EntityQueryProvider $QueryProvider;
-    protected EntityDataPersister $DataPersister;
-    protected EntityStateManager $EntityStateManager;
-
-    public function __construct(EntityOptions $options, EntityModel $model)
-    {
-        $this->Model              = $model;
-        $this->DataProvider       = $options->Provider;
-        $this->DataPersister      = new EntityDataPersister($options->Provider->Connection, $options->Provider->SqlHelper);
-        $this->EntityStateManager = new EntityStateManager($model);
-        $this->QueryProvider      = new EntityQueryProvider($this);
-        $this->Finder             = new EntityFinder($this);
-    }
+    private EntityModel $model;
+    private EntityFinder $finder;
+    private IEntityDataProvider $dataProvider;
+    private EntityQueryProvider $queryProvider;
+    private EntityDataPersister $dataPersister;
+    private EntityStateManager $entityStateManager;
 
     public function __get(string $name)
     {
-        return $this->$name;
+        if (in_array($name, ['Model', 'Finder', 'DataProvider', 'QueryProvider', 'DataPersister', 'EntityStateManager'])) {
+            $property = lcfirst($name);
+            return $this->$property;
+        }
+
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
+    }
+
+    public function __construct(EntityOptions $options, EntityModel $model)
+    {
+        $this->model              = $model;
+        $this->dataProvider       = $options->Provider;
+        $this->dataPersister      = new EntityDataPersister($options->Provider->Connection, $options->Provider->SqlHelper);
+        $this->entityStateManager = new EntityStateManager($model);
+        $this->queryProvider      = new EntityQueryProvider($this);
+        $this->finder             = new EntityFinder($this);
     }
 
     public function finder(string $entityName): object
     {
-        $entityType = $this->Model->getEntityType($entityName);
-        return $this->EntityFinderFactory->create($entityType);
+        $entityType = $this->model->getEntityType($entityName);
+        return $this->entityFinderFactory->create($entityType); // need to check the source of this object
     }
 
     public function entry(object $entity): EntityEntry
     {
-        return $this->EntityStateManager->getOrCreateEntry($entity);
+        return $this->entityStateManager->getOrCreateEntry($entity);
     }
 
     public function attach(object $entity): void
@@ -71,34 +81,34 @@ class EntityDatabase
 
     public function save(): int
     {
-        $entries = $this->EntityStateManager->getEntries();
-        $count   = $this->persiste($entries);
-        $this->EntityStateManager->clearEntries();
+        $entries = $this->entityStateManager->getEntries();
+        $count = $this->persiste($entries);
+        $this->entityStateManager->clearEntries();
         return $count;
     }
 
     public function persiste($entries): int
     {
         $count = 0;
-        $this->DataProvider->Connection->open();
+        $this->dataProvider->Connection->open();
         foreach ($entries as $entityType) {
             foreach ($entityType as $entry) {
                 $entry->detectChanges();
                 switch ($entry->State) {
                     case EntityState::Added:
-                        $count += $this->DataPersister->insert($entry);
+                        $count += $this->dataPersister->insert($entry);
                         break;
                     case EntityState::Modified:
-                        $count += $this->DataPersister->update($entry);
+                        $count += $this->dataPersister->update($entry);
                         break;
                     case EntityState::Deleted:
-                        $count += $this->DataPersister->delete($entry);
+                        $count += $this->dataPersister->delete($entry);
                         break;
                 }
             }
         }
 
-        $this->DataProvider->Connection->close();
+        $this->dataProvider->Connection->close();
         return $count;
     }
 }

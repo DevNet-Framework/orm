@@ -11,14 +11,9 @@ namespace DevNet\Entity\Migration\Operations;
 
 class InsertData extends Operation
 {
-    protected ?string $Schema;
-    protected string $Table;
-    protected array $Columns;
-
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
+    public ?string $Schema;
+    public string $Table;
+    public array $Columns;
 
     public function __construct(?string $schema, string $table, array $columns)
     {        

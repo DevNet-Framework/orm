@@ -11,7 +11,7 @@ namespace DevNet\Entity\Migration\Operations;
 
 class RenameTable extends Table
 {
-    protected string $Rename;
+    public string $Rename;
 
     public function __construct(?string $schema, string $name, string $rename)
     {

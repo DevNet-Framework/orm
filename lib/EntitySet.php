@@ -14,38 +14,38 @@ use DevNet\Entity\Storage\EntityDatabase;
 
 class EntitySet extends EntityQuery
 {
-    private EntityDatabase $Database;
+    private EntityDatabase $database;
 
     public function __construct(string $entityName, EntityDatabase $database)
     {
-        $this->Database = $database;
+        $this->database = $database;
 
         parent::__construct($database->Model->getEntityType($entityName), $database->QueryProvider);
     }
 
     public function find(int $id): ?object
     {
-        return $this->Database->Finder->find($this->EntityType, $id);
+        return $this->database->Finder->find($this->entityType, $id);
     }
 
     public function add(object $entity): void
     {
-        $this->Database->add($entity);
+        $this->database->add($entity);
     }
 
     public function remove(object $entity): void
     {
-        $this->Database->remove($entity);
+        $this->database->remove($entity);
     }
 
     public function update(object $entity): void
     {
-        $this->Database->attach($entity);
+        $this->database->attach($entity);
     }
 
     public function create(): object
     {
-        $entityName = $this->EntityType->getName();
+        $entityName = $this->entityType->getName();
         $entity     = new $entityName();
         $this->add($entity);
         return $entity;

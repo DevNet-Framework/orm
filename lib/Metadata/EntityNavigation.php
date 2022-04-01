@@ -9,43 +9,53 @@
 
 namespace DevNet\Entity\Metadata;
 
+use DevNet\System\Exceptions\PropertyException;
 use ReflectionProperty;
 
 class EntityNavigation
 {
-    const NavigationReference  = 1;
-    const NavigationCollection = 2;
+    public const NavigationReference  = 1;
+    public const NavigationCollection = 2;
 
-    private ReflectionProperty $PropertyInfo;
-    private EntityType $Metadata;
-    private EntityType $MetadataReference;
-    private int $NavigationType = 0;
-
-    public function __construct(EntityType $entityType, ReflectionProperty $propertyInfo)
-    {
-        $this->Metadata     = $entityType;
-        $this->PropertyInfo = $propertyInfo;
-    }
+    private ReflectionProperty $propertyInfo;
+    private EntityType $metadata;
+    private EntityType $metadataReference;
+    private int $navigationType = 0;
 
     public function __get(string $name)
     {
-        return $this->$name;
+        if (in_array($name, ['PropertyInfo', 'Metadata', 'MetadataReference', 'NavigationType'])) {
+            $property = lcfirst($name);
+            return $this->$property;
+        }
+
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
     }
 
-    public function hasMany(string $EntityReference)
+    public function __construct(EntityType $entityType, ReflectionProperty $propertyInfo)
     {
-        $this->MetadataReference = $this->Metadata->Model->getEntityType($EntityReference);
-        $this->NavigationType    = 2;
+        $this->metadata = $entityType;
+        $this->propertyInfo = $propertyInfo;
+    }
+
+    public function hasMany(string $entityReference)
+    {
+        $this->metadataReference = $this->metadata->Model->getEntityType($entityReference);
+        $this->navigationType = 2;
     }
 
     public function hasOne(string $EntityReference)
     {
-        $this->MetadataReference = $this->Metadata->Model->getEntityType($EntityReference);
-        $this->NavigationType    = 1;
+        $this->metadataReference = $this->metadata->Model->getEntityType($EntityReference);
+        $this->navigationType = 1;
     }
 
     public function getForeignKey(): ?string
     {
-        return $this->MetadataReference->getForeignKey($this->Metadata->getName());
+        return $this->metadataReference->getForeignKey($this->metadata->getName());
     }
 }

@@ -11,14 +11,9 @@ namespace DevNet\Entity\Migration\Operations;
 
 class UniqueConstraint extends Operation
 {
-    protected string $Table;
-    protected array $Columns;
-    protected string $Constraint;
-
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
+    public string $Table;
+    public array $Columns;
+    public string $Constraint;
 
     public function __construct(string $table, array $columns)
     {

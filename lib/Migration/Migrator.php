@@ -15,22 +15,22 @@ use DevNet\Entity\Providers\IEntityDataProvider;
 
 class Migrator
 {
-    private ?string $Schema;
-    private IEntityDataProvider $DataProvider;
-    private MigrationHistory $History;
-    private MigrationAssembly $Assembley;
+    private ?string $schema;
+    private IEntityDataProvider $dataProvider;
+    private MigrationHistory $history;
+    private MigrationAssembly $assembley;
 
     public function __construct(EntityDatabase $database, string $namespace, string $directory)
     {
-        $this->Schema       = $database->Model->Schema;
-        $this->DataProvider = $database->DataProvider;
-        $this->History      = new MigrationHistory($database, $namespace, $directory);
-        $this->Assembley    = new MigrationAssembly($namespace, $directory);
+        $this->schema       = $database->Model->Schema;
+        $this->dataProvider = $database->DataProvider;
+        $this->history      = new MigrationHistory($database, $namespace, $directory);
+        $this->assembley    = new MigrationAssembly($namespace, $directory);
     }
 
     public function generateScript(array $operations): string
     {
-        $migrationGenerator = new $this->DataProvider->MigrationGenerator;
+        $migrationGenerator = new $this->dataProvider->MigrationGenerator;
         foreach ($operations as $operation) {
             $migrationGenerator->visit($operation);
         }
@@ -41,48 +41,48 @@ class Migrator
     public function getCommands(?string $targetMigration = null): array
     {
         if ($targetMigration !== null) {
-            $targetMigration = $this->Assembley->findMigrationId($targetMigration);
+            $targetMigration = $this->assembley->findMigrationId($targetMigration);
         }
 
-        $lastMigration      = $this->History->max(fn ($m) => $m->Id);
+        $lastMigration      = $this->history->max(fn ($migration) => $migration->Id);
         $migrationsToApply  = [];
         $migrationsToRevert = [];
         $commands           = [];
 
         if ($targetMigration === null) {
-            $migrationsToApply = $this->Assembley->where(fn ($m) => $m->Id > $lastMigration)
-                ->orderBy(fn ($m) => $m->Id);
+            $migrationsToApply = $this->assembley->where(fn ($migration) => $migration->Id > $lastMigration)
+                ->orderBy(fn ($migration) => $migration->Id);
         } else if ($targetMigration > $lastMigration) {
             if ($targetMigration) {
-                $migrationsToApply = $this->Assembley->where(fn ($m) => $m->Id > $lastMigration && $m->Id <= $targetMigration)
-                    ->orderBy(fn ($m) => $m->Id);
+                $migrationsToApply = $this->assembley->where(fn ($migration) => $migration->Id > $lastMigration && $migration->Id <= $targetMigration)
+                    ->orderBy(fn ($migration) => $migration->Id);
             } else {
-                $migrationsToApply = $this->Assembley->where(fn ($m) => $m->Id > $lastMigration)
-                    ->orderBy(fn ($m) => $m->Id);
+                $migrationsToApply = $this->assembley->where(fn ($migration) => $migration->Id > $lastMigration)
+                    ->orderBy(fn ($migration) => $migration->Id);
             }
         } else {
-            $migrationsToRevert = $this->History->where(fn ($m) => $m->Id <= $lastMigration && $m->Id > $targetMigration)
-                ->orderByDescending(fn ($m) => $m->Id);
+            $migrationsToRevert = $this->history->where(fn ($migration) => $migration->Id <= $lastMigration && $migration->Id > $targetMigration)
+                ->orderByDescending(fn ($migration) => $migration->Id);
         }
 
         foreach ($migrationsToApply as $migrationToApply) {
             $migration  = $migrationToApply->Type;
-            $migration  = new $migration($this->Schema);
+            $migration  = new $migration($this->schema);
             $upScript   = $this->generateScript($migration->UpOperations);
-            $commands[] = $this->DataProvider->Connection->createCommand($upScript);
+            $commands[] = $this->dataProvider->Connection->createCommand($upScript);
 
-            $addScript  = $this->History->getInsertScript($migrationToApply->Id, $migrationToApply->Name);
-            $commands[] = $this->DataProvider->Connection->createCommand($addScript);
+            $addScript  = $this->history->getInsertScript($migrationToApply->Id, $migrationToApply->Name);
+            $commands[] = $this->dataProvider->Connection->createCommand($addScript);
         }
 
         foreach ($migrationsToRevert as $migrationToRevert) {
             $migration  = $migrationToRevert->Type;
-            $migration  = new $migration($this->Schema);
+            $migration  = new $migration($this->schema);
             $downScript = $this->generateScript($migration->DownOperations);
-            $commands[] = $this->DataProvider->Connection->createCommand($downScript);
+            $commands[] = $this->dataProvider->Connection->createCommand($downScript);
 
-            $delScript  = $this->History->getDeleteScript($migrationToRevert->Id);
-            $commands[] = $this->DataProvider->Connection->createCommand($delScript);
+            $delScript  = $this->history->getDeleteScript($migrationToRevert->Id);
+            $commands[] = $this->dataProvider->Connection->createCommand($delScript);
         }
 
         return $commands;
@@ -91,13 +91,13 @@ class Migrator
     public function migrate(?string $targetMigration = null): void
     {
         $commands   = $this->getCommands($targetMigration);
-        $connection = $this->DataProvider->Connection;
+        $connection = $this->dataProvider->Connection;
         $connection->open();
 
         $transaction = $connection->beginTransaction();
         
-        if (!$this->History->exists() && $commands) {
-            $createScript = $this->History->getCreateScript();
+        if (!$this->history->exists() && $commands) {
+            $createScript = $this->history->getCreateScript();
             $command = $connection->createCommand($createScript);
             $command->execute();
         }

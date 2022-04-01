@@ -10,59 +10,68 @@
 namespace DevNet\Entity\Migration;
 
 use DevNet\Entity\Migration\Operations\Operation;
+use DevNet\System\Exceptions\PropertyException;
 use Closure;
 
 class MigrationBuilder
 {
-    protected ?string $Schema;
-    protected array $Operations = [];
+    private ?string $schema;
+    private array $operations = [];
 
     public function __get(string $name)
     {
-        return $this->$name;
+        if ($name == 'Operations') {
+            return $this->operations;
+        }
+
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
     }
 
     public function __construct(?string $schema = null)
     {
-        $this->Schema = $schema;
+        $this->schema = $schema;
     }
 
     public function createTable(string $name, Closure $builder): void
     {
-        $table = Operation::createTable($this->Schema, $name);
+        $table = Operation::createTable($this->schema, $name);
         $builder($table);
-        $this->Operations[] = $table;
+        $this->operations[] = $table;
     }
 
     public function alterTable(string $name, Closure $builder): void
     {
-        $table = Operation::alterTable($this->Schema, $name);
+        $table = Operation::alterTable($this->schema, $name);
         $builder($table);
-        $this->Operations[] = $table;
+        $this->operations[] = $table;
     }
 
     public function RenameTable(string $name, string $rename): void
     {
-        $this->Operations[] = Operation::renameTable($this->Schema, $name, $rename);
+        $this->operations[] = Operation::renameTable($this->schema, $name, $rename);
     }
 
     public function dropTable(string $name): void
     {
-        $this->Operations[] = Operation::dropTable($this->Schema, $name);
+        $this->operations[] = Operation::dropTable($this->schema, $name);
     }
 
     public function insertData(string $table, array $columns): void
     {
-        $this->Operations[] = Operation::insertData($this->Schema, $table, $columns);
+        $this->operations[] = Operation::insertData($this->schema, $table, $columns);
     }
 
     public function updateData(string $table, array $columns, array $keys): void
     {
-        $this->Operations[] = Operation::updateData($this->Schema, $table, $columns, $keys);
+        $this->operations[] = Operation::updateData($this->schema, $table, $columns, $keys);
     }
 
     public function deleteData(string $table, array $keys = []): void
     {
-        $this->Operations[] = Operation::deleteData($this->Schema, $table, $keys);
+        $this->operations[] = Operation::deleteData($this->schema, $table, $keys);
     }
 }

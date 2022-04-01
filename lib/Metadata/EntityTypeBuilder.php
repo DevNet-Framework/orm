@@ -11,48 +11,46 @@ namespace DevNet\Entity\Metadata;
 
 class EntityTypeBuilder
 {
-    private EntityType $Metadata;
+    private EntityType $metadata;
 
     public function __construct(EntityType $entityType)
     {
-        $this->Metadata = $entityType;
+        $this->metadata = $entityType;
     }
 
     public function toTable(string $tableName)
     {
-        $this->Metadata->setTableName($tableName);
+        $this->metadata->setTableName($tableName);
         return $this;
     }
 
     public function property(string $propertyName)
     {
-        return $this->Metadata->getProperty($propertyName);
+        return $this->metadata->getProperty($propertyName);
     }
 
     public function hasKey(string $propertyName)
     {
-        $this->Metadata->setPrimaryKey($propertyName);
+        $this->metadata->setPrimaryKey($propertyName);
         return $this;
     }
 
     public function hasForeignKey(string $propertyName, string $entityReference)
     {
-        $this->Metadata->addForeignKey($propertyName, $entityReference);
+        $this->metadata->addForeignKey($propertyName, $entityReference);
         return $this;
     }
 
     public function hasMany(string $navigationName, string $EntityReference)
     {
-        $navigation = $this->Metadata->getNavigation($navigationName);
-
+        $navigation = $this->metadata->getNavigation($navigationName);
         $navigation->hasMany($EntityReference);
         return $this;
     }
 
     public function hasOne(string $navigationName, string $entityReference)
     {
-        $navigation = $this->Metadata->getNavigation($navigationName);
-
+        $navigation = $this->metadata->getNavigation($navigationName);
         $navigation->hasOne($entityReference);
         return $this;
     }

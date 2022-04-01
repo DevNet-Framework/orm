@@ -18,11 +18,11 @@ use DateTime;
 
 class EntityQueryProvider implements IQueryProvider
 {
-    private EntityDatabase $Database;
+    private EntityDatabase $database;
 
     public function __construct(EntityDatabase $database)
     {
-        $this->Database = $database;
+        $this->database = $database;
     }
 
     public function createQuery(object $entityType, Expression $expression = null): IQueryable
@@ -32,10 +32,10 @@ class EntityQueryProvider implements IQueryProvider
 
     public function execute(object $entityType, Expression $expression)
     {
-        $this->Database->DataProvider->Connection->open();
+        $this->database->DataProvider->Connection->open();
         $slq       = $this->getQueryText($expression);
-        $command   = $this->Database->DataProvider->Connection->createCommand($slq);
-        $variables = $this->Database->DataProvider->QueryGenerator->OuterVariables;
+        $command   = $this->database->DataProvider->Connection->createCommand($slq);
+        $variables = $this->database->DataProvider->QueryGenerator->OuterVariables;
 
         if ($variables) {
             $command->addParameters($variables);
@@ -77,13 +77,13 @@ class EntityQueryProvider implements IQueryProvider
             }
         }
 
-        $this->Database->DataProvider->Connection->close();
+        $this->database->DataProvider->Connection->close();
         return new Enumerator($entities);
     }
 
     public function getQueryText(Expression $expression): string
     {
-        $queryGenerator = $this->Database->DataProvider->QueryGenerator;
+        $queryGenerator = $this->database->DataProvider->QueryGenerator;
         $queryGenerator->Sql = [];
         $queryGenerator->OuterVariables = [];
         $queryGenerator->visit($expression);

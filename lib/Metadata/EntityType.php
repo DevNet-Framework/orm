@@ -17,41 +17,55 @@ use DateTime;
 
 class EntityType
 {
-    private EntityModel $Model;
-    private Reflector $EntityInfo;
-    private string $EntityName;
-    private string $TableName;
-    private string $PropertyKey = 'Id';
-    private array $ForeignKeys  = [];
-    private array $Properties   = [];
-    private array $Navigations  = [];
+    private EntityModel $model;
+    private Reflector $entityInfo;
+    private string $entityName;
+    private string $tableName;
+    private string $propertyKey = 'Id';
+    private array $foreignKeys  = [];
+    private array $properties   = [];
+    private array $navigations  = [];
+
+    public function __get(string $name)
+    {
+        if (in_array($name, ['Model', 'EntityInfo', 'EntityName', 'TableName', 'PropertyKey', 'foreignKeys', 'properties', 'navigations'])) {
+            $property = lcfirst($name);
+            return $this->$property;
+        }
+
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
+    }
 
     public function __construct(string $entityName, EntityModel $model)
     {
-        $this->Model      = $model;
-        $this->EntityName = $entityName;
-        $this->EntityInfo = new \ReflectionClass($entityName);
-        $this->TableName  = $this->EntityInfo->getShortName();
+        $this->model      = $model;
+        $this->entityName = $entityName;
+        $this->entityInfo = new \ReflectionClass($entityName);
+        $this->tableName  = $this->entityInfo->getShortName();
 
         $scalarTypes = ['bool', 'int', 'float', 'string'];
-        foreach ($this->EntityInfo->getProperties() as $PropertyInfo) {
+        foreach ($this->entityInfo->getProperties() as $propertyInfo) {
             // map only public typed properties
-            if ($PropertyInfo->isPublic() && $PropertyInfo->hasType()) {
-                $propertyName = $PropertyInfo->getName();
-                $propertyType = $PropertyInfo->getType()->getName();
+            if ($propertyInfo->isPublic() && $propertyInfo->hasType()) {
+                $propertyName = $propertyInfo->getName();
+                $propertyType = $propertyInfo->getType()->getName();
                 if (in_array(strtolower($propertyType), $scalarTypes) || $propertyType === DateTime::class) {
-                    $this->Properties[$propertyName] = new EntityProperty($this, $PropertyInfo);
+                    $this->properties[$propertyName] = new EntityProperty($this, $propertyInfo);
                     if (strtolower($propertyName) === 'id') {
-                        $this->PropertyKey = $propertyName;
+                        $this->propertyKey = $propertyName;
                     }
                 } else {
                     if ($propertyType === IList::class) {
                         // conventional collection navigation property feature will be added in the future release
-                        $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo);
+                        $this->navigations[$propertyName] = new EntityNavigation($this, $propertyInfo);
                     } else {
                         if (class_exists($propertyType)) {
                             // conventional reference navigation property feature will be added in the future release
-                            $this->Navigations[$propertyName] = new EntityNavigation($this, $PropertyInfo);
+                            $this->navigations[$propertyName] = new EntityNavigation($this, $propertyInfo);
                         }
                     }
                 }
@@ -59,29 +73,24 @@ class EntityType
         }
     }
 
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
-
     public function getName(): string
     {
-        return $this->EntityName;
+        return $this->entityName;
     }
 
     public function getTableName(): string
     {
-        return $this->TableName;
+        return $this->tableName;
     }
 
     public function getSchemaName(): ?string
     {
-        return $this->Model->Schema;
+        return $this->model->Schema;
     }
 
     public function getPrimaryKey(): string
     {
-        $property = $this->getProperty($this->PropertyKey);
+        $property = $this->getProperty($this->propertyKey);
         if ($property) {
             return $property->Column['Name'];
         }
@@ -89,7 +98,7 @@ class EntityType
 
     public function getForeignKey(string $entityReference): ?string
     {
-        $propertyName = $this->ForeignKeys[$entityReference] ?? null;
+        $propertyName = $this->foreignKeys[$entityReference] ?? null;
         if (!$propertyName) {
             return null;
         }
@@ -100,9 +109,9 @@ class EntityType
 
     public function getProperty(string $propertyName): EntityProperty
     {
-        $propery = $this->Properties[$propertyName] ?? null;
+        $propery = $this->properties[$propertyName] ?? null;
         if (!$propery) {
-            throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
+            throw new PropertyException("Undefined property {$this->entityName}::{$propertyName}");
         }
 
         return $propery;
@@ -110,9 +119,9 @@ class EntityType
 
     public function getNavigation(string $navigationName): EntityNavigation
     {
-        $navigation = $this->Navigations[$navigationName] ?? null;
+        $navigation = $this->navigations[$navigationName] ?? null;
         if (!$navigation) {
-            throw new PropertyException("Undefined property {$this->EntityName}::{$navigationName}");
+            throw new PropertyException("Undefined property {$this->entityName}::{$navigationName}");
         }
 
         return $navigation;
@@ -120,31 +129,31 @@ class EntityType
 
     public function setTableName(string $name): void
     {
-        $this->TableName = $name;
+        $this->tableName = $name;
     }
 
     public function setPrimaryKey(string $propertyName): void
     {
-        if (!property_exists($this->EntityName, $propertyName)) {
-            throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
+        if (!property_exists($this->entityName, $propertyName)) {
+            throw new PropertyException("Undefined property {$this->entityName}::{$propertyName}");
         }
 
         $property = $this->getProperty($propertyName);
         if ($property) {
-            $this->PropertyKey = $propertyName;
+            $this->propertyKey = $propertyName;
         }
     }
 
     public function addForeignKey(string $propertyName, string $entityReference): void
     {
-        if (!property_exists($this->EntityName, $propertyName)) {
-            throw new PropertyException("Undefined property {$this->EntityName}::{$propertyName}");
+        if (!property_exists($this->entityName, $propertyName)) {
+            throw new PropertyException("Undefined property {$this->entityName}::{$propertyName}");
         }
 
         if (!class_exists($entityReference)) {
             throw new ClassException("Class {$entityReference} not found");
         }
 
-        $this->ForeignKeys[$entityReference] = $propertyName;
+        $this->foreignKeys[$entityReference] = $propertyName;
     }
 }

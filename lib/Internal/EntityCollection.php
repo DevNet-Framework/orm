@@ -16,28 +16,28 @@ use DevNet\System\Collections\IList;
 
 class EntityCollection implements IList
 {
-    private EntityNavigation $Navigation;
-    private EntityDatabase $Database;
-    private $KeyValue;
+    private EntityNavigation $navigation;
+    private EntityDatabase $database;
+    private $keyValue;
 
     public function __construct(
         EntityNavigation $navigation,
         EntityDatabase $database,
         $keyValue
     ) {
-        $this->Navigation = $navigation;
-        $this->Database   = $database;
-        $this->KeyValue   = $keyValue;
+        $this->navigation = $navigation;
+        $this->database   = $database;
+        $this->keyValue   = $keyValue;
     }
 
     public function add($entity): void
     {
-        $this->Database->add($entity);
+        $this->database->add($entity);
     }
 
     public function remove($entity): void
     {
-        $this->Database->remove($entity);
+        $this->database->remove($entity);
     }
 
     public function contains($entity): bool
@@ -53,10 +53,10 @@ class EntityCollection implements IList
 
     public function getIterator(): Enumerator
     {
-        $entities = $this->Database->Finder->query($this->Navigation, $this->KeyValue)->getIterator();
+        $entities = $this->database->Finder->query($this->navigation, $this->keyValue)->getIterator();
 
         foreach ($entities as $entity) {
-            $this->Database->Finder->load($entity);
+            $this->database->Finder->load($entity);
         }
 
         return $entities;

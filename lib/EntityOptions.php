@@ -11,17 +11,30 @@ namespace DevNet\Entity;
 
 use DevNet\Entity\Providers\IEntityDataProvider;
 use DevNet\System\Exceptions\ClassException;
+use DevNet\System\Exceptions\PropertyException;
 
 class EntityOptions
 {
     use \DevNet\System\Extension\ExtenderTrait;
 
-    private string $ContextType = EntityContext::class;
-    private IEntityDataProvider $Provider;
+    private string $contextType = EntityContext::class;
+    private IEntityDataProvider $provider;
 
     public function __get(string $name)
     {
-        return $this->$name;
+        if ($name == 'ContextType') {
+            return $this->contextType;
+        }
+        
+        if ($name == 'Provider') {
+            return $this->provider;
+        }
+
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
     }
 
     public function useContext(string $contextType)
@@ -35,11 +48,11 @@ class EntityOptions
             throw new \Exception("Custom EntityContext must inherent from " . EntityContext::class);
         }
 
-        $this->ContextType = $contextType;
+        $this->contextType = $contextType;
     }
 
     public function useProvider(IEntityDataProvider $provider)
     {
-        $this->Provider = $provider;
+        $this->provider = $provider;
     }
 }

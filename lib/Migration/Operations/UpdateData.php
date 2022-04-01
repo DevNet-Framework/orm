@@ -11,15 +11,10 @@ namespace DevNet\Entity\Migration\Operations;
 
 class UpdateData extends Operation
 {
-    protected ?string $Schema;
-    protected string $Table;
-    protected array $Columns;
-    protected array $Keys;
-
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
+    public ?string $Schema;
+    public string $Table;
+    public array $Columns;
+    public array $Keys;
 
     public function __construct(?string $schema, string $table, array $columns, array $keys)
     {        

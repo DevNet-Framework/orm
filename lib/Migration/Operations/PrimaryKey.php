@@ -11,19 +11,14 @@ namespace DevNet\Entity\Migration\Operations;
 
 class PrimaryKey extends Operation
 {
-    protected string $Table;
-    protected array $Columns;
-    protected string $Constraint;
-
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
+    public string $Table;
+    public array $Columns;
+    public string $Constraint;
 
     public function __construct(string $table, array $columns)
     {
-        $this->Table  = $table;
-        $this->Columns = $columns;
+        $this->Table      = $table;
+        $this->Columns    = $columns;
         $this->Constraint = "PK_" . $table;
     }
 

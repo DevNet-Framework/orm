@@ -11,14 +11,9 @@ namespace DevNet\Entity\Migration\Operations;
 
 class DeleteData extends Operation
 {
-    protected ?string $Schema;
-    protected string $Table;
-    protected array $Keys;
-
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
+    public ?string $Schema;
+    public string $Table;
+    public array $Keys;
 
     public function __construct(?string $schema, string $table, array $keys)
     {        

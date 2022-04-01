@@ -15,36 +15,45 @@ use DateTime;
 
 class EntityEntry
 {
-    private EntityType $Metadata;
-    private object $Entity;
-    private int $State;
-    private array $Values = [];
+    private EntityType $metadata;
+    private object $entity;
+    private int $state;
+    private array $values = [];
 
     public function __construct(object $entity, EntityType $entityType)
     {
-        $this->Entity   = $entity;
-        $this->Metadata = $entityType;
-        $this->State    = EntityState::Attached;
+        $this->entity   = $entity;
+        $this->metadata = $entityType;
+        $this->state    = EntityState::Attached;
     }
 
     public function __get(string $name)
     {
+        if (in_array($name, ['Metadata', 'Entity', 'State'])) {
+            $property = lcfirst($name);
+            return $this->$property;
+        }
+        
         if ($name == "Values") {
-            foreach ($this->Metadata->Properties as $property) {
+            foreach ($this->metadata->Properties as $property) {
                 $propertyName = $property->PropertyInfo->getName();
-                if ($property->PropertyInfo->isInitialized($this->Entity)) {
-                    $value = $property->PropertyInfo->getValue($this->Entity);
+                if ($property->PropertyInfo->isInitialized($this->entity)) {
+                    $value = $property->PropertyInfo->getValue($this->entity);
                     if ($value instanceof DateTime) {
                         $value = $value->format('y-m-d h:m:s');
                     }
-                    $this->Values[$propertyName] = $value;
+                    $this->values[$propertyName] = $value;
                 } else {
-                    $this->Values[$propertyName] = null;
+                    $this->values[$propertyName] = null;
                 }
             }
         }
 
-        return $this->$name;
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
     }
 
     public function __set(string $name, $value)
@@ -65,18 +74,18 @@ class EntityEntry
     public function detectChanges()
     {
         $values = [];
-        foreach ($this->Metadata->Properties as $property) {
+        foreach ($this->metadata->Properties as $property) {
             $propertyName = $property->PropertyInfo->getName();
-            if (isset($this->Entity->$propertyName)) {
-                $values[$propertyName] = $this->Entity->$propertyName;
+            if (isset($this->entity->$propertyName)) {
+                $values[$propertyName] = $this->entity->$propertyName;
             } else {
-                $this->Values[$propertyName] = null;
+                $this->values[$propertyName] = null;
             }
         }
 
-        if ($this->Values != $values && $this->State == EntityState::Attached) {
-            $this->State = EntityState::Modified;
-            $this->Values = $values;
+        if ($this->values != $values && $this->state == EntityState::Attached) {
+            $this->state = EntityState::Modified;
+            $this->values = $values;
         }
     }
 }

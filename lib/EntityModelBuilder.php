@@ -15,21 +15,21 @@ use DevNet\Entity\Metadata\IEntityTypeConfiguration;
 
 class EntityModelBuilder
 {
-    private EntityModel $Model;
+    private EntityModel $model;
 
     public function __construct()
     {
-        $this->Model = new EntityModel($this);
+        $this->model = new EntityModel($this);
     }
 
     public function hasSchema(string $name): void
     {
-        $this->Model->setSchema($name);
+        $this->model->setSchema($name);
     }
 
     public function entity(string $entityName): EntityTypeBuilder
     {
-        $entityType = $this->Model->getEntityType($entityName);
+        $entityType = $this->model->getEntityType($entityName);
 
         return new EntityTypeBuilder($entityType);
     }
@@ -41,6 +41,6 @@ class EntityModelBuilder
 
     public function getModel()
     {
-        return $this->Model;
+        return $this->model;
     }
 }

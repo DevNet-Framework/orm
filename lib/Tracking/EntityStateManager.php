@@ -13,18 +13,18 @@ use DevNet\Entity\Metadata\EntityModel;
 
 class EntityStateManager
 {
-    private EntityModel $Model;
-    public array $IdentityMap = [];
+    private EntityModel $model;
+    public array $identityMap = [];
 
     public function __construct(EntityModel $model)
     {
-        $this->Model = $model;
+        $this->model = $model;
     }
 
     public function getOrCreateEntry(object $entity): EntityEntry
     {
         $entityName = get_class($entity);
-        $entityType = $this->Model->getEntityType($entityName);
+        $entityType = $this->model->getEntityType($entityName);
         $entry      = $this->getEntry($entity);
         if ($entry) {
             return $entry;
@@ -40,14 +40,14 @@ class EntityStateManager
         $entity = $entry->Entity;
         $entityHash = spl_object_hash($entity);
         $entityName = $entry->Metadata->getName();
-        $this->IdentityMap[$entityName][$entityHash] = $entry;
+        $this->identityMap[$entityName][$entityHash] = $entry;
     }
 
-    public function getEntry($entity, int $id = null): EntityEntry
+    public function getEntry($entity, int $id = null): ?EntityEntry
     {
         if (is_string($entity)) {
-            if (isset($this->IdentityMap[$entity])) {
-                foreach ($this->IdentityMap[$entity] as $entry) {
+            if (isset($this->identityMap[$entity])) {
+                foreach ($this->identityMap[$entity] as $entry) {
                     $key = $entry->Metadata->PropertyKey;
                     if ($entry->Entity->$key == $id) {
                         return $entry;
@@ -59,8 +59,8 @@ class EntityStateManager
         if (is_object($entity)) {
             $entityName = get_class($entity);
             $entityHash = spl_object_hash($entity);
-            if (isset($this->IdentityMap[$entityName][$entityHash])) {
-                return $this->IdentityMap[$entityName][$entityHash];
+            if (isset($this->identityMap[$entityName][$entityHash])) {
+                return $this->identityMap[$entityName][$entityHash];
             }
         }
 
@@ -69,11 +69,11 @@ class EntityStateManager
 
     public function getEntries(): array
     {
-        return $this->IdentityMap;
+        return $this->identityMap;
     }
 
     public function clearEntries(): void
     {
-        $this->IdentityMap = [];
+        $this->identityMap = [];
     }
 }

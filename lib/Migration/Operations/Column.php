@@ -11,24 +11,19 @@ namespace DevNet\Entity\Migration\Operations;
 
 class Column extends Operation
 {
-    protected string $Table;
-    protected string $Name;
-    protected string $Type;
-    protected ?int $Max;
-    protected ?int $Scale;
-    protected bool $Nullable = true;
-    protected bool $Identity = false; // auto increment
-    protected $Default = null;
+    public string $Table;
+    public string $Name;
+    public string $Type;
+    public ?int $Max;
+    public ?int $Scale;
+    public bool $Nullable = true;
+    public bool $Identity = false; // auto increment
+    public $Default = null;
 
     public function __construct(string $table, string $name)
     {
         $this->Table = $table;
         $this->Name  = $name;
-    }
-
-    public function __get(string $name)
-    {
-        return $this->$name;
     }
 
     public function type(string $type, ?int $max = null, ?int $scale = null): Column

@@ -11,18 +11,13 @@ namespace DevNet\Entity\Migration\Operations;
 
 class ForeignKey extends Operation
 {
-    protected string $Table;
-    protected string $Column;
-    protected string $ReferencedTable;
-    protected string $ReferencedColumn;
-    protected string $Constraint;
-    protected ?string $OnUpdate = null;
-    protected ?string $OnDelete = null;
-
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
+    public string $Table;
+    public string $Column;
+    public string $ReferencedTable;
+    public string $ReferencedColumn;
+    public string $Constraint;
+    public ?string $OnUpdate = null;
+    public ?string $OnDelete = null;
 
     public function __construct(string $table, string $column)
     {

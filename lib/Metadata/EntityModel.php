@@ -10,41 +10,51 @@
 namespace DevNet\Entity\Metadata;
 
 use DevNet\Entity\EntityModelBuilder;
+use DevNet\System\Exceptions\PropertyException;
 
 class EntityModel
 {
-    private EntityModelBuilder $Builder;
-    private array $EntityModel = [];
-    private ?string $Schema = null;
-
-    public function __construct(EntityModelBuilder $builder)
-    {
-        $this->Builder = $builder;
-    }
+    private EntityModelBuilder $builder;
+    private array $entityModel = [];
+    private ?string $schema = null;
 
     public function __get(string $name)
     {
-        return $this->$name;
+        if (in_array($name, ['Builder', 'EntityModel', 'Schema'])) {
+            $property = lcfirst($name);
+            return $this->$property;
+        }
+
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
+    }
+
+    public function __construct(EntityModelBuilder $builder)
+    {
+        $this->builder = $builder;
     }
 
     public function setSchema(string $name)
     {
-        $this->Schema = $name;
+        $this->schema = $name;
     }
 
     public function addEntityType(EntityType $entityType)
     {
-        $this->EntityModel[$entityType->getName()] = $entityType;
+        $this->entityModel[$entityType->getName()] = $entityType;
     }
 
     public function getEntityType(string $entityName)
     {
-        if (isset($this->EntityModel[$entityName])) {
-            return $this->EntityModel[$entityName];
+        if (isset($this->entityModel[$entityName])) {
+            return $this->entityModel[$entityName];
         }
 
         $entityType = new EntityType($entityName, $this);
-        $this->EntityModel[$entityName] = $entityType;
+        $this->entityModel[$entityName] = $entityType;
 
         return $entityType;
     }

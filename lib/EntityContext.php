@@ -12,13 +12,27 @@ namespace DevNet\Entity;
 use DevNet\Entity\Metadata\EntityModel;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Database\DbTransaction;
+use DevNet\System\Exceptions\PropertyException;
 
 class EntityContext
 {
-    protected ?DbTransaction $Transaction;
     protected EntityDatabase $Database;
     protected EntityModel $Model;
-    protected array $Repositories = [];
+    private ?DbTransaction $transaction = null;
+    private array $repositories = [];
+
+    public function __get(string $name)
+    {
+        if ($name == 'Database' || $name == 'Model') {
+            return $this->$name;
+        }
+
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
+    }
 
     public function __construct(EntityOptions $options)
     {
@@ -29,27 +43,22 @@ class EntityContext
         $this->onModelCreate($builder);
     }
 
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
-
     public function beginTransaction()
     {
-        $this->Transaction = $this->Database->DataProvider->Connection->beginTransaction();
+        $this->transaction = $this->Database->DataProvider->Connection->beginTransaction();
     }
 
-    /** Registry pattern and singleton pattern. */
     public function set(string $entityType)
     {
-        if (isset($this->Repositories[$entityType])) {
-            return $this->Repositories[$entityType];
+        // Registry pattern with singleton pattern.
+        if (isset($this->repositories[$entityType])) {
+            return $this->repositories[$entityType];
         }
 
         $entityRepository = new EntitySet($entityType, $this->Database);
+        $this->repositories[$entityType] = $entityRepository;
 
-        $this->Repositories[$entityType] = $entityRepository;
-        return $this->Repositories[$entityType];
+        return $entityRepository;
     }
 
     public function save(): int
@@ -59,12 +68,12 @@ class EntityContext
 
     public function commit()
     {
-        $this->Transaction->commit();
+        $this->transaction->commit();
     }
 
     public function rollBack()
     {
-        $this->Transaction->rollBack();
+        $this->transaction->rollBack();
     }
 
     public function onModelCreate(EntityModelBuilder $builder)

@@ -15,24 +15,12 @@ use DevNet\System\Text\StringBuilder;
 
 class SqliteMigrationGenerator extends OperationVisitor
 {
-    protected StringBuilder $SqlBuilder;
-    protected SqliteHelper $SqlHelper;
-    protected array $Statment = [];
-
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
+    protected SqliteHelper $sqlHelper;
 
     public function __construct()
     {
         $this->SqlBuilder = new StringBuilder();
-        $this->SqlHelper  = new SqliteHelper();
-    }
-
-    public function __toString(): string
-    {
-        return $this->SqlBuilder;
+        $this->sqlHelper  = new SqliteHelper();
     }
 
     public function visitTable(Operation $operation): void
@@ -60,7 +48,7 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitCreateTable(Operation $operation): void
     {
-        $table = $this->SqlHelper->delimitIdentifier($operation->Name, $operation->Schema);
+        $table = $this->sqlHelper->delimitIdentifier($operation->Name, $operation->Schema);
         $this->SqlBuilder->append('CREATE TABLE ');
         $this->SqlBuilder->append($table);
         $this->SqlBuilder->appendLine(' (');
@@ -70,7 +58,7 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitAlterTable(Operation $operation): void
     {
-        $table = $this->SqlHelper->delimitIdentifier($operation->Name, $operation->Schema);
+        $table = $this->sqlHelper->delimitIdentifier($operation->Name, $operation->Schema);
         foreach ($operation->Columns as $column) {
             $this->SqlBuilder->append('ALTER TABLE ');
             $this->SqlBuilder->appendLine($table);
@@ -88,8 +76,8 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitRenameTable(Operation $operation): void
     {
-        $table = $this->SqlHelper->delimitIdentifier($operation->Name, $operation->Schema);
-        $rename = $this->SqlHelper->delimitIdentifier($operation->Rename, $operation->Schema);
+        $table = $this->sqlHelper->delimitIdentifier($operation->Name, $operation->Schema);
+        $rename = $this->sqlHelper->delimitIdentifier($operation->Rename, $operation->Schema);
         $this->SqlBuilder->append('RENAME TABLE ');
         $this->SqlBuilder->append($table);
         $this->SqlBuilder->append(' TO ');
@@ -99,7 +87,7 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitDropTable(Operation $operation): void
     {
-        $table = $this->SqlHelper->delimitIdentifier($operation->Name, $operation->Schema);
+        $table = $this->sqlHelper->delimitIdentifier($operation->Name, $operation->Schema);
         $this->SqlBuilder->append('DROP TABLE ');
         $this->SqlBuilder->append($table);
         $this->SqlBuilder->appendLine(';');
@@ -107,7 +95,7 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitColumn(Operation $operation): void
     {
-        $column = $this->SqlHelper->delimitIdentifier($operation->Name);
+        $column = $this->sqlHelper->delimitIdentifier($operation->Name);
         $this->SqlBuilder->append($column);
         switch ($operation->Type) {
             case 'boolean':
@@ -166,8 +154,8 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitRenameColumn(Operation $operation): void
     {
-        $name   = $this->SqlHelper->delimitIdentifier($operation->Name);
-        $rename = $this->SqlHelper->delimitIdentifier($operation->Rename);
+        $name   = $this->sqlHelper->delimitIdentifier($operation->Name);
+        $rename = $this->sqlHelper->delimitIdentifier($operation->Rename);
         $this->SqlBuilder->append('RENAME COLUMN ');
         $this->SqlBuilder->append($name);
         $this->SqlBuilder->append(' TO ');
@@ -176,7 +164,7 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitDropColumn(Operation $operation): void
     {
-        $name = $this->SqlHelper->delimitIdentifier($operation->Name);
+        $name = $this->sqlHelper->delimitIdentifier($operation->Name);
         $this->SqlBuilder->append('DROP COLUMN ');
         $this->SqlBuilder->append($name);
     }
@@ -184,8 +172,8 @@ class SqliteMigrationGenerator extends OperationVisitor
     public function visitPrimaryKey(Operation $operation): void
     {
         $keys = implode(', ', $operation->Columns);
-        $keys = $this->SqlHelper->delimitIdentifier($keys);
-        $constraint = $this->SqlHelper->delimitIdentifier($operation->Constraint);
+        $keys = $this->sqlHelper->delimitIdentifier($keys);
+        $constraint = $this->sqlHelper->delimitIdentifier($operation->Constraint);
         $this->SqlBuilder->append('CONSTRAINT ');
         $this->SqlBuilder->append($constraint);
         $this->SqlBuilder->append(' PRIMARY KEY (');
@@ -206,10 +194,10 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitForeignKey(Operation $operation): void
     {
-        $key = $this->SqlHelper->delimitIdentifier($operation->Column);
-        $constraint = $this->SqlHelper->delimitIdentifier($operation->Constraint);
-        $refTable = $this->SqlHelper->delimitIdentifier($operation->ReferencedTable);
-        $refColumn = $this->SqlHelper->delimitIdentifier($operation->ReferencedColumn);
+        $key = $this->sqlHelper->delimitIdentifier($operation->Column);
+        $constraint = $this->sqlHelper->delimitIdentifier($operation->Constraint);
+        $refTable = $this->sqlHelper->delimitIdentifier($operation->ReferencedTable);
+        $refColumn = $this->sqlHelper->delimitIdentifier($operation->ReferencedColumn);
         $this->SqlBuilder->append('CONSTRAINT ');
         $this->SqlBuilder->append($constraint);
         $this->SqlBuilder->append(' FOREIGN KEY (');
@@ -243,7 +231,7 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitDropForeignKey(Operation $operation): void
     {
-        $constraint = $this->SqlHelper->delimitIdentifier($operation->Constraint);
+        $constraint = $this->sqlHelper->delimitIdentifier($operation->Constraint);
         $this->SqlBuilder->append('DROP FOREIGN KEY ');
         $this->SqlBuilder->append($constraint);
     }
@@ -251,8 +239,8 @@ class SqliteMigrationGenerator extends OperationVisitor
     public function visitUniqueConstraint(Operation $operation): void
     {
         $columns = implode(', ', $operation->Columns);
-        $columns = $this->SqlHelper->delimitIdentifier($columns);
-        $constraint = $this->SqlHelper->delimitIdentifier($operation->Constraint);
+        $columns = $this->sqlHelper->delimitIdentifier($columns);
+        $constraint = $this->sqlHelper->delimitIdentifier($operation->Constraint);
         $this->SqlBuilder->append('CONSTRAINT ');
         $this->SqlBuilder->append($constraint);
         $this->SqlBuilder->append(' UNIQUE (');
@@ -268,7 +256,7 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitDropUniqueConstraint(Operation $operation): void
     {
-        $constraint = $this->SqlHelper->delimitIdentifier($operation->Constraint);
+        $constraint = $this->sqlHelper->delimitIdentifier($operation->Constraint);
         $this->SqlBuilder->append('DROP INDEX ');
         $this->SqlBuilder->append($constraint);
     }
@@ -276,11 +264,11 @@ class SqliteMigrationGenerator extends OperationVisitor
     public function visitInsertData(Operation $operation): void
     {
 
-        $table = $this->SqlHelper->delimitIdentifier($operation->Table, $operation->Schema);
+        $table = $this->sqlHelper->delimitIdentifier($operation->Table, $operation->Schema);
         $columnNames  = [];
         $columnValues = [];
         foreach ($operation->Columns as $name => $value) {
-            $columnNames[] = $this->SqlHelper->delimitIdentifier($name);
+            $columnNames[] = $this->sqlHelper->delimitIdentifier($name);
             if (is_numeric($value) || is_bool($value)) {
                 $columnValues[] = $value;
             } else {
@@ -303,22 +291,22 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitUpdateData(Operation $operation): void
     {
-        $table   = $this->SqlHelper->delimitIdentifier($operation->Table, $operation->Schema);
+        $table   = $this->sqlHelper->delimitIdentifier($operation->Table, $operation->Schema);
         $columns = [];
         $keys    = [];
         foreach ($operation->Columns as $name => $value) {
             if (is_numeric($value) || is_bool($value)) {
-                $columns[] = $this->SqlHelper->delimitIdentifier($name) . " = {$value}";
+                $columns[] = $this->sqlHelper->delimitIdentifier($name) . " = {$value}";
             } else {
-                $columns[] = $this->SqlHelper->delimitIdentifier($name) . " = '{$value}'";
+                $columns[] = $this->sqlHelper->delimitIdentifier($name) . " = '{$value}'";
             }
         }
 
         foreach ($operation->Keys as $name => $value) {
             if (is_numeric($value) || is_bool($value)) {
-                $keys[] = $this->SqlHelper->delimitIdentifier($name) . " = {$value}";
+                $keys[] = $this->sqlHelper->delimitIdentifier($name) . " = {$value}";
             } else {
-                $keys[] = $this->SqlHelper->delimitIdentifier($name) . " = '{$value}'";
+                $keys[] = $this->sqlHelper->delimitIdentifier($name) . " = '{$value}'";
             }
         }
 
@@ -336,14 +324,14 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitDeleteData(Operation $operation): void
     {
-        $table = $this->SqlHelper->delimitIdentifier($operation->Table, $operation->Schema);
+        $table = $this->sqlHelper->delimitIdentifier($operation->Table, $operation->Schema);
         $keys  = [];
 
         foreach ($operation->Keys as $name => $value) {
             if (is_numeric($value) || is_bool($value)) {
-                $keys[] = $this->SqlHelper->delimitIdentifier($name) . " = {$value}";
+                $keys[] = $this->sqlHelper->delimitIdentifier($name) . " = {$value}";
             } else {
-                $keys[] = $this->SqlHelper->delimitIdentifier($name) . " = '{$value}'";
+                $keys[] = $this->sqlHelper->delimitIdentifier($name) . " = '{$value}'";
             }
         }
 

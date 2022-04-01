@@ -18,25 +18,30 @@ use DevNet\System\Exceptions\PropertyException;
 
 class MySqlDataProvider implements IEntityDataProvider
 {
-    private DbConnection $Connection;
-    private ISqlGenerationHelper $SqlHelper;
-    private ExpressionVisitor $QueryGenerator;
-    private OperationVisitor $MigrationGenerator;
-
-    public function __construct(DbConnection $connection)
-    {
-        $this->Connection         = $connection;
-        $this->SqlHelper          = new MySqlHelper();
-        $this->QueryGenerator     = new MySqlQueryGenerator();
-        $this->MigrationGenerator = new MySqlMigrationGenerator();
-    }
+    private DbConnection $connection;
+    private ISqlGenerationHelper $sqlHelper;
+    private ExpressionVisitor $queryGenerator;
+    private OperationVisitor $migrationGenerator;
 
     public function __get(string $name)
     {
-        if (!in_array($name, ['Connection', 'SqlHelper', 'QueryGenerator', 'MigrationGenerator'])) {
-            throw PropertyException::undefinedPropery(self::class, $name);
+        if (in_array($name, ['Connection', 'SqlHelper', 'QueryGenerator', 'MigrationGenerator'])) {
+            $property = lcfirst($name);
+            return $this->$property;
         }
 
-        return $this->$name;
+        if (property_exists($this, $name)) {
+            throw new PropertyException("access to private property" . get_class($this) . "::" . $name);
+        }
+
+        throw new PropertyException("access to undefined property" . get_class($this) . "::" . $name);
+    }
+
+    public function __construct(DbConnection $connection)
+    {
+        $this->connection         = $connection;
+        $this->sqlHelper          = new MySqlHelper();
+        $this->queryGenerator     = new MySqlQueryGenerator();
+        $this->migrationGenerator = new MySqlMigrationGenerator();
     }
 }

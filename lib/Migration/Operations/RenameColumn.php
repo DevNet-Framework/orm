@@ -11,13 +11,13 @@ namespace DevNet\Entity\Migration\Operations;
 
 class RenameColumn extends Column
 {
-    protected string $Rename;
+    public string $Rename;
 
     public function __construct(string $table, string $name, string $rename)
     {
-        $this->Table = $table;
-        $this->Name  = $name;
-        $this->Rename  = $rename;
+        $this->Table  = $table;
+        $this->Name   = $name;
+        $this->Rename = $rename;
     }
 
     public function accept(OperationVisitor $visitor): void
