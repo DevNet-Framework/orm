@@ -35,9 +35,9 @@ class EntityDataPersister
             $values[]       = $value;
         }
 
-        $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $placeHolders = implode(', ', $placeHolders);
         $culomns      = implode(', ', $culomns);
+        $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $dbCommand    = $this->connection->createCommand("INSERT INTO {$table} ($culomns) VALUES ({$placeHolders})");
         $dbCommand->addParameters($values);
         return $dbCommand->execute();
@@ -55,10 +55,10 @@ class EntityDataPersister
             $values[]       = $value;
         }
 
-        $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $placeHolders = implode(', ', $placeHolders);
         $values[]     = $entry->Entity->$key;
         $key          = $this->sqlHelper->delimitIdentifier($key);
+        $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $dbCommand    = $this->connection->createCommand("UPDATE {$table} SET {$placeHolders} WHERE {$key} = ?");
 
         $dbCommand->addParameters($values);
@@ -68,8 +68,9 @@ class EntityDataPersister
     public function delete(EntityEntry $entry): int
     {
         $entityType = $entry->Metadata;
-        $key        = $this->sqlHelper->delimitIdentifier($entityType->getPrimaryKey());
+        $key        = $entityType->getPrimaryKey();
         $values[]   = $entry->Entity->$key;
+        $key        = $this->sqlHelper->delimitIdentifier($key);
         $table      = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $dbCommand  = $this->connection->createCommand("DELETE FROM {$table} WHERE {$key} = ?");
 
