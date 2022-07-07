@@ -11,9 +11,9 @@ namespace DevNet\Entity\Migration\Operations;
 
 class CreateTable extends Table
 {
-    public function column(string $name): Column
+    public function column(string $name, string $type, ?int $max = null, ?int $scale = null): Column
     {
-        $column = new Column($this->Name, $name);
+        $column = new Column($this->Name, $name, $type, $max, $scale);
         $this->Columns[] = $column;
         return $column;
     }
