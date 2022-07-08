@@ -20,18 +20,13 @@ class Column extends Operation
     public bool $Identity = false; // auto increment
     public $Default = null;
 
-    public function __construct(string $table, string $name)
+    public function __construct(string $table, string $name, string $type, ?int $max = null, ?int $scale = null)
     {
         $this->Table = $table;
         $this->Name  = $name;
-    }
-
-    public function type(string $type, ?int $max = null, ?int $scale = null): Column
-    {
         $this->Type  = strtolower($type);
         $this->Max   = $max;
         $this->Scale = $scale;
-        return $this;
     }
 
     public function nullable(bool $nullable = true): Column
@@ -40,16 +35,16 @@ class Column extends Operation
         return $this;
     }
 
+    public function default($value): Column
+    {
+        $this->Default = $value;
+        return $this;
+    }
+
     public function identity(): Column
     {
         $this->Identity = true;
         $this->Nullable = false;
-        return $this;
-    }
-
-    public function default($value): Column
-    {
-        $this->Default = $value;
         return $this;
     }
 
