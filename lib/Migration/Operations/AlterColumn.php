@@ -11,12 +11,6 @@ namespace DevNet\Entity\Migration\Operations;
 
 class AlterColumn extends Column
 {
-    public function __construct(string $table, string $name)
-    {
-        $this->Table = $table;
-        $this->Name  = $name;
-    }
-
     public function accept(OperationVisitor $visitor): void
     {
         $visitor->visitAlterColumn($this);
