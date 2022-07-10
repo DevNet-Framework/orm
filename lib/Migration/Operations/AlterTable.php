@@ -11,16 +11,16 @@ namespace DevNet\Entity\Migration\Operations;
 
 class AlterTable extends Table
 {
-    public function addColumn(string $name): AddColumn
+    public function addColumn(string $name, string $type, ?int $max = null, ?int $scale = null): AddColumn
     {
-        $column = new AddColumn($this->Name, $name);
+        $column = new AddColumn($this->Name, $name, $type, $max, $scale);
         $this->Columns[] = $column;
         return $column;
     }
 
-    public function AlterColumn(string $name): AlterColumn
+    public function AlterColumn(string $name, string $type, ?int $max = null, ?int $scale = null): AlterColumn
     {
-        $column = new AlterColumn($this->Name, $name);
+        $column = new AlterColumn($this->Name, $name, $type, $max, $scale);
         $this->Columns[] = $column;
         return $column;
     }
