@@ -148,8 +148,7 @@ class SqliteMigrationGenerator extends OperationVisitor
 
     public function visitAlterColumn(Operation $operation): void
     {
-        $this->SqlBuilder->append('ALTER COLUMN ');
-        $this->visitColumn($operation);
+        throw new \Exception("ALTER COLUMN not supported in Sqlite Database");
     }
 
     public function visitRenameColumn(Operation $operation): void
