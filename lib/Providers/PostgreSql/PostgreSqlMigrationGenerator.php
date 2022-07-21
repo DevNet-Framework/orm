@@ -88,36 +88,8 @@ class PostgreSqlMigrationGenerator extends OperationVisitor
     {
         $column = $this->sqlHelper->delimitIdentifier($operation->Name);
         $this->SqlBuilder->append($column);
-        switch ($operation->Type) {
-            case 'bool':
-                $this->SqlBuilder->append(' BOOLEAN');
-                break;
-            case 'int':
-                $this->SqlBuilder->append(' INTEGER');
-                break;
-            case 'string':
-                if ($operation->Max) {
-                    $this->SqlBuilder->append(' VARCHAR(');
-                    $this->SqlBuilder->append($operation->Max);
-                    $this->SqlBuilder->append(')');
-                } else {
-                    $this->SqlBuilder->append(' TEXT');
-                }
-                break;
-            default:
-                $this->SqlBuilder->append(' ');
-                $this->SqlBuilder->append(strtoupper($operation->Type));
-                if ($operation->Max) {
-                    $this->SqlBuilder->append('(');
-                    $this->SqlBuilder->append($operation->Max);
-                    if ($operation->Scale) {
-                        $this->SqlBuilder->append(', ');
-                        $this->SqlBuilder->append($operation->Scale);
-                    }
-                    $this->SqlBuilder->append(')');
-                }
-                break;
-        }
+
+        $this->visitType($operation);
 
         if ($operation->Nullable) {
             $this->SqlBuilder->append(' NULL');
@@ -148,7 +120,10 @@ class PostgreSqlMigrationGenerator extends OperationVisitor
     public function visitAlterColumn(Operation $operation): void
     {
         $this->SqlBuilder->append('ALTER COLUMN ');
-        $this->visitColumn($operation);
+        $column = $this->sqlHelper->delimitIdentifier($operation->Name);
+        $this->SqlBuilder->append($column);
+        $this->SqlBuilder->append(' TYPE');
+        $this->visitType($operation);
     }
 
     public function visitRenameColumn(Operation $operation): void
@@ -166,6 +141,40 @@ class PostgreSqlMigrationGenerator extends OperationVisitor
         $name = $this->sqlHelper->delimitIdentifier($operation->Name);
         $this->SqlBuilder->append('DROP COLUMN ');
         $this->SqlBuilder->append($name);
+    }
+
+    public function visitType(Operation $operation)
+    {
+        switch ($operation->Type) {
+            case 'bool':
+                $this->SqlBuilder->append(' BOOLEAN');
+                break;
+            case 'int':
+                $this->SqlBuilder->append(' INTEGER');
+                break;
+            case 'string':
+                if ($operation->Max) {
+                    $this->SqlBuilder->append(' VARCHAR(');
+                    $this->SqlBuilder->append($operation->Max);
+                    $this->SqlBuilder->append(')');
+                } else {
+                    $this->SqlBuilder->append(' TEXT');
+                }
+                break;
+            default:
+                $this->SqlBuilder->append(' ');
+                $this->SqlBuilder->append(strtoupper($operation->Type));
+                if ($operation->Max) {
+                    $this->SqlBuilder->append('(');
+                    $this->SqlBuilder->append($operation->Max);
+                    if ($operation->Scale) {
+                        $this->SqlBuilder->append(', ');
+                        $this->SqlBuilder->append($operation->Scale);
+                    }
+                    $this->SqlBuilder->append(')');
+                }
+                break;
+        }
     }
 
     public function visitPrimaryKey(Operation $operation): void
