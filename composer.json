@@ -10,8 +10,9 @@
         }
     ],
     "require": {
-        "php": ">=7.4.0",
-        "devnet/core": "1.0.*"
+        "php": "7.4 - 8.0",
+        "devnet/core": "1.0.*",
+        "devnet/cli": "1.0.*"
     },
     "autoload": {
         "psr-4": {
