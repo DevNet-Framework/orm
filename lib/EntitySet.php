@@ -25,7 +25,7 @@ class EntitySet extends EntityQuery
 
     public function find(int $id): ?object
     {
-        return $this->database->Finder->find($this->entityType, $id);
+        return $this->database->Finder->find($this->EntityType, $id);
     }
 
     public function add(object $entity): void
@@ -45,8 +45,8 @@ class EntitySet extends EntityQuery
 
     public function create(): object
     {
-        $entityName = $this->entityType->getName();
-        $entity     = new $entityName();
+        $entityName = $this->EntityType->getName();
+        $entity = new $entityName();
         $this->add($entity);
         return $entity;
     }
