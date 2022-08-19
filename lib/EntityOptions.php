@@ -15,7 +15,7 @@ use DevNet\System\Exceptions\PropertyException;
 
 class EntityOptions
 {
-    use \DevNet\System\Extension\ExtenderTrait;
+    use \DevNet\System\Extension\ExtensionTrait;
 
     private string $contextType = EntityContext::class;
     private IEntityDataProvider $provider;

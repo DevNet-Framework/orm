@@ -15,7 +15,7 @@ use stdClass;
 
 class MigrationAssembly implements IEnumerable
 {
-    use \DevNet\System\Extension\ExtenderTrait;
+    use \DevNet\System\Extension\ExtensionTrait;
 
     private array $migrations = [];
 

@@ -21,7 +21,7 @@ use DevNet\System\Linq\IQueryable;
  */
 class EntityQuery implements IQueryable
 {
-    use \DevNet\System\Extension\ExtenderTrait;
+    use \DevNet\System\Extension\ExtensionTrait;
 
     private object $entityType;
     private IQueryProvider $provider;

@@ -28,7 +28,7 @@ class EntityType
 
     public function __get(string $name)
     {
-        if (in_array($name, ['Model', 'EntityInfo', 'EntityName', 'TableName', 'PropertyKey', 'foreignKeys', 'properties', 'navigations'])) {
+        if (in_array($name, ['Model', 'EntityInfo', 'EntityName', 'TableName', 'PropertyKey', 'ForeignKeys', 'Properties', 'Navigations'])) {
             $property = lcfirst($name);
             return $this->$property;
         }

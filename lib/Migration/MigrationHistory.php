@@ -19,7 +19,7 @@ use stdClass;
 
 class MigrationHistory implements IEnumerable
 {
-    use \DevNet\System\Extension\ExtenderTrait;
+    use \DevNet\System\Extension\ExtensionTrait;
 
     private EntityDatabase $Database;
     private ?string $schema   = null;
@@ -80,8 +80,8 @@ class MigrationHistory implements IEnumerable
     public function getCreateScript(): string
     {
         $table = new CreateTable($this->schema, 'MigrationHistory');
-        $table->column('Id')->type('bigint')->nullable(false);
-        $table->column('Name')->type('varchar(45)')->nullable(false);
+        $table->column('Id', 'bigint')->nullable(false);
+        $table->column('Name', 'varchar(45)')->nullable(false);
         $table->primaryKey('Id');
 
         $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
