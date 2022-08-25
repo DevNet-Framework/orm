@@ -15,11 +15,12 @@ use DevNet\Entity\Migration\Operations\DeleteData;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Collections\Enumerator;
 use DevNet\System\Collections\IEnumerable;
+use DevNet\System\ObjectTrait;
 use stdClass;
 
 class MigrationHistory implements IEnumerable
 {
-    use \DevNet\System\Extension\ExtensionTrait;
+    use ObjectTrait;
 
     private EntityDatabase $Database;
     private ?string $schema   = null;

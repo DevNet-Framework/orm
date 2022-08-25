@@ -12,10 +12,11 @@ namespace DevNet\Entity;
 use DevNet\Entity\Providers\IEntityDataProvider;
 use DevNet\System\Exceptions\ClassException;
 use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\ObjectTrait;
 
 class EntityOptions
 {
-    use \DevNet\System\Extension\ExtensionTrait;
+    use ObjectTrait;
 
     private string $contextType = EntityContext::class;
     private IEntityDataProvider $provider;

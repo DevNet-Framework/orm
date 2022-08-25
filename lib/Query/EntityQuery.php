@@ -15,13 +15,14 @@ use DevNet\System\Compiler\Expressions\Expression;
 use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\Linq\IQueryProvider;
 use DevNet\System\Linq\IQueryable;
+use DevNet\System\ObjectTrait;
 
 /**
  * create expression from method and passe it to queryProvider.
  */
 class EntityQuery implements IQueryable
 {
-    use \DevNet\System\Extension\ExtensionTrait;
+    use ObjectTrait;
 
     private object $entityType;
     private IQueryProvider $provider;
