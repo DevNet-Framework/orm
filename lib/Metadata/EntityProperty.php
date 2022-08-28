@@ -9,36 +9,49 @@
 
 namespace DevNet\Entity\Metadata;
 
-use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\ObjectTrait;
 use ReflectionProperty;
 
 class EntityProperty
 {
+    use ObjectTrait;
+
     private EntityType $metadata;
     private ReflectionProperty $propertyInfo;
     private string $tableReference;
     private array $column = [];
     private ?EntityNavigation $navigation = null;
 
-    public function __get(string $name)
-    {
-        if (in_array($name, ['Metadata', 'PropertyInfo', 'TableReference', 'Column', 'Navigation'])) {
-            $property = lcfirst($name);
-            return $this->$property;
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
-    }
-
     public function __construct(EntityType $entityType, ReflectionProperty $propertyInfo)
     {
         $this->metadata       = $entityType;
         $this->propertyInfo   = $propertyInfo;
         $this->column['Name'] = $propertyInfo->getName();
+    }
+
+    public function get_Metadata(): EntityType
+    {
+        return $this->metadata;
+    }
+
+    public function get_PropertyInfo(): ReflectionProperty
+    {
+        return $this->propertyInfo;
+    }
+
+    public function get_TableReference(): string
+    {
+        return $this->tableReference;
+    }
+
+    public function get_Column(): array
+    {
+        return $this->column;
+    }
+
+    public function get_Navigation(): ?EntityNavigation
+    {
+        return $this->navigation;
     }
 
     public function hasColumn(string $name, string $type = null, int $lenth = null)

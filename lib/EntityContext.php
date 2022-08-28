@@ -12,27 +12,16 @@ namespace DevNet\Entity;
 use DevNet\Entity\Metadata\EntityModel;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Database\DbTransaction;
-use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\ObjectTrait;
 
 class EntityContext
 {
-    protected EntityDatabase $Database;
-    protected EntityModel $Model;
+    use ObjectTrait;
+
+    protected EntityDatabase $database;
+    protected EntityModel $model;
     private ?DbTransaction $transaction = null;
     private array $repositories = [];
-
-    public function __get(string $name)
-    {
-        if ($name == 'Database' || $name == 'Model') {
-            return $this->$name;
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
-    }
 
     public function __construct(EntityOptions $options)
     {
@@ -41,6 +30,16 @@ class EntityContext
         $this->Model    = $this->Database->Model;
 
         $this->onModelCreate($builder);
+    }
+
+    public function get_Database(): EntityDatabase
+    {
+        return $this->database;
+    }
+
+    public function get_Model(): EntityModel
+    {
+        return $this->model;
     }
 
     public function beginTransaction()

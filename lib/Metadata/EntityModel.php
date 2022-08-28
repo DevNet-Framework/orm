@@ -10,31 +10,34 @@
 namespace DevNet\Entity\Metadata;
 
 use DevNet\Entity\EntityModelBuilder;
-use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\ObjectTrait;
 
 class EntityModel
 {
+    use ObjectTrait;
+
     private EntityModelBuilder $builder;
     private array $entityModel = [];
     private ?string $schema = null;
 
-    public function __get(string $name)
-    {
-        if (in_array($name, ['Builder', 'EntityModel', 'Schema'])) {
-            $property = lcfirst($name);
-            return $this->$property;
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
-    }
-
     public function __construct(EntityModelBuilder $builder)
     {
         $this->builder = $builder;
+    }
+
+    public function get_Builder(): EntityModelBuilder
+    {
+        return $this->builder;
+    }
+
+    public function get_EntityModel(): array
+    {
+        return $this->entityModel;
+    }
+
+    public function get_Schema(): ?string
+    {
+        return $this->schema;
     }
 
     public function setSchema(string $name)

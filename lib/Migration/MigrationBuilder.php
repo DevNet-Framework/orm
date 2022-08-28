@@ -10,30 +10,24 @@
 namespace DevNet\Entity\Migration;
 
 use DevNet\Entity\Migration\Operations\Operation;
-use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\ObjectTrait;
 use Closure;
 
 class MigrationBuilder
 {
+    use ObjectTrait;
+
     private ?string $schema;
     private array $operations = [];
-
-    public function __get(string $name)
-    {
-        if ($name == 'Operations') {
-            return $this->operations;
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
-    }
 
     public function __construct(?string $schema = null)
     {
         $this->schema = $schema;
+    }
+
+    public function get_Operations(): array
+    {
+        return $this->operations;
     }
 
     public function createTable(string $name, Closure $builder): void

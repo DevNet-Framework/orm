@@ -9,34 +9,27 @@
 
 namespace DevNet\Entity\Migration;
 
-use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\ObjectTrait;
 
 abstract class AbstractMigration
 {
+    use ObjectTrait;
+
     private ?string $schema;
-    private array $upOperations;
-    private array $downOperations;
-
-    public function __get(string $name)
-    {
-        if ($name == 'UpOperations') {
-            return $this->build('up');
-        }
-
-        if ($name == 'DownOperations') {
-            return $this->build('down');
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
-    }
 
     public function __construct(?string $schema = null)
     {
         $this->schema = $schema;
+    }
+
+    public function get_UpOperations(): array
+    {
+        return $this->build('up');
+    }
+
+    public function get_DownOperations(): array
+    {
+        return $this->build('down');
     }
 
     public function build(string $action): array

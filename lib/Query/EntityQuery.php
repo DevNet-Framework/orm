@@ -12,7 +12,6 @@ namespace DevNet\Entity\Query;
 use DevNet\System\Collections\Enumerator;
 use DevNet\System\Linq\Enumerables\TakeEnumerable;
 use DevNet\System\Compiler\Expressions\Expression;
-use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\Linq\IQueryProvider;
 use DevNet\System\Linq\IQueryable;
 use DevNet\System\ObjectTrait;
@@ -28,25 +27,26 @@ class EntityQuery implements IQueryable
     private IQueryProvider $provider;
     private Expression $expression;
 
-    public function __get(string $name)
-    {
-        if (in_array($name, ['EntityType', 'Provider', 'Expression'])) {
-            $property = lcfirst($name);
-            return $this->$property;
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
-    }
-
     public function __construct(object $entityType, IQueryProvider $provider, Expression $expression = null)
     {
         $this->entityType = $entityType;
         $this->provider   = $provider;
         $this->expression = ($expression == null) ? Expression::constant($this) : $expression;
+    }
+
+    public function get_EntityType(): object
+    {
+        return $this->entityType;
+    }
+
+    public function get_Provider(): IQueryProvider
+    {
+        return $this->provider;
+    }
+
+    public function get_Expression(): Expression
+    {
+        return $this->expression;
     }
 
     public function getIterator(): Enumerator

@@ -12,11 +12,14 @@ namespace DevNet\Entity\Metadata;
 use DevNet\System\Collections\IList;
 use DevNet\System\Exceptions\ClassException;
 use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\ObjectTrait;
 use Reflector;
 use DateTime;
 
 class EntityType
 {
+    use ObjectTrait;
+
     private EntityModel $model;
     private Reflector $entityInfo;
     private string $entityName;
@@ -25,20 +28,6 @@ class EntityType
     private array $foreignKeys  = [];
     private array $properties   = [];
     private array $navigations  = [];
-
-    public function __get(string $name)
-    {
-        if (in_array($name, ['Model', 'EntityInfo', 'EntityName', 'TableName', 'PropertyKey', 'ForeignKeys', 'Properties', 'Navigations'])) {
-            $property = lcfirst($name);
-            return $this->$property;
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
-    }
 
     public function __construct(string $entityName, EntityModel $model)
     {
@@ -71,6 +60,36 @@ class EntityType
                 }
             }
         }
+    }
+
+    public function get_Model(): EntityModel
+    {
+        return $this->model;
+    }
+
+    public function get_EntityInfo(): Reflector
+    {
+        return $this->entityInfo;
+    }
+
+    public function get_PropertyKey(): string
+    {
+        return $this->propertyKey;
+    }
+
+    public function get_ForeignKeys(): array
+    {
+        return $this->foreignKeys;
+    }
+
+    public function get_Properties(): array
+    {
+        return $this->properties;
+    }
+
+    public function get_Navigations(): array
+    {
+        return $this->navigations;
     }
 
     public function getName(): string
@@ -111,7 +130,7 @@ class EntityType
     {
         $propery = $this->properties[$propertyName] ?? null;
         if (!$propery) {
-            throw new PropertyException("Undefined property {$this->entityName}::{$propertyName}");
+            throw new PropertyException("Could not find the public property {$this->entityName}::{$propertyName}", 0, 1);
         }
 
         return $propery;
@@ -121,7 +140,7 @@ class EntityType
     {
         $navigation = $this->navigations[$navigationName] ?? null;
         if (!$navigation) {
-            throw new PropertyException("Undefined property {$this->entityName}::{$navigationName}");
+            throw new PropertyException("Could not find the public property {$this->entityName}::{$navigationName}", 0, 1);
         }
 
         return $navigation;
@@ -135,7 +154,7 @@ class EntityType
     public function setPrimaryKey(string $propertyName): void
     {
         if (!property_exists($this->entityName, $propertyName)) {
-            throw new PropertyException("Undefined property {$this->entityName}::{$propertyName}");
+            new PropertyException("Could not find the public property {$this->entityName}::{$propertyName}", 0, 1);
         }
 
         $property = $this->getProperty($propertyName);
@@ -147,11 +166,11 @@ class EntityType
     public function addForeignKey(string $propertyName, string $entityReference): void
     {
         if (!property_exists($this->entityName, $propertyName)) {
-            throw new PropertyException("Undefined property {$this->entityName}::{$propertyName}");
+            throw new PropertyException("Could not find the public property {$this->entityName}::{$propertyName}");
         }
 
         if (!class_exists($entityReference)) {
-            throw new ClassException("Class {$entityReference} not found");
+            throw new ClassException("Could not find the entity reference {$entityReference}", 0, 1);
         }
 
         $this->foreignKeys[$entityReference] = $propertyName;

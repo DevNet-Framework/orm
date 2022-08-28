@@ -14,28 +14,16 @@ use DevNet\Entity\Storage\ISqlGenerationHelper;
 use DevNet\Entity\Migration\Operations\OperationVisitor;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Database\DbConnection;
-use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\ObjectTrait;
 
 class MySqlDataProvider implements IEntityDataProvider
 {
+    use ObjectTrait;
+
     private DbConnection $connection;
     private ISqlGenerationHelper $sqlHelper;
     private ExpressionVisitor $queryGenerator;
     private OperationVisitor $migrationGenerator;
-
-    public function __get(string $name)
-    {
-        if (in_array($name, ['Connection', 'SqlHelper', 'QueryGenerator', 'MigrationGenerator'])) {
-            $property = lcfirst($name);
-            return $this->$property;
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
-    }
 
     public function __construct(DbConnection $connection)
     {
@@ -43,5 +31,25 @@ class MySqlDataProvider implements IEntityDataProvider
         $this->sqlHelper          = new MySqlHelper();
         $this->queryGenerator     = new MySqlQueryGenerator();
         $this->migrationGenerator = new MySqlMigrationGenerator();
+    }
+
+    public function get_Connection(): DbConnection
+    {
+        return $this->connection;
+    }
+
+    public function get_SqlHelper(): ISqlGenerationHelper
+    {
+        return $this->sqlHelper;
+    }
+
+    public function get_QueryGenerator(): ExpressionVisitor
+    {
+        return $this->queryGenerator;
+    }
+    
+    public function get_MigrationGenerator(): OperationVisitor
+    {
+        return $this->migrationGenerator;
     }
 }

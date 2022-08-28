@@ -10,38 +10,26 @@
 namespace DevNet\Entity\Storage;
 
 use DevNet\Entity\EntityOptions;
-use DevNet\Entity\Metadata\EntityModel;
 use DevNet\Entity\Internal\EntityFinder;
+use DevNet\Entity\Metadata\EntityModel;
 use DevNet\Entity\Providers\IEntityDataProvider;
 use DevNet\Entity\Query\EntityQueryProvider;
 use DevNet\Entity\Storage\EntityDataPersister;
 use DevNet\Entity\Tracking\EntityEntry;
 use DevNet\Entity\Tracking\EntityStateManager;
 use DevNet\Entity\Tracking\EntityState;
-use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\ObjectTrait;
 
 class EntityDatabase
 {
+    use ObjectTrait;
+
     private EntityModel $model;
     private EntityFinder $finder;
     private IEntityDataProvider $dataProvider;
     private EntityQueryProvider $queryProvider;
     private EntityDataPersister $dataPersister;
     private EntityStateManager $entityStateManager;
-
-    public function __get(string $name)
-    {
-        if (in_array($name, ['Model', 'Finder', 'DataProvider', 'QueryProvider', 'DataPersister', 'EntityStateManager'])) {
-            $property = lcfirst($name);
-            return $this->$property;
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
-    }
 
     public function __construct(EntityOptions $options, EntityModel $model)
     {
@@ -51,6 +39,36 @@ class EntityDatabase
         $this->entityStateManager = new EntityStateManager($model);
         $this->queryProvider      = new EntityQueryProvider($this);
         $this->finder             = new EntityFinder($this);
+    }
+
+    public function get_Model(): EntityModel
+    {
+        return $this->model;
+    }
+
+    public function get_Finder(): EntityFinder
+    {
+        return $this->finder;
+    }
+
+    public function get_DataProvider(): IEntityDataProvider
+    {
+        return $this->dataProvider;
+    }
+
+    public function get_QueryProvider(): EntityQueryProvider
+    {
+        return $this->queryProvider;
+    }
+
+    public function get_DataPersister(): EntityDataPersister
+    {
+        return $this->dataPersister;
+    }
+
+    public function get_EntityStateManager(): EntityStateManager
+    {
+        return $this->entityStateManager;
     }
 
     public function finder(string $entityName): object

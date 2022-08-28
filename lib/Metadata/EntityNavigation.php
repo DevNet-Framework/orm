@@ -9,11 +9,13 @@
 
 namespace DevNet\Entity\Metadata;
 
-use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\ObjectTrait;
 use ReflectionProperty;
 
 class EntityNavigation
 {
+    use ObjectTrait;
+
     public const NavigationReference  = 1;
     public const NavigationCollection = 2;
 
@@ -22,24 +24,27 @@ class EntityNavigation
     private EntityType $metadataReference;
     private int $navigationType = 0;
 
-    public function __get(string $name)
-    {
-        if (in_array($name, ['PropertyInfo', 'Metadata', 'MetadataReference', 'NavigationType'])) {
-            $property = lcfirst($name);
-            return $this->$property;
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
-    }
-
     public function __construct(EntityType $entityType, ReflectionProperty $propertyInfo)
     {
         $this->metadata = $entityType;
         $this->propertyInfo = $propertyInfo;
+    }
+
+    public function get_PropertyInfo(): ReflectionProperty
+    {
+        return $this->propertyInfo;
+    }
+    public function get_Metadata(): EntityType
+    {
+        return $this->metadata;
+    }
+    public function get_MetadataReference(): EntityType
+    {
+        return $this->metadataReference;
+    }
+    public function get_NavigationType(): int
+    {
+        return $this->navigationType;
     }
 
     public function hasMany(string $entityReference)

@@ -11,7 +11,6 @@ namespace DevNet\Entity;
 
 use DevNet\Entity\Providers\IEntityDataProvider;
 use DevNet\System\Exceptions\ClassException;
-use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\ObjectTrait;
 
 class EntityOptions
@@ -21,38 +20,31 @@ class EntityOptions
     private string $contextType = EntityContext::class;
     private IEntityDataProvider $provider;
 
-    public function __get(string $name)
+    public function get_ContextType(): string
     {
-        if ($name == 'ContextType') {
-            return $this->contextType;
-        }
-        
-        if ($name == 'Provider') {
-            return $this->provider;
-        }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
+        return $this->contextType;
     }
 
-    public function useContext(string $contextType)
+    public function get_Provider(): IEntityDataProvider
+    {
+        return $this->provider;
+    }
+
+    public function useContext(string $contextType): void
     {
         if (!class_exists($contextType)) {
-            throw ClassException::classNotFound($contextType);
+            throw new ClassException("Could not find class {$contextType}", 0, 1);
         }
 
         $parents = class_parents($contextType);
         if (!in_array(EntityContext::class, $parents)) {
-            throw new \Exception("Custom EntityContext must inherent from " . EntityContext::class);
+            throw new ClassException("Custom EntityContext must inherent from " . EntityContext::class, 0, 1);
         }
 
         $this->contextType = $contextType;
     }
 
-    public function useProvider(IEntityDataProvider $provider)
+    public function useProvider(IEntityDataProvider $provider): void
     {
         $this->provider = $provider;
     }
