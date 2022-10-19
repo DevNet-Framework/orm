@@ -22,7 +22,7 @@ class MigrationHistory implements IEnumerable
 {
     use ObjectTrait;
 
-    private EntityDatabase $Database;
+    private EntityDatabase $database;
     private ?string $schema   = null;
     private string $table     = 'MigrationHistory';
     private array $migrations = [];
@@ -46,7 +46,7 @@ class MigrationHistory implements IEnumerable
         }
 
         if ($dbReader) {
-            $this->Existence = true;
+            $this->existence = true;
             while ($dbReader->read()) {
                 $file = $directory . "/" . $dbReader->getValue("Id") . "_" . $dbReader->getValue("Name") . ".php";
                 if (file_exists($file)) {
@@ -67,7 +67,7 @@ class MigrationHistory implements IEnumerable
 
     public function exists(): bool
     {
-        return $this->Existence;
+        return $this->existence;
     }
 
     public function getSelectScript(): string
