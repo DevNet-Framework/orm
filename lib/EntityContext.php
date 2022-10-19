@@ -26,8 +26,8 @@ class EntityContext
     public function __construct(EntityOptions $options)
     {
         $builder        = new EntityModelBuilder();
-        $this->Database = new EntityDatabase($options, $builder->getModel());
-        $this->Model    = $this->Database->Model;
+        $this->database = new EntityDatabase($options, $builder->getModel());
+        $this->model    = $this->database->Model;
 
         $this->onModelCreate($builder);
     }
