@@ -9,27 +9,15 @@
 
 namespace DevNet\Entity;
 
-use DevNet\Entity\Providers\IEntityDataProvider;
-use DevNet\System\ObjectTrait;
-
 class EntityOptions
 {
-    use ObjectTrait;
+    public string $ContextType = EntityContext::class;
+    public string $ProviderType = '';
+    public string $ConnectionString = '';
 
-    private IEntityDataProvider $provider;
-
-    public function get_ContextType(): string
+    public function __construct(string $providerType = '', string $connectionString = '')
     {
-        return $this->contextType;
-    }
-
-    public function get_Provider(): IEntityDataProvider
-    {
-        return $this->provider;
-    }
-
-    public function useProvider(IEntityDataProvider $provider): void
-    {
-        $this->provider = $provider;
+        $this->ProviderType = $providerType;
+        $this->ConnectionString = $connectionString;
     }
 }
