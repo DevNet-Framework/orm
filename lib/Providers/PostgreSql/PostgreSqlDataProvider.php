@@ -25,9 +25,9 @@ class PostgreSqlDataProvider implements IEntityDataProvider
     private ExpressionVisitor $queryGenerator;
     private OperationVisitor $migrationGenerator;
 
-    public function __construct(DbConnection $connection)
+    public function __construct(string $connectionString)
     {
-        $this->connection         = $connection;
+        $this->connection         = new PostgreSqlConnection($connectionString);
         $this->sqlHelper          = new PostgreSqlHelper();
         $this->queryGenerator     = new PostgreSqlQueryGenerator();
         $this->migrationGenerator = new PostgreSqlMigrationGenerator();
