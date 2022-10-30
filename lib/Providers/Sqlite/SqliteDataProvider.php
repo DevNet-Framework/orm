@@ -25,9 +25,9 @@ class SqliteDataProvider implements IEntityDataProvider
     private ExpressionVisitor $queryGenerator;
     private OperationVisitor $migrationGenerator;
 
-    public function __construct(DbConnection $connection)
+    public function __construct(string $connectionString)
     {
-        $this->connection         = $connection;
+        $this->connection         = new SqliteConnection($connectionString);
         $this->sqlHelper          = new SqliteHelper();
         $this->queryGenerator     = new SqliteQueryGenerator();
         $this->migrationGenerator = new SqliteMigrationGenerator();
