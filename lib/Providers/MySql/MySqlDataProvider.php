@@ -25,9 +25,9 @@ class MySqlDataProvider implements IEntityDataProvider
     private ExpressionVisitor $queryGenerator;
     private OperationVisitor $migrationGenerator;
 
-    public function __construct(DbConnection $connection)
+    public function __construct(string $connectionString)
     {
-        $this->connection         = $connection;
+        $this->connection         = new MySqlConnection($connectionString);
         $this->sqlHelper          = new MySqlHelper();
         $this->queryGenerator     = new MySqlQueryGenerator();
         $this->migrationGenerator = new MySqlMigrationGenerator();
