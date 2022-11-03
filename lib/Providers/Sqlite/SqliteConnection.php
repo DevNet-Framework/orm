@@ -14,7 +14,7 @@ class SqliteConnection extends DbConnection
 {
     public function __construct(string $connectionUrl)
     {
-        $datasource = "mysql:".$connectionUrl;
+        $datasource = "sqlite:".$connectionUrl;
 
         parent::__construct($datasource);
     }
