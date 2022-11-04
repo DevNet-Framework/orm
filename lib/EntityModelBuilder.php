@@ -17,9 +17,9 @@ class EntityModelBuilder
 {
     private EntityModel $model;
 
-    public function __construct()
+    public function __construct(EntityModel $model)
     {
-        $this->model = new EntityModel($this);
+        $this->model = $model;
     }
 
     public function hasSchema(string $name): void
