@@ -20,9 +20,9 @@ class EntityModel
     private array $entityModel = [];
     private ?string $schema = null;
 
-    public function __construct(EntityModelBuilder $builder)
+    public function __construct()
     {
-        $this->builder = $builder;
+        $this->builder = new EntityModelBuilder($this);
     }
 
     public function get_Builder(): EntityModelBuilder
