@@ -9,7 +9,6 @@
 
 namespace DevNet\Entity\Storage;
 
-use DevNet\Entity\EntityOptions;
 use DevNet\Entity\Internal\EntityFinder;
 use DevNet\Entity\Metadata\EntityModel;
 use DevNet\Entity\Providers\IEntityDataProvider;
@@ -31,12 +30,12 @@ class EntityDatabase
     private EntityDataPersister $dataPersister;
     private EntityStateManager $entityStateManager;
 
-    public function __construct(EntityOptions $options, EntityModel $model)
+    public function __construct(IEntityDataProvider $provider)
     {
-        $this->model              = $model;
-        $this->dataProvider       = $options->Provider;
-        $this->dataPersister      = new EntityDataPersister($options->Provider->Connection, $options->Provider->SqlHelper);
-        $this->entityStateManager = new EntityStateManager($model);
+        $this->dataProvider       = $provider;
+        $this->model              = new EntityModel();
+        $this->dataPersister      = new EntityDataPersister($provider->Connection, $provider->SqlHelper);
+        $this->entityStateManager = new EntityStateManager($this->model);
         $this->queryProvider      = new EntityQueryProvider($this);
         $this->finder             = new EntityFinder($this);
     }
