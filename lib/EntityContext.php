@@ -10,6 +10,9 @@
 namespace DevNet\Entity;
 
 use DevNet\Entity\Metadata\EntityModel;
+use DevNet\Entity\Providers\MySql\MySqlDataProvider;
+use DevNet\Entity\Providers\PostgreSql\PostgreSqlDataProvider;
+use DevNet\Entity\Providers\Sqlite\SqliteDataProvider;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Database\DbTransaction;
 use DevNet\System\ObjectTrait;
@@ -18,18 +21,44 @@ class EntityContext
 {
     use ObjectTrait;
 
+    protected EntityOptions $options;
     protected EntityDatabase $database;
-    protected EntityModel $model;
     private ?DbTransaction $transaction = null;
     private array $repositories = [];
 
-    public function __construct(EntityOptions $options)
+    public function __construct(string $connectionString)
     {
-        $builder        = new EntityModelBuilder();
-        $this->database = new EntityDatabase($options, $builder->getModel());
-        $this->model    = $this->database->Model;
+        $this->options = new EntityOptions();
+        $this->onConfigure($this->options);
 
-        $this->onModelCreate($builder);
+        $roviderType = $this->options->ProviderType;
+        if (class_exists($roviderType)) {
+            $provider = new $roviderType($connectionString);
+        } else {
+            $driver = parse_url($connectionString, PHP_URL_SCHEME);
+            switch ($driver) {
+                case 'mysql':
+                    $provider = new MySqlDataProvider($connectionString);
+                    break;
+                case 'pgsql':
+                    $provider = new PostgreSqlDataProvider($connectionString);
+                    break;
+                case 'sqlite':
+                    $provider = new SqliteDataProvider($connectionString);
+                    break;
+                default:
+                    throw new \Exception("Could not find a compatible Data Provider! Try to implement a custom IEntityDataProvider");
+                    break;
+            }
+        }
+
+        $this->database = new EntityDatabase($provider);
+        $this->onModelCreate($this->database->Model->Builder);
+    }
+
+    public function get_Options(): EntityOptions
+    {
+        return $this->options;
     }
 
     public function get_Database(): EntityDatabase
@@ -42,7 +71,7 @@ class EntityContext
         return $this->model;
     }
 
-    public function beginTransaction()
+    public function beginTransaction(): void
     {
         $this->transaction = $this->Database->DataProvider->Connection->beginTransaction();
     }
@@ -65,17 +94,22 @@ class EntityContext
         return $this->Database->save();
     }
 
-    public function commit()
+    public function commit(): void
     {
         $this->transaction->commit();
     }
 
-    public function rollBack()
+    public function rollBack(): void
     {
         $this->transaction->rollBack();
     }
 
-    public function onModelCreate(EntityModelBuilder $builder)
+    public function onConfigure(EntityOptions $options): void
+    {
+        # overide code...
+    }
+
+    public function onModelCreate(EntityModelBuilder $builder): void
     {
         # overide code...
     }
