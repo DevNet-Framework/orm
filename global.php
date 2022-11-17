@@ -7,7 +7,10 @@
  * @link        https://github.com/DevNet-Framework
  */
 
+use DevNet\Cli\Commands\CommandRegistry;
 use DevNet\Cli\Templating\CodeGeneratorRegistry;
+use DevNet\Entity\Tools\MigrateCommand;
 use DevNet\Entity\Tools\MigrationGeneratorProvider;
 
 CodeGeneratorRegistry::register('migration', MigrationGeneratorProvider::class);
+CommandRegistry::register('migrate', MigrateCommand::class);
