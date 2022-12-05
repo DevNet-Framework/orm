@@ -2,8 +2,8 @@
 This dependency is a part of **DevNet Framework**, an object relational mapping system that helps to manipulate database, in object-oriented way.
 
 ## Requirements
-- PHP 7.4 or higher version from [php.net](https://www.php.net/)
-- Composer the dependency manager from [getcomposer.org](https://getcomposer.org/)
+- [PHP](https://www.php.net/) version 8.0 or higher
+- [Composer](https://getcomposer.org/) version 2.0 or higher
 
 ## Installation
 
