@@ -32,13 +32,13 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
         return $visitor->__toString();
     }
 
-    public function visitLambda(Expression $expression)
+    public function visitLambda(Expression $expression): void
     {
         $this->parameters = $expression->Parameters;
         $this->visit($expression->Body);
     }
 
-    public function visitCall(Expression $expression)
+    public function visitCall(Expression $expression): void
     {
         $arguments = $expression->Arguments;
         $lastExpression = array_shift($arguments);
@@ -108,14 +108,14 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
         $this->lastMethod = $expression->Method;
     }
 
-    public function visitGroup(Expression $expression)
+    public function visitGroup(Expression $expression): void
     {
         $this->Sql[] = "(";
         $this->visit($expression->Expression);
         $this->Sql[] = ")";
     }
 
-    public function visitBinary(Expression $expression)
+    public function visitBinary(Expression $expression): void
     {
         $negation = null;
         switch ($expression->Name) {
@@ -145,7 +145,7 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
         $this->visit($expression->Right);
     }
 
-    public function visitUnary(Expression $expression)
+    public function visitUnary(Expression $expression): void
     {
         $operator = $expression->Name;
         if ($expression->Name === "!") {
@@ -156,7 +156,7 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
         $this->visit($expression->Operand);
     }
 
-    public function visitProperty(Expression $expression)
+    public function visitProperty(Expression $expression): void
     {
         if (in_array($expression->Parameter->Name, $this->parameters)) {
             $propertyType = $this->entityType->getProperty($expression->Property);
@@ -171,7 +171,7 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
         }
     }
 
-    public function visitParameter(Expression $expression)
+    public function visitParameter(Expression $expression): void
     {
         if (in_array($expression->Name, $this->parameters)) {
             $this->Sql[] = $expression->Name;
@@ -181,7 +181,7 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
         }
     }
 
-    public function visitConstant(Expression $expression)
+    public function visitConstant(Expression $expression): void
     {
         if ($expression->Value instanceof IQueryable) {
             $this->entityType = $expression->Value->EntityType;
@@ -212,12 +212,12 @@ class PostgreSqlQueryGenerator extends ExpressionVisitor
         }
     }
 
-    public function visitArray(Expression $expression)
+    public function visitArray(Expression $expression): void
     {
         throw new \Exception("Array Expression not implemented!");
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return implode(" ", $this->Sql);
     }

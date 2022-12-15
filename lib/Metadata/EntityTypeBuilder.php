@@ -18,37 +18,37 @@ class EntityTypeBuilder
         $this->metadata = $entityType;
     }
 
-    public function toTable(string $tableName)
+    public function toTable(string $tableName): static
     {
         $this->metadata->setTableName($tableName);
         return $this;
     }
 
-    public function property(string $propertyName)
+    public function property(string $propertyName): EntityProperty
     {
         return $this->metadata->getProperty($propertyName);
     }
 
-    public function hasKey(string $propertyName)
+    public function hasKey(string $propertyName): static
     {
         $this->metadata->setPrimaryKey($propertyName);
         return $this;
     }
 
-    public function hasForeignKey(string $propertyName, string $entityReference)
+    public function hasForeignKey(string $propertyName, string $entityReference): static
     {
         $this->metadata->addForeignKey($propertyName, $entityReference);
         return $this;
     }
 
-    public function hasMany(string $navigationName, string $EntityReference)
+    public function hasMany(string $navigationName, string $EntityReference): static
     {
         $navigation = $this->metadata->getNavigation($navigationName);
         $navigation->hasMany($EntityReference);
         return $this;
     }
 
-    public function hasOne(string $navigationName, string $entityReference)
+    public function hasOne(string $navigationName, string $entityReference): static
     {
         $navigation = $this->metadata->getNavigation($navigationName);
         $navigation->hasOne($entityReference);

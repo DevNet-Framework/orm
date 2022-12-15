@@ -10,6 +10,7 @@
 namespace DevNet\Entity\Query;
 
 use DevNet\System\Collections\Enumerator;
+use DevNet\System\Collections\IEnumerable;
 use DevNet\System\Linq\Enumerables\TakeEnumerable;
 use DevNet\System\Compiler\Expressions\Expression;
 use DevNet\System\Linq\IQueryProvider;
@@ -59,12 +60,12 @@ class EntityQuery implements IQueryable
         return $this->getIterator()->toArray();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->provider->getQueryText($this->expression);
     }
 
-    public function asEnumerable()
+    public function asEnumerable(): IEnumerable
     {
         return new TakeEnumerable($this);
     }

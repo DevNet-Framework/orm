@@ -34,12 +34,12 @@ class EntityModelBuilder
         return new EntityTypeBuilder($entityType);
     }
 
-    public function ApplyConfiguration(IEntityTypeConfiguration $configuration)
+    public function ApplyConfiguration(IEntityTypeConfiguration $configuration): void
     {
         $configuration->configure($this->entity($configuration->getEntityName()));
     }
 
-    public function getModel()
+    public function getModel(): EntityModel
     {
         return $this->model;
     }

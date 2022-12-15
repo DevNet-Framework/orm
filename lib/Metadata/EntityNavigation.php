@@ -47,13 +47,13 @@ class EntityNavigation
         return $this->navigationType;
     }
 
-    public function hasMany(string $entityReference)
+    public function hasMany(string $entityReference): void
     {
         $this->metadataReference = $this->metadata->Model->getEntityType($entityReference);
         $this->navigationType = 2;
     }
 
-    public function hasOne(string $EntityReference)
+    public function hasOne(string $EntityReference): void
     {
         $this->metadataReference = $this->metadata->Model->getEntityType($EntityReference);
         $this->navigationType = 1;

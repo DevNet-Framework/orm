@@ -46,7 +46,7 @@ class EntityFinder
         return $entity;
     }
 
-    public function load(object $entity)
+    public function load(object $entity): void
     {
         $this->database->attach($entity);
 

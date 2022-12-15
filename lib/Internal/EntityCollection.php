@@ -62,14 +62,14 @@ class EntityCollection implements IList
         return $entities;
     }
 
-    public function first()
+    public function first(): object
     {
         foreach ($this->getIterator() as $element) {
             return $element;
         }
     }
 
-    public function last()
+    public function last(): object
     {
         foreach ($this->getIterator() as $element) {
             $last = $element;

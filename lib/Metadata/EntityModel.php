@@ -40,17 +40,17 @@ class EntityModel
         return $this->schema;
     }
 
-    public function setSchema(string $name)
+    public function setSchema(string $name): void
     {
         $this->schema = $name;
     }
 
-    public function addEntityType(EntityType $entityType)
+    public function addEntityType(EntityType $entityType): void
     {
         $this->entityModel[$entityType->getName()] = $entityType;
     }
 
-    public function getEntityType(string $entityName)
+    public function getEntityType(string $entityName): EntityType
     {
         if (isset($this->entityModel[$entityName])) {
             return $this->entityModel[$entityName];

@@ -76,7 +76,7 @@ class EntityContext
         $this->transaction = $this->Database->DataProvider->Connection->beginTransaction();
     }
 
-    public function set(string $entityType)
+    public function set(string $entityType): EntitySet
     {
         // Registry pattern with singleton pattern.
         if (isset($this->repositories[$entityType])) {

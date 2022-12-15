@@ -30,7 +30,7 @@ class EntityQueryProvider implements IQueryProvider
         return new EntityQuery($entityType, $this, $expression);
     }
 
-    public function execute(object $entityType, Expression $expression)
+    public function execute(object $entityType, Expression $expression): void
     {
         $this->database->DataProvider->Connection->open();
         $slq       = $this->getQueryText($expression);

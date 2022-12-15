@@ -71,7 +71,7 @@ class EntityEntry
         $this->$name = $value;
     }
 
-    public function detectChanges()
+    public function detectChanges(): void
     {
         $values = [];
         foreach ($this->metadata->Properties as $property) {

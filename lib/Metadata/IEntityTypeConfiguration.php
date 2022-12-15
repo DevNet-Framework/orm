@@ -15,5 +15,5 @@ interface IEntityTypeConfiguration
 {
     public function getEntityName(): string;
 
-    public function configure(EntityTypeBuilder $builder);
+    public function configure(EntityTypeBuilder $builder): void;
 }

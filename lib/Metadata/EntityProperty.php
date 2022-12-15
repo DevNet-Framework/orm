@@ -54,7 +54,7 @@ class EntityProperty
         return $this->navigation;
     }
 
-    public function hasColumn(string $name, string $type = null, int $lenth = null)
+    public function hasColumn(string $name, string $type = null, int $lenth = null): void
     {
         $this->column['Name']  = $name;
         $this->column['Type']  = $type;
