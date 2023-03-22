@@ -30,7 +30,7 @@ class EntityQueryProvider implements IQueryProvider
         return new EntityQuery($entityType, $this, $expression);
     }
 
-    public function execute(object $entityType, Expression $expression): void
+    public function execute(object $entityType, Expression $expression): array
     {
         $this->database->DataProvider->Connection->open();
         $slq       = $this->getQueryText($expression);
@@ -78,7 +78,7 @@ class EntityQueryProvider implements IQueryProvider
         }
 
         $this->database->DataProvider->Connection->close();
-        return new Enumerator($entities);
+        return $entities;
     }
 
     public function getQueryText(Expression $expression): string
