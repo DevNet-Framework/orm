@@ -52,7 +52,8 @@ class EntityQuery implements IQueryable
 
     public function getIterator(): Enumerator
     {
-        return $this->provider->execute($this->entityType, $this->expression);
+        $entities = $this->provider->execute($this->entityType, $this->expression);
+        return new Enumerator($entities);
     }
 
     public function toArray(): array
