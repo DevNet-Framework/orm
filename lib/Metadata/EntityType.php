@@ -24,6 +24,7 @@ class EntityType
     private Reflector $entityInfo;
     private string $entityName;
     private string $tableName;
+    private ?string $schema     = null;
     private string $propertyKey = 'Id';
     private array $foreignKeys  = [];
     private array $properties   = [];
@@ -104,6 +105,10 @@ class EntityType
 
     public function getSchemaName(): ?string
     {
+        if ($this->schema) {
+            return $this->schema;
+        }
+
         return $this->model->Schema;
     }
 
@@ -113,6 +118,8 @@ class EntityType
         if ($property) {
             return $property->Column['Name'];
         }
+
+        return $this->propertyKey;
     }
 
     public function getForeignKey(string $entityReference): ?string
@@ -146,9 +153,10 @@ class EntityType
         return $navigation;
     }
 
-    public function setTableName(string $name): void
+    public function toTable(string $name, string $schema = null): void
     {
         $this->tableName = $name;
+        $this->schema = $schema;
     }
 
     public function setPrimaryKey(string $propertyName): void
