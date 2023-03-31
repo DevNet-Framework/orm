@@ -11,15 +11,15 @@ namespace DevNet\Entity\Migration\Operations;
 
 class DeleteData extends Operation
 {
-    public ?string $Schema;
     public string $Table;
     public array $Keys;
+    public ?string $Schema = null;
 
-    public function __construct(?string $schema, string $table, array $keys)
+    public function __construct(string $table, array $keys, ?string $schema = null)
     {        
-        $this->Schema = $schema;
         $this->Table  = $table;
         $this->Keys   = $keys;
+        $this->Schema = $schema;
     }
 
     public function accept(OperationVisitor $visitor): void

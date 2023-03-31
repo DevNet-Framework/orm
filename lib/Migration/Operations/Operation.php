@@ -13,38 +13,38 @@ abstract class Operation
 {
     abstract public function accept(OperationVisitor $expressionVisitor): void;
 
-    public static function createTable(?string $schema, string $name): CreateTable
+    public static function createTable(string $name, ?string $schema = null): CreateTable
     {
-        return new CreateTable($schema, $name);
+        return new CreateTable($name, $schema);
     }
 
-    public static function alterTable(?string $schema, string $name): AlterTable
+    public static function alterTable(string $name, ?string $schema = null): AlterTable
     {
-        return new AlterTable($schema, $name);
+        return new AlterTable($name, $schema);
     }
 
-    public static function renameTable(?string $schema, string $name, string $rename): RenameTable
+    public static function renameTable(string $name, string $rename, ?string $schema = null): RenameTable
     {
-        return new RenameTable($schema, $name, $rename);
+        return new RenameTable($name, $rename, $schema);
     }
 
-    public static function dropTable(?string $schema, string $name): DropTable
+    public static function dropTable(string $name, ?string $schema = null): DropTable
     {
-        return new DropTable($schema, $name);
+        return new DropTable($name, $schema);
     }
 
-    public static function insertData(?string $schema, string $name, array $columns): InsertData
+    public static function insertData(string $name, array $columns, ?string $schema = null): InsertData
     {
-        return new InsertData($schema, $name, $columns);
+        return new InsertData($name, $columns, $schema);
     }
 
-    public static function updateData(?string $schema, string $name, array $columns, array $keys): UpdateData
+    public static function updateData(string $name, array $columns, array $keys, ?string $schema = null): UpdateData
     {
-        return new UpdateData($schema, $name, $columns, $keys);
+        return new UpdateData($name, $columns, $keys, $schema);
     }
 
-    public static function deleteData(?string $schema, string $name, array $keys): DeleteData
+    public static function deleteData(string $name, array $keys, ?string $schema = null): DeleteData
     {
-        return new DeleteData($schema, $name, $keys);
+        return new DeleteData($name, $keys, $schema);
     }
 }
