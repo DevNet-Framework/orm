@@ -11,11 +11,11 @@ namespace DevNet\Entity;
 
 class EntityOptions
 {
-    public string $ContextType = EntityContext::class;
-    public string $ProviderType = '';
     public string $ConnectionString = '';
+    public string $ProviderType = '';
+    public string $DefaultSchema = '';
 
-    public function __construct(string $providerType = '', string $connectionString = '')
+    public function __construct(string $connectionString = '', string $providerType = '')
     {
         $this->ProviderType = $providerType;
         $this->ConnectionString = $connectionString;
