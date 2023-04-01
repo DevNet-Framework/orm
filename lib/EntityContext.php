@@ -26,25 +26,24 @@ class EntityContext
     private ?DbTransaction $transaction = null;
     private array $repositories = [];
 
-    public function __construct(string $connectionString)
+    public function __construct(EntityOptions $options)
     {
-        $this->options = new EntityOptions();
-        $this->onConfigure($this->options);
+        $this->options = $options;
 
-        $roviderType = $this->options->ProviderType;
-        if (class_exists($roviderType)) {
-            $provider = new $roviderType($connectionString);
+        $providerType = $options->ProviderType;
+        if (class_exists($providerType)) {
+            $provider = new $providerType($options->ConnectionString);
         } else {
-            $driver = parse_url($connectionString, PHP_URL_SCHEME);
+            $driver = parse_url($options->ConnectionString, PHP_URL_SCHEME);
             switch ($driver) {
                 case 'mysql':
-                    $provider = new MySqlDataProvider($connectionString);
+                    $provider = new MySqlDataProvider($options->ConnectionString);
                     break;
                 case 'pgsql':
-                    $provider = new PostgreSqlDataProvider($connectionString);
+                    $provider = new PostgreSqlDataProvider($options->ConnectionString);
                     break;
                 case 'sqlite':
-                    $provider = new SqliteDataProvider($connectionString);
+                    $provider = new SqliteDataProvider($options->ConnectionString);
                     break;
                 default:
                     throw new \Exception("Could not find a compatible Data Provider! Try to implement a custom IEntityDataProvider");
@@ -53,6 +52,10 @@ class EntityContext
         }
 
         $this->database = new EntityDatabase($provider);
+        if ($options->DefaultSchema) {
+            $this->database->Model->SetSchema($options->DefaultSchema);
+        }
+
         $this->onModelCreate($this->database->Model->Builder);
     }
 
@@ -102,11 +105,6 @@ class EntityContext
     public function rollBack(): void
     {
         $this->transaction->rollBack();
-    }
-
-    public function onConfigure(EntityOptions $options): void
-    {
-        # overide code...
     }
 
     public function onModelCreate(EntityModelBuilder $builder): void
