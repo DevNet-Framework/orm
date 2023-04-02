@@ -23,14 +23,12 @@ class MigrationHistory implements IEnumerable
     use ObjectTrait;
 
     private EntityDatabase $database;
-    private ?string $schema   = null;
     private string $table     = 'MigrationHistory';
     private array $migrations = [];
     private bool $existence   = false;
 
     public function __construct(EntityDatabase $database, string $namespace, string $directory)
     {
-        $this->schema   = $database->Model->Schema;
         $this->database = $database;
 
         $connection = $database->DataProvider->Connection;
@@ -73,14 +71,14 @@ class MigrationHistory implements IEnumerable
     public function getSelectScript(): string
     {
         $sqlHelper = $this->database->DataProvider->SqlHelper;
-        $table = $sqlHelper->delimitIdentifier($this->table, $this->schema);
+        $table = $sqlHelper->delimitIdentifier($this->table);
 
         return "SELECT * FROM {$table}";
     }
 
     public function getCreateScript(): string
     {
-        $table = new CreateTable($this->schema, 'MigrationHistory');
+        $table = new CreateTable('MigrationHistory');
         $table->column('Id', 'bigint')->nullable(false);
         $table->column('Name', 'varchar(45)')->nullable(false);
         $table->primaryKey('Id');
@@ -93,7 +91,7 @@ class MigrationHistory implements IEnumerable
 
     public function getInsertScript(string $id, string $name): string
     {
-        $data = new InsertData($this->schema, $this->table, ['Id' => $id, 'Name' => $name]);
+        $data = new InsertData($this->table, ['Id' => $id, 'Name' => $name]);
         $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
         $migrationGenerator->visit($data);
 
@@ -102,7 +100,7 @@ class MigrationHistory implements IEnumerable
 
     public function getDeleteScript(string $id): string
     {
-        $data = new DeleteData($this->schema, $this->table, ['Id' => $id]);
+        $data = new DeleteData($this->table, ['Id' => $id]);
         $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
         $migrationGenerator->visit($data);
 
