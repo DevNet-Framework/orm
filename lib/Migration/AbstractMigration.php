@@ -15,13 +15,6 @@ abstract class AbstractMigration
 {
     use ObjectTrait;
 
-    private ?string $schema;
-
-    public function __construct(?string $schema = null)
-    {
-        $this->schema = $schema;
-    }
-
     public function get_UpOperations(): array
     {
         return $this->build('up');
@@ -38,7 +31,7 @@ abstract class AbstractMigration
             throw new \Exception("Method {$action} not supported");
         }
 
-        $builder = new MigrationBuilder($this->schema);
+        $builder = new MigrationBuilder();
         $this->$action($builder);
 
         return $builder->Operations;
