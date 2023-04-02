@@ -17,55 +17,49 @@ class MigrationBuilder
 {
     use ObjectTrait;
 
-    private ?string $schema;
     private array $operations = [];
-
-    public function __construct(?string $schema = null)
-    {
-        $this->schema = $schema;
-    }
 
     public function get_Operations(): array
     {
         return $this->operations;
     }
 
-    public function createTable(string $name, Closure $builder): void
+    public function createTable(string $name, Closure $builder, ?string $schema = null): void
     {
-        $table = Operation::createTable($this->schema, $name);
+        $table = Operation::createTable($name, $schema);
         $builder($table);
         $this->operations[] = $table;
     }
 
-    public function alterTable(string $name, Closure $builder): void
+    public function alterTable(string $name, Closure $builder, ?string $schema = null): void
     {
-        $table = Operation::alterTable($this->schema, $name);
+        $table = Operation::alterTable($name, $schema);
         $builder($table);
         $this->operations[] = $table;
     }
 
-    public function RenameTable(string $name, string $rename): void
+    public function RenameTable(string $name, string $rename, ?string $schema = null): void
     {
-        $this->operations[] = Operation::renameTable($this->schema, $name, $rename);
+        $this->operations[] = Operation::renameTable($name, $rename, $schema);
     }
 
-    public function dropTable(string $name): void
+    public function dropTable(string $name, ?string $schema = null): void
     {
-        $this->operations[] = Operation::dropTable($this->schema, $name);
+        $this->operations[] = Operation::dropTable($schema, $name);
     }
 
-    public function insertData(string $table, array $columns): void
+    public function insertData(string $table, array $columns, ?string $schema = null): void
     {
-        $this->operations[] = Operation::insertData($this->schema, $table, $columns);
+        $this->operations[] = Operation::insertData($table, $columns, $schema);
     }
 
-    public function updateData(string $table, array $columns, array $keys): void
+    public function updateData(string $table, array $columns, array $keys, ?string $schema = null): void
     {
-        $this->operations[] = Operation::updateData($this->schema, $table, $columns, $keys);
+        $this->operations[] = Operation::updateData($table, $columns, $keys, $schema);
     }
 
-    public function deleteData(string $table, array $keys = []): void
+    public function deleteData(string $table, array $keys = [], ?string $schema = null): void
     {
-        $this->operations[] = Operation::deleteData($this->schema, $table, $keys);
+        $this->operations[] = Operation::deleteData($table, $keys, $schema);
     }
 }
