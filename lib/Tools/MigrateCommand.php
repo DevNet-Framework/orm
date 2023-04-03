@@ -10,6 +10,7 @@
 namespace DevNet\Entity\Tools;
 
 use DevNet\Entity\EntityContext;
+use DevNet\Entity\EntityOptions;
 use DevNet\Entity\Migration\Migrator;
 use DevNet\System\Command\CommandEventArgs;
 use DevNet\System\Command\CommandLine;
@@ -23,10 +24,10 @@ class MigrateCommand extends CommandLine
     {
         parent::__construct('migrate', 'Update the database to a specified migration.');
 
-        $this->addOption('--target', ' The migration target, by default update to the last migration.');
-        $this->addOption('--directory', ' The relative path to the migration target.');
-        $this->addOption('--connection', ' The connection string to the database. Defaults the one specified in settings.json.');
-        $this->addOption('--context', ' The custom EntityContext to use. Defaults the one specified in settings.json.');
+        $this->addOption('--target', 'The migration target, by default update to the last migration.');
+        $this->addOption('--directory', 'The relative path to the migration target.');
+        $this->addOption('--connection', 'The connection string to the database. Defaults the one specified in settings.json.');
+        $this->addOption('--provider', 'The custom IEntityDataProvider to use. Defaults the one specified in settings.json.');
         $this->setHandler($this);
     }
 
@@ -34,7 +35,7 @@ class MigrateCommand extends CommandLine
     {
         $projectRoot   = getcwd();
         $connection    = $args->getParameter('--connection');
-        $context       = $args->getParameter('--context');
+        $provider      = $args->getParameter('--provider');
         $target        = $args->getParameter('--target');
         $directory     = $args->getParameter('--directory');
         $configBuilder = new ConfigurationBuilder();
@@ -53,18 +54,15 @@ class MigrateCommand extends CommandLine
             }
         }
 
-        $contextType = $configuration->getValue('database:context');
-        if (!$contextType) {
-            $contextType = EntityContext::class;
-        }
-
-        if ($context) {
-            if ($context->getValue()) {
-                $contextType = ucwords($context->getValue(), '\\');
+        $providerType = $configuration->getValue('database:provider');
+        if ($provider) {
+            if ($provider->getValue()) {
+                $providerType = ucwords($provider->getValue(), '\\');
             }
         }
 
-        $entityContext = new $contextType($connectionString);
+        $entityOptions = new EntityOptions($connectionString, $providerType);
+        $entityContext = new EntityContext($entityOptions);
         if ($entityContext) {
             Console::writeLine("Build started...");
             $path = 'Migrations';
