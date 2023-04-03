@@ -15,14 +15,12 @@ use DevNet\Entity\Providers\IEntityDataProvider;
 
 class Migrator
 {
-    private ?string $schema;
     private IEntityDataProvider $dataProvider;
     private MigrationHistory $history;
     private MigrationAssembly $assembley;
 
     public function __construct(EntityDatabase $database, string $namespace, string $directory)
     {
-        $this->schema       = $database->Model->Schema;
         $this->dataProvider = $database->DataProvider;
         $this->history      = new MigrationHistory($database, $namespace, $directory);
         $this->assembley    = new MigrationAssembly($namespace, $directory);
@@ -67,7 +65,7 @@ class Migrator
 
         foreach ($migrationsToApply as $migrationToApply) {
             $migration  = $migrationToApply->Type;
-            $migration  = new $migration($this->schema);
+            $migration  = new $migration();
             $upScript   = $this->generateScript($migration->UpOperations);
             $commands[] = $this->dataProvider->Connection->createCommand($upScript);
 
@@ -77,7 +75,7 @@ class Migrator
 
         foreach ($migrationsToRevert as $migrationToRevert) {
             $migration  = $migrationToRevert->Type;
-            $migration  = new $migration($this->schema);
+            $migration  = new $migration();
             $downScript = $this->generateScript($migration->DownOperations);
             $commands[] = $this->dataProvider->Connection->createCommand($downScript);
 
@@ -95,7 +93,7 @@ class Migrator
         $connection->open();
 
         $transaction = $connection->beginTransaction();
-        
+
         if (!$this->history->exists() && $commands) {
             $createScript = $this->history->getCreateScript();
             $command = $connection->createCommand($createScript);
