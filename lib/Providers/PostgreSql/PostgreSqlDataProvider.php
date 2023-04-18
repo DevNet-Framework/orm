@@ -14,11 +14,11 @@ use DevNet\Entity\Providers\IEntityDataProvider;
 use DevNet\Entity\Storage\ISqlGenerationHelper;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Database\DbConnection;
-use DevNet\System\ObjectTrait;
+use DevNet\System\PropertyTrait;
 
 class PostgreSqlDataProvider implements IEntityDataProvider
 {
-    use ObjectTrait;
+    use PropertyTrait;
 
     private DbConnection $connection;
     private ISqlGenerationHelper $sqlHelper;

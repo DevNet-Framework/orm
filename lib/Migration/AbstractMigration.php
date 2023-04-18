@@ -9,11 +9,11 @@
 
 namespace DevNet\Entity\Migration;
 
-use DevNet\System\ObjectTrait;
+use DevNet\System\PropertyTrait;
 
 abstract class AbstractMigration
 {
-    use ObjectTrait;
+    use PropertyTrait;
 
     public function get_UpOperations(): array
     {

@@ -12,13 +12,13 @@ namespace DevNet\Entity\Metadata;
 use DevNet\System\Collections\IList;
 use DevNet\System\Exceptions\ClassException;
 use DevNet\System\Exceptions\PropertyException;
-use DevNet\System\ObjectTrait;
+use DevNet\System\PropertyTrait;
 use Reflector;
 use DateTime;
 
 class EntityType
 {
-    use ObjectTrait;
+    use PropertyTrait;
 
     private EntityModel $model;
     private Reflector $entityInfo;

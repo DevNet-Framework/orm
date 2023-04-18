@@ -11,12 +11,12 @@ namespace DevNet\Entity\Migration;
 
 use DevNet\System\Collections\Enumerator;
 use DevNet\System\Collections\IEnumerable;
-use DevNet\System\ObjectTrait;
+use DevNet\System\MethodTrait;
 use stdClass;
 
 class MigrationAssembly implements IEnumerable
 {
-    use ObjectTrait;
+    use MethodTrait;
 
     private array $migrations = [];
 

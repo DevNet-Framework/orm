@@ -15,11 +15,11 @@ use DevNet\Entity\Providers\PostgreSql\PostgreSqlDataProvider;
 use DevNet\Entity\Providers\Sqlite\SqliteDataProvider;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Database\DbTransaction;
-use DevNet\System\ObjectTrait;
+use DevNet\System\PropertyTrait;
 
 class EntityContext
 {
-    use ObjectTrait;
+    use PropertyTrait;
 
     protected EntityOptions $options;
     protected EntityDatabase $database;

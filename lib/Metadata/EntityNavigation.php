@@ -9,12 +9,12 @@
 
 namespace DevNet\Entity\Metadata;
 
-use DevNet\System\ObjectTrait;
+use DevNet\System\PropertyTrait;
 use ReflectionProperty;
 
 class EntityNavigation
 {
-    use ObjectTrait;
+    use PropertyTrait;
 
     public const NavigationReference  = 1;
     public const NavigationCollection = 2;

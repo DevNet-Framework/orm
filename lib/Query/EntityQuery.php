@@ -15,14 +15,16 @@ use DevNet\System\Linq\Enumerables\TakeEnumerable;
 use DevNet\System\Compiler\Expressions\Expression;
 use DevNet\System\Linq\IQueryProvider;
 use DevNet\System\Linq\IQueryable;
-use DevNet\System\ObjectTrait;
+use DevNet\System\MethodTrait;
+use DevNet\System\PropertyTrait;
 
 /**
  * create expression from method and passe it to queryProvider.
  */
 class EntityQuery implements IQueryable
 {
-    use ObjectTrait;
+    use MethodTrait;
+    use PropertyTrait;
 
     private object $entityType;
     private IQueryProvider $provider;

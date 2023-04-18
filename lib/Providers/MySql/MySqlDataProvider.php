@@ -14,11 +14,11 @@ use DevNet\Entity\Storage\ISqlGenerationHelper;
 use DevNet\Entity\Migration\Operations\OperationVisitor;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Database\DbConnection;
-use DevNet\System\ObjectTrait;
+use DevNet\System\PropertyTrait;
 
 class MySqlDataProvider implements IEntityDataProvider
 {
-    use ObjectTrait;
+    use PropertyTrait;
 
     private DbConnection $connection;
     private ISqlGenerationHelper $sqlHelper;

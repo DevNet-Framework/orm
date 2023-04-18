@@ -9,12 +9,12 @@
 
 namespace DevNet\Entity\Metadata;
 
-use DevNet\System\ObjectTrait;
+use DevNet\System\PropertyTrait;
 use ReflectionProperty;
 
 class EntityProperty
 {
-    use ObjectTrait;
+    use PropertyTrait;
 
     private EntityType $metadata;
     private ReflectionProperty $propertyInfo;

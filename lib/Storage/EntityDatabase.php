@@ -17,11 +17,11 @@ use DevNet\Entity\Storage\EntityDataPersister;
 use DevNet\Entity\Tracking\EntityEntry;
 use DevNet\Entity\Tracking\EntityStateManager;
 use DevNet\Entity\Tracking\EntityState;
-use DevNet\System\ObjectTrait;
+use DevNet\System\PropertyTrait;
 
 class EntityDatabase
 {
-    use ObjectTrait;
+    use PropertyTrait;
 
     private EntityModel $model;
     private EntityFinder $finder;
