@@ -12,5 +12,11 @@ use DevNet\Cli\Templating\CodeGeneratorRegistry;
 use DevNet\Entity\Tools\MigrateCommand;
 use DevNet\Entity\Tools\MigrationGeneratorProvider;
 
-CodeGeneratorRegistry::register('migration', MigrationGeneratorProvider::class);
-CommandRegistry::register('migrate', MigrateCommand::class);
+/**
+ * DevNet CLI package is not mandatory required by DevNet Entity package,
+ * so we need to check first if the DevNet CLI is installed before registering the command.
+ */
+if (class_exists(CommandRegistry::class)) {
+    CommandRegistry::register('migrate', MigrateCommand::class);
+    CodeGeneratorRegistry::register('migration', MigrationGeneratorProvider::class);
+}
