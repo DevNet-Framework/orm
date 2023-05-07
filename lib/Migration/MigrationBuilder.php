@@ -45,7 +45,7 @@ class MigrationBuilder
 
     public function dropTable(string $name, ?string $schema = null): void
     {
-        $this->operations[] = Operation::dropTable($schema, $name);
+        $this->operations[] = Operation::dropTable($name, $schema);
     }
 
     public function insertData(string $table, array $columns, ?string $schema = null): void
