@@ -79,13 +79,13 @@ class MigrateCommand extends CommandLine
                 $migrator->migrate();
             }
         } else {
-            Console::foregroundColor(ConsoleColor::Red);
+            Console::$ForegroundColor = ConsoleColor::Red;
             Console::writeLine("EntityContext not found.");
             Console::resetColor();
             return;
         }
 
-        Console::foregroundColor(ConsoleColor::Green);
+        Console::$ForegroundColor = ConsoleColor::Green;
         Console::writeLine("Done.");
         Console::resetColor();
     }
