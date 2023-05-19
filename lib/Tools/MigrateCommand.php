@@ -14,11 +14,12 @@ use DevNet\Entity\EntityOptions;
 use DevNet\Entity\Migration\Migrator;
 use DevNet\System\Command\CommandEventArgs;
 use DevNet\System\Command\CommandLine;
+use DevNet\System\Command\ICommandHandler;
 use DevNet\System\Configuration\ConfigurationBuilder;
 use DevNet\System\IO\ConsoleColor;
 use DevNet\System\IO\Console;
 
-class MigrateCommand extends CommandLine
+class MigrateCommand extends CommandLine implements ICommandHandler
 {
     public function __construct()
     {
@@ -28,36 +29,31 @@ class MigrateCommand extends CommandLine
         $this->addOption('--directory', 'The relative path to the migration target.');
         $this->addOption('--connection', 'The connection string to the database. Defaults the one specified in settings.json.');
         $this->addOption('--provider', 'The custom IEntityDataProvider to use. Defaults the one specified in settings.json.');
-        $this->setHandler($this);
     }
 
-    public function __invoke(object $sender, CommandEventArgs $args): void
+    public function onExecute(object $sender, CommandEventArgs $args): void
     {
-        $projectRoot   = getcwd();
-        $connection    = $args->getParameter('--connection');
-        $provider      = $args->getParameter('--provider');
-        $target        = $args->getParameter('--target');
-        $directory     = $args->getParameter('--directory');
+        $projectRoot = getcwd();
         $configBuilder = new ConfigurationBuilder();
-        $settingsPath  = $projectRoot . '/' . 'settings.json';
-
+        $settingsPath = $projectRoot . '/' . 'settings.json';
         if (file_exists($settingsPath)) {
             $configBuilder->addJsonFile($settingsPath);
         }
 
         $configuration = $configBuilder->build();
-
         $connectionString = $configuration->getValue('database:connection');
+        $connection = $args->get('--connection');
         if ($connection) {
-            if ($connection->getValue()) {
-                $connectionString = ucwords($connection->getValue(), '\\');
+            if ($connection->Value) {
+                $connectionString = ucwords($connection->Value, '\\');
             }
         }
 
         $providerType = $configuration->getValue('database:provider');
+        $provider = $args->get('--provider');
         if ($provider) {
-            if ($provider->getValue()) {
-                $providerType = ucwords($provider->getValue(), '\\');
+            if ($provider->Value) {
+                $providerType = ucwords($provider->Value, '\\');
             }
         }
 
@@ -66,15 +62,17 @@ class MigrateCommand extends CommandLine
         if ($entityContext) {
             Console::writeLine("Build started...");
             $path = 'Migrations';
+            $directory = $args->get('--directory');
             if ($directory) {
-                if ($directory->getValue()) {
-                    $path = ucwords($directory->getValue(), '/');
+                if ($directory->Value) {
+                    $path = ucwords($directory->Value, '/');
                 }
             }
             $namespace = 'Application\\' . str_replace('/', '\\', $path);
-            $migrator  = new Migrator($entityContext->Database, $namespace, $projectRoot . '/' . $path);
+            $migrator = new Migrator($entityContext->Database, $namespace, $projectRoot . '/' . $path);
+            $target = $args->get('--target');
             if ($target) {
-                $migrator->migrate($target->getValue());
+                $migrator->migrate($target->Value);
             } else {
                 $migrator->migrate();
             }
