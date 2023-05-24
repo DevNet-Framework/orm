@@ -11,7 +11,6 @@ namespace DevNet\Entity\Storage;
 
 use DevNet\Entity\Internal\EntityFinder;
 use DevNet\Entity\Metadata\EntityModel;
-use DevNet\Entity\Providers\IEntityDataProvider;
 use DevNet\Entity\Query\EntityQueryProvider;
 use DevNet\Entity\Storage\EntityDataPersister;
 use DevNet\Entity\Tracking\EntityEntry;

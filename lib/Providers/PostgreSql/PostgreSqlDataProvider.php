@@ -10,7 +10,7 @@
 namespace DevNet\Entity\Providers\PostgreSql;
 
 use DevNet\Entity\Migration\Operations\OperationVisitor;
-use DevNet\Entity\Providers\IEntityDataProvider;
+use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\Entity\Storage\ISqlGenerationHelper;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Database\DbConnection;
@@ -47,7 +47,7 @@ class PostgreSqlDataProvider implements IEntityDataProvider
     {
         return $this->queryGenerator;
     }
-    
+
     public function get_MigrationGenerator(): OperationVisitor
     {
         return $this->migrationGenerator;

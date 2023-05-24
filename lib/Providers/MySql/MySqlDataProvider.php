@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Providers\MySql;
 
-use DevNet\Entity\Providers\IEntityDataProvider;
+use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\Entity\Storage\ISqlGenerationHelper;
 use DevNet\Entity\Migration\Operations\OperationVisitor;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;
@@ -47,7 +47,7 @@ class MySqlDataProvider implements IEntityDataProvider
     {
         return $this->queryGenerator;
     }
-    
+
     public function get_MigrationGenerator(): OperationVisitor
     {
         return $this->migrationGenerator;

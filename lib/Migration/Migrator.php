@@ -11,7 +11,7 @@ namespace DevNet\Entity\Migration;
 
 use DevNet\System\Linq;
 use DevNet\Entity\Storage\EntityDatabase;
-use DevNet\Entity\Providers\IEntityDataProvider;
+use DevNet\Entity\Storage\IEntityDataProvider;
 
 class Migrator
 {
