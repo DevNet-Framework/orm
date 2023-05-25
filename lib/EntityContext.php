@@ -10,11 +10,10 @@
 namespace DevNet\Entity;
 
 use DevNet\Entity\Metadata\EntityModel;
-use DevNet\Entity\Providers\MySql\MySqlDataProvider;
-use DevNet\Entity\Providers\PostgreSql\PostgreSqlDataProvider;
-use DevNet\Entity\Providers\Sqlite\SqliteDataProvider;
 use DevNet\Entity\Storage\EntityDatabase;
+use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\System\Database\DbTransaction;
+use DevNet\System\Exceptions\ClassException;
 use DevNet\System\PropertyTrait;
 
 class EntityContext
@@ -31,26 +30,16 @@ class EntityContext
         $this->options = $options;
 
         $providerType = $options->ProviderType;
-        if (class_exists($providerType)) {
-            $provider = new $providerType($options->ConnectionString);
-        } else {
-            $driver = parse_url($options->ConnectionString, PHP_URL_SCHEME);
-            switch ($driver) {
-                case 'mysql':
-                    $provider = new MySqlDataProvider($options->ConnectionString);
-                    break;
-                case 'pgsql':
-                    $provider = new PostgreSqlDataProvider($options->ConnectionString);
-                    break;
-                case 'sqlite':
-                    $provider = new SqliteDataProvider($options->ConnectionString);
-                    break;
-                default:
-                    throw new \Exception("Could not find a compatible Data Provider! Try to implement a custom IEntityDataProvider");
-                    break;
-            }
+        if (!class_exists($providerType)) {
+            throw new ClassException("Could not find the data provider class {$providerType}", 0, 1);
         }
 
+        $interfaces = class_implements($providerType);
+        if (!in_array(IEntityDataProvider::class, $interfaces)) {
+            throw new ClassException("{$providerType} must implements IEntityDataProvider inteface", 0, 1);
+        }
+
+        $provider = new $providerType($options->ConnectionString);
         $this->database = new EntityDatabase($provider);
         if ($options->DefaultSchema) {
             $this->database->Model->SetSchema($options->DefaultSchema);
