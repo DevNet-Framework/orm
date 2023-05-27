@@ -15,7 +15,7 @@
     "autoload": {
         "psr-4": {
             "DevNet\\Entity\\": "lib/",
-            "DevNet\\Entity\\Tools": "tools/"
+            "DevNet\\Entity\\Tools\\": "tools/"
         },
         "files": [
             "global.php"
