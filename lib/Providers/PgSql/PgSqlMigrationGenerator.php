@@ -7,20 +7,20 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Providers\PostgreSql;
+namespace DevNet\Entity\Providers\PgSql;
 
 use DevNet\Entity\Migration\Operations\OperationVisitor;
 use DevNet\Entity\Migration\Operations\Operation;
 use DevNet\System\Text\StringBuilder;
 
-class PostgreSqlMigrationGenerator extends OperationVisitor
+class PgSqlMigrationGenerator extends OperationVisitor
 {
-    private PostgreSqlHelper $sqlHelper;
+    private PgSqlHelper $sqlHelper;
 
     public function __construct()
     {
         $this->SqlBuilder = new StringBuilder();
-        $this->sqlHelper  = new PostgreSqlHelper();
+        $this->sqlHelper  = new PgSqlHelper();
     }
 
     public function visitTable(Operation $operation): void
@@ -355,6 +355,5 @@ class PostgreSqlMigrationGenerator extends OperationVisitor
             $this->SqlBuilder->append($keys);
         }
         $this->SqlBuilder->append(';');
-
     }
 }

@@ -7,11 +7,11 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Providers\PostgreSql;
+namespace DevNet\Entity\Providers\PgSql;
 
 use DevNet\System\Database\DbConnection;
 
-class PostgreSqlConnection extends DbConnection
+class PgSqlConnection extends DbConnection
 {
     public function __construct(string $connectionUrl)
     {

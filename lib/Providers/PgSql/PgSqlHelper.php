@@ -7,11 +7,11 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Providers\PostgreSql;
+namespace DevNet\Entity\Providers\PgSql;
 
 use DevNet\Entity\Storage\ISqlGenerationHelper;
 
-class PostgreSqlHelper implements ISqlGenerationHelper
+class PgSqlHelper implements ISqlGenerationHelper
 {
     public function delimitIdentifier(string $name, ?string $schema = null): string
     {

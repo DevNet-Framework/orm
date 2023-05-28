@@ -7,7 +7,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Providers\PostgreSql;
+namespace DevNet\Entity\Providers\PgSql;
 
 use DevNet\Entity\Metadata\EntityType;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;
@@ -16,7 +16,7 @@ use DevNet\System\Compiler\Expressions\Expression;
 use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\Linq\IQueryable;
 
-class PostgreSqlQueryGenerator extends ExpressionVisitor
+class PgSqlQueryGenerator extends ExpressionVisitor
 {
     private EntityType $entityType;
     private string $method        = '';

@@ -7,7 +7,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Providers\PostgreSql;
+namespace DevNet\Entity\Providers\PgSql;
 
 use DevNet\Entity\Migration\Operations\OperationVisitor;
 use DevNet\Entity\Storage\IEntityDataProvider;
@@ -16,7 +16,7 @@ use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Database\DbConnection;
 use DevNet\System\PropertyTrait;
 
-class PostgreSqlDataProvider implements IEntityDataProvider
+class PgSqlDataProvider implements IEntityDataProvider
 {
     use PropertyTrait;
 
@@ -27,10 +27,10 @@ class PostgreSqlDataProvider implements IEntityDataProvider
 
     public function __construct(string $connectionString)
     {
-        $this->connection         = new PostgreSqlConnection($connectionString);
-        $this->sqlHelper          = new PostgreSqlHelper();
-        $this->queryGenerator     = new PostgreSqlQueryGenerator();
-        $this->migrationGenerator = new PostgreSqlMigrationGenerator();
+        $this->connection         = new PgSqlConnection($connectionString);
+        $this->sqlHelper          = new PgSqlHelper();
+        $this->queryGenerator     = new PgSqlQueryGenerator();
+        $this->migrationGenerator = new PgSqlMigrationGenerator();
     }
 
     public function get_Connection(): DbConnection
