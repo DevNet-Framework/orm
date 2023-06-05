@@ -12,7 +12,6 @@ namespace DevNet\Entity\Query;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Linq\IQueryable;
 use DevNet\System\Linq\IQueryProvider;
-use DevNet\System\Collections\Enumerator;
 use DevNet\System\Compiler\Expressions\Expression;
 use DateTime;
 
@@ -33,16 +32,12 @@ class EntityQueryProvider implements IQueryProvider
     public function execute(object $entityType, Expression $expression): array
     {
         $this->database->DataProvider->Connection->open();
+
+        $entities  = [];
         $slq       = $this->getQueryText($expression);
         $command   = $this->database->DataProvider->Connection->createCommand($slq);
         $variables = $this->database->DataProvider->QueryGenerator->OuterVariables;
-
-        if ($variables) {
-            $command->addParameters($variables);
-        }
-
-        $entities = [];
-        $dbReader = $command->executeReader($entityType->getName());
+        $dbReader  = $command->executeReader($variables);
 
         if ($dbReader) {
             while ($dbReader->read()) {
