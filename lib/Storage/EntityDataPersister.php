@@ -39,8 +39,8 @@ class EntityDataPersister
         $culomns      = implode(', ', $culomns);
         $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $dbCommand    = $this->connection->createCommand("INSERT INTO {$table} ($culomns) VALUES ({$placeHolders})");
-        $dbCommand->addParameters($values);
-        return $dbCommand->execute();
+
+        return $dbCommand->execute($values);
     }
 
     public function update(EntityEntry $entry): int
@@ -61,8 +61,7 @@ class EntityDataPersister
         $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $dbCommand    = $this->connection->createCommand("UPDATE {$table} SET {$placeHolders} WHERE {$key} = ?");
 
-        $dbCommand->addParameters($values);
-        return $dbCommand->execute();
+        return $dbCommand->execute($values);
     }
 
     public function delete(EntityEntry $entry): int
@@ -74,7 +73,6 @@ class EntityDataPersister
         $table      = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $dbCommand  = $this->connection->createCommand("DELETE FROM {$table} WHERE {$key} = ?");
 
-        $dbCommand->addParameters($values);
-        return $dbCommand->execute();
+        return $dbCommand->execute($values);
     }
 }
