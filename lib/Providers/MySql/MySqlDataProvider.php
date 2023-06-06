@@ -10,45 +10,42 @@
 namespace DevNet\Entity\Providers\MySql;
 
 use DevNet\Entity\Storage\IEntityDataProvider;
-use DevNet\Entity\Storage\ISqlGenerationHelper;
-use DevNet\Entity\Migration\Operations\OperationVisitor;
-use DevNet\System\Compiler\Expressions\ExpressionVisitor;
-use DevNet\System\Database\DbConnection;
+use DevNet\System\Database\MySql\MySqlConnection;
 use DevNet\System\PropertyTrait;
 
 class MySqlDataProvider implements IEntityDataProvider
 {
     use PropertyTrait;
 
-    private DbConnection $connection;
-    private ISqlGenerationHelper $sqlHelper;
-    private ExpressionVisitor $queryGenerator;
-    private OperationVisitor $migrationGenerator;
+    private MySqlConnection $connection;
+    private MySqlHelper $sqlHelper;
+    private MySqlQueryGenerator $queryGenerator;
+    private MySqlMigrationGenerator $migrationGenerator;
 
-    public function __construct(string $connectionString)
+    public function __construct(string $connectionUrl)
     {
-        $this->connection         = new MySqlConnection($connectionString);
+        $this->connection         = new MySqlConnection($connectionUrl);
         $this->sqlHelper          = new MySqlHelper();
         $this->queryGenerator     = new MySqlQueryGenerator();
         $this->migrationGenerator = new MySqlMigrationGenerator();
     }
 
-    public function get_Connection(): DbConnection
+    public function get_Connection(): MySqlConnection
     {
         return $this->connection;
     }
 
-    public function get_SqlHelper(): ISqlGenerationHelper
+    public function get_SqlHelper(): MySqlHelper
     {
         return $this->sqlHelper;
     }
 
-    public function get_QueryGenerator(): ExpressionVisitor
+    public function get_QueryGenerator(): MySqlQueryGenerator
     {
         return $this->queryGenerator;
     }
 
-    public function get_MigrationGenerator(): OperationVisitor
+    public function get_MigrationGenerator(): MySqlMigrationGenerator
     {
         return $this->migrationGenerator;
     }
