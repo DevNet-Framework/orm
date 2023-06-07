@@ -28,16 +28,16 @@ class EntityFinder
         $this->entityStateManager = $database->EntityStateManager;
     }
 
-    public function find(EntityType $entityType, $id): ?object
+    public function find(EntityType $entityType, string $keyValue): ?object
     {
-        $entry = $this->entityStateManager->getEntry($entityType->getName(), $id);
+        $entry = $this->entityStateManager->getEntry($entityType->getName(), $keyValue);
         if ($entry) {
             return $entry->Entity;
         }
 
         $query  = new EntityQuery($entityType, $this->database->QueryProvider);
         $key    = $entityType->getPrimaryKey();
-        $entity = $query->where(fn ($entity) => $entity->$key == $id)->first();
+        $entity = $query->where(fn ($entity) => $entity->$key == $keyValue)->first();
 
         if ($entity) {
             $this->load($entity);
