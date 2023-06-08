@@ -43,13 +43,13 @@ class EntityStateManager
         $this->identityMap[$entityName][$entityHash] = $entry;
     }
 
-    public function getEntry($entity, int $id = null): ?EntityEntry
+    public function getEntry(object|string $entity, ?string $keyValue = null): ?EntityEntry
     {
         if (is_string($entity)) {
             if (isset($this->identityMap[$entity])) {
                 foreach ($this->identityMap[$entity] as $entry) {
                     $key = $entry->Metadata->PropertyKey;
-                    if ($entry->Entity->$key == $id) {
+                    if ($entry->Entity->$key == $keyValue) {
                         return $entry;
                     }
                 }
