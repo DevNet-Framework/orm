@@ -9,11 +9,11 @@
 
 namespace DevNet\Entity\Tracking;
 
-class EntityState
+enum EntityState: int
 {
-    const Attached  = 1;
-    const Added     = 2;
-    const Modified  = 3;
-    const Deleted   = 0;
-    const Detached  = 4;
+    case Detached  = 0;
+    case Attached  = 1;
+    case Added     = 2;
+    case Deleted   = 3;
+    case Modified  = 4;
 }
