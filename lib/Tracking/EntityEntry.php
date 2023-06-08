@@ -10,14 +10,16 @@
 namespace DevNet\Entity\Tracking;
 
 use DevNet\Entity\Metadata\EntityType;
-use DevNet\System\Exceptions\PropertyException;
+use DevNet\System\PropertyTrait;
 use DateTime;
 
 class EntityEntry
 {
+    use PropertyTrait;
+
     private EntityType $metadata;
+    private EntityState $state;
     private object $entity;
-    private int $state;
     private array $values = [];
 
     public function __construct(object $entity, EntityType $entityType)
@@ -25,50 +27,48 @@ class EntityEntry
         $this->entity   = $entity;
         $this->metadata = $entityType;
         $this->state    = EntityState::Attached;
-    }
 
-    public function __get(string $name)
-    {
-        if (in_array($name, ['Metadata', 'Entity', 'State'])) {
-            $property = lcfirst($name);
-            return $this->$property;
-        }
-        
-        if ($name == "Values") {
-            foreach ($this->metadata->Properties as $property) {
-                $propertyName = $property->PropertyInfo->getName();
-                if ($property->PropertyInfo->isInitialized($this->entity)) {
-                    $value = $property->PropertyInfo->getValue($this->entity);
+        foreach ($this->metadata->Properties as $property) {
+            $propertyName = $property->PropertyInfo->getName();
+            if ($property->PropertyInfo->isInitialized($this->entity)) {
+                $value = $property->PropertyInfo->getValue($this->entity);
+                if (is_array($value) || is_object($value)) {
                     if ($value instanceof DateTime) {
                         $value = $value->format('y-m-d h:m:s');
+                    } else {
+                        continue;
                     }
-                    $this->values[$propertyName] = $value;
-                } else {
-                    $this->values[$propertyName] = null;
                 }
+                $this->values[$propertyName] = $value;
+            } else {
+                $this->values[$propertyName] = null;
             }
         }
-
-        if (property_exists($this, $name)) {
-            throw new PropertyException("access to private property " . get_class($this) . "::" . $name);
-        }
-
-        throw new PropertyException("access to undefined property " . get_class($this) . "::" . $name);
     }
 
-    public function __set(string $name, $value)
+    public function get_Metadata(): EntityType
     {
-        switch ($name) {
-            case 'entity':
-            case 'metadata':
-            case 'values':
-            case 'navigations':
-            case 'references':
-                throw PropertyException::privateProperty(self::class, $name);
-                break;
-        }
+        return $this->metadata;
+    }
 
-        $this->$name = $value;
+    public function get_State(): EntityState
+    {
+        return $this->state;
+    }
+
+    public function get_Entity(): Object
+    {
+        return $this->entity;
+    }
+
+    public function get_Values(): array
+    {
+        return $this->values;
+    }
+
+    public function set_State(EntityState $state): void
+    {
+        $this->state = $state;
     }
 
     public function detectChanges(): void
@@ -76,16 +76,24 @@ class EntityEntry
         $values = [];
         foreach ($this->metadata->Properties as $property) {
             $propertyName = $property->PropertyInfo->getName();
-            if (isset($this->entity->$propertyName)) {
-                $values[$propertyName] = $this->entity->$propertyName;
+            if ($property->PropertyInfo->isInitialized($this->entity)) {
+                $value = $property->PropertyInfo->getValue($this->entity);
+                if (is_array($value) || is_object($value)) {
+                    if ($value instanceof DateTime) {
+                        $value = $value->format('y-m-d h:m:s');
+                    } else {
+                        continue;
+                    }
+                }
+                $values[$propertyName] = $value;
             } else {
-                $this->values[$propertyName] = null;
+                $values[$propertyName] = null;
             }
         }
 
-        if ($this->values != $values && $this->state == EntityState::Attached) {
-            $this->state = EntityState::Modified;
+        if ($this->values != $values) {
             $this->values = $values;
+            $this->state  = EntityState::Modified;
         }
     }
 }
