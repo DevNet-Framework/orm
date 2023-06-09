@@ -109,7 +109,9 @@ class EntityDatabase
         $this->dataProvider->Connection->open();
         foreach ($entries as $entityType) {
             foreach ($entityType as $entry) {
-                $entry->detectChanges();
+                if ($entry->State == EntityState::Attached) {
+                    $entry->detectChanges();
+                }
                 switch ($entry->State) {
                     case EntityState::Added:
                         $count += $this->dataPersister->insert($entry);
