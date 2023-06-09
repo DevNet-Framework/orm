@@ -9,7 +9,6 @@
 
 namespace DevNet\Entity\Metadata;
 
-use DevNet\System\Collections\IList;
 use DevNet\System\Exceptions\ClassException;
 use DevNet\System\Exceptions\PropertyException;
 use DevNet\System\PropertyTrait;
@@ -48,16 +47,8 @@ class EntityType
                     if (strtolower($propertyName) === 'id') {
                         $this->propertyKey = $propertyName;
                     }
-                } else {
-                    if ($propertyType === IList::class) {
-                        // conventional collection navigation property feature will be added in the future release
-                        $this->navigations[$propertyName] = new EntityNavigation($this, $propertyInfo);
-                    } else {
-                        if (class_exists($propertyType)) {
-                            // conventional reference navigation property feature will be added in the future release
-                            $this->navigations[$propertyName] = new EntityNavigation($this, $propertyInfo);
-                        }
-                    }
+                } else if (class_exists($propertyType)) {
+                    $this->navigations[$propertyName] = new EntityNavigation($this, $propertyInfo);
                 }
             }
         }
@@ -153,7 +144,7 @@ class EntityType
         return $navigation;
     }
 
-    public function toTable(string $name, string $schema = null): void
+    public function setTableName(string $name, string $schema = null): void
     {
         $this->tableName = $name;
         $this->schema = $schema;
