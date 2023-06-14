@@ -9,21 +9,18 @@
 
 namespace DevNet\Entity\Providers\Sqlite;
 
-use DevNet\Entity\Migration\Operations\OperationVisitor;
 use DevNet\Entity\Storage\IEntityDataProvider;
-use DevNet\Entity\Storage\ISqlGenerationHelper;
-use DevNet\System\Compiler\Expressions\ExpressionVisitor;
-use DevNet\System\Database\DbConnection;
+use DevNet\System\Database\Sqlite\SqliteConnection;
 use DevNet\System\PropertyTrait;
 
 class SqliteDataProvider implements IEntityDataProvider
 {
     use PropertyTrait;
 
-    private DbConnection $connection;
-    private ISqlGenerationHelper $sqlHelper;
-    private ExpressionVisitor $queryGenerator;
-    private OperationVisitor $migrationGenerator;
+    private SqliteConnection $connection;
+    private SqliteHelper $sqlHelper;
+    private SqliteQueryGenerator $queryGenerator;
+    private SqliteMigrationGenerator $migrationGenerator;
 
     public function __construct(string $connectionString)
     {
@@ -33,22 +30,22 @@ class SqliteDataProvider implements IEntityDataProvider
         $this->migrationGenerator = new SqliteMigrationGenerator();
     }
 
-    public function get_Connection(): DbConnection
+    public function get_Connection(): SqliteConnection
     {
         return $this->connection;
     }
 
-    public function get_SqlHelper(): ISqlGenerationHelper
+    public function get_SqlHelper(): SqliteHelper
     {
         return $this->sqlHelper;
     }
 
-    public function get_QueryGenerator(): ExpressionVisitor
+    public function get_QueryGenerator(): SqliteQueryGenerator
     {
         return $this->queryGenerator;
     }
 
-    public function get_MigrationGenerator(): OperationVisitor
+    public function get_MigrationGenerator(): SqliteMigrationGenerator
     {
         return $this->migrationGenerator;
     }
