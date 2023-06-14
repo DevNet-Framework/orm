@@ -9,21 +9,18 @@
 
 namespace DevNet\Entity\Providers\PgSql;
 
-use DevNet\Entity\Migration\Operations\OperationVisitor;
 use DevNet\Entity\Storage\IEntityDataProvider;
-use DevNet\Entity\Storage\ISqlGenerationHelper;
-use DevNet\System\Compiler\Expressions\ExpressionVisitor;
-use DevNet\System\Database\DbConnection;
+use DevNet\System\Database\PgSql\PgSqlConnection;
 use DevNet\System\PropertyTrait;
 
 class PgSqlDataProvider implements IEntityDataProvider
 {
     use PropertyTrait;
 
-    private DbConnection $connection;
-    private ISqlGenerationHelper $sqlHelper;
-    private ExpressionVisitor $queryGenerator;
-    private OperationVisitor $migrationGenerator;
+    private PgSqlConnection $connection;
+    private PgSqlHelper $sqlHelper;
+    private PgSqlQueryGenerator $queryGenerator;
+    private PgSqlMigrationGenerator $migrationGenerator;
 
     public function __construct(string $connectionString)
     {
@@ -33,22 +30,22 @@ class PgSqlDataProvider implements IEntityDataProvider
         $this->migrationGenerator = new PgSqlMigrationGenerator();
     }
 
-    public function get_Connection(): DbConnection
+    public function get_Connection(): PgSqlConnection
     {
         return $this->connection;
     }
 
-    public function get_SqlHelper(): ISqlGenerationHelper
+    public function get_SqlHelper(): PgSqlHelper
     {
         return $this->sqlHelper;
     }
 
-    public function get_QueryGenerator(): ExpressionVisitor
+    public function get_QueryGenerator(): PgSqlQueryGenerator
     {
         return $this->queryGenerator;
     }
 
-    public function get_MigrationGenerator(): OperationVisitor
+    public function get_MigrationGenerator(): PgSqlMigrationGenerator
     {
         return $this->migrationGenerator;
     }
