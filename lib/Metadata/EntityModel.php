@@ -47,7 +47,7 @@ class EntityModel
 
     public function addEntityType(EntityType $entityType): void
     {
-        $this->entityModel[$entityType->getName()] = $entityType;
+        $this->entityModel[$entityType->Name] = $entityType;
     }
 
     public function getEntityType(string $entityName): EntityType
