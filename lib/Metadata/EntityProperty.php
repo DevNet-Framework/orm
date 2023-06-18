@@ -9,6 +9,7 @@
 
 namespace DevNet\Entity\Metadata;
 
+use DevNet\Entity\Annotations\Column;
 use DevNet\System\PropertyTrait;
 use ReflectionProperty;
 
@@ -16,22 +17,28 @@ class EntityProperty
 {
     use PropertyTrait;
 
-    private EntityType $metadata;
+    private EntityType $entityType;
     private ReflectionProperty $propertyInfo;
-    private string $tableReference;
-    private array $column = [];
-    private ?EntityNavigation $navigation = null;
+    private string $columnName;
 
     public function __construct(EntityType $entityType, ReflectionProperty $propertyInfo)
     {
-        $this->metadata       = $entityType;
-        $this->propertyInfo   = $propertyInfo;
-        $this->column['Name'] = $propertyInfo->getName();
+        $this->entityType   = $entityType;
+        $this->propertyInfo = $propertyInfo;
+        $this->columnName   = $propertyInfo->getName();
+
+        foreach ($this->methodInfo->getAttributes() as $attribute) {
+            if ($attribute->getName() == Column::class) {
+                $column = $attribute->newInstance();
+                $this->columnName = $column->Name;
+                break;
+            }
+        }
     }
 
-    public function get_Metadata(): EntityType
+    public function get_EntityType(): EntityType
     {
-        return $this->metadata;
+        return $this->entityType;
     }
 
     public function get_PropertyInfo(): ReflectionProperty
@@ -39,30 +46,13 @@ class EntityProperty
         return $this->propertyInfo;
     }
 
-    public function get_TableReference(): string
+    public function hasColumn(string $name): void
     {
-        return $this->tableReference;
-    }
-
-    public function get_Column(): array
-    {
-        return $this->column;
-    }
-
-    public function get_Navigation(): ?EntityNavigation
-    {
-        return $this->navigation;
-    }
-
-    public function hasColumn(string $name, string $type = null, int $lenth = null): void
-    {
-        $this->column['Name']  = $name;
-        $this->column['Type']  = $type;
-        $this->column['Lenth'] = $lenth;
+        $this->columnName = $name;
     }
 
     public function getColumnName(): string
     {
-        return $this->column['Name'];
+        return $this->columnName;
     }
 }
