@@ -41,7 +41,7 @@ class EntityQueryProvider implements IQueryProvider
 
         if ($dbReader) {
             while ($dbReader->read()) {
-                $entity = $entityType->getName();
+                $entity = $entityType->Name;
                 $entity = new $entity();
 
                 foreach ($entityType->Properties as $property) {
