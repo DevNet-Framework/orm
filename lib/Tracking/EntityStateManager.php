@@ -39,7 +39,7 @@ class EntityStateManager
     {
         $entity = $entry->Entity;
         $entityHash = spl_object_hash($entity);
-        $entityName = $entry->Metadata->getName();
+        $entityName = $entry->Metadata->Name;
         $this->identityMap[$entityName][$entityHash] = $entry;
     }
 
