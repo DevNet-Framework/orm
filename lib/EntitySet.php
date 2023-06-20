@@ -45,7 +45,7 @@ class EntitySet extends EntityQuery
 
     public function create(): object
     {
-        $entityName = $this->EntityType->getName();
+        $entityName = $this->EntityType->Name;
         $entity = new $entityName();
         $this->add($entity);
         return $entity;
