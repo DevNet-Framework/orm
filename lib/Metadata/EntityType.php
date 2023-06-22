@@ -86,9 +86,9 @@ class EntityType
         return $this->entityInfo;
     }
 
-    public function get_PropertyKey(): string
+    public function get_Keys(): array
     {
-        return $this->propertyKey;
+        return $this->keys;
     }
 
     public function get_ForeignKeys(): array
@@ -120,28 +120,9 @@ class EntityType
         return $this->model->Schema;
     }
 
-    public function getPrimaryKey(): array
-    {
-        $keys = [];
-        foreach ($this->keys as $propertyName) {
-            $property = $this->getProperty($propertyName);
-            if ($property) {
-                $keys[] = $property->getColumnName();
-            }
-        }
-
-        return $keys;
-    }
-
     public function getForeignKey(string $relatedEntity): ?string
     {
-        $propertyName = $this->foreignKeys[$relatedEntity] ?? null;
-        if (!$propertyName) {
-            return null;
-        }
-
-        $property = $this->getProperty($propertyName);
-        return $property->getColumnName();
+        return $this->foreignKeys[$relatedEntity] ?? null;
     }
 
     public function getProperty(string $propertyName): EntityProperty
@@ -170,7 +151,7 @@ class EntityType
         $this->schema = $schema;
     }
 
-    public function addKey(array $propertyNames): void
+    public function setPrimaryKey(array $propertyNames): void
     {
         foreach ($propertyNames as $propertyName) {
             if (!property_exists($this->entityName, $propertyName)) {
