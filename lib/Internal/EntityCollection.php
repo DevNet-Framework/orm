@@ -12,13 +12,13 @@ namespace DevNet\Entity\Internal;
 use DevNet\Entity\Metadata\EntityNavigation;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Collections\Enumerator;
-use DevNet\System\Collections\IList;
+use DevNet\System\Collections\ICollection;
 
-class EntityCollection implements IList
+class EntityCollection implements ICollection
 {
     private EntityNavigation $navigation;
     private EntityDatabase $database;
-    private $keyValue;
+    private string $keyValue;
 
     public function __construct(
         EntityNavigation $navigation,
@@ -30,17 +30,17 @@ class EntityCollection implements IList
         $this->keyValue   = $keyValue;
     }
 
-    public function add($entity): void
+    public function add(object $entity): void
     {
         $this->database->add($entity);
     }
 
-    public function remove($entity): void
+    public function remove(mixed $entity): void
     {
         $this->database->remove($entity);
     }
 
-    public function contains($entity): bool
+    public function contains(mixed $entity): bool
     {
         foreach ($this as $entity) {
             if ($entity == $entity) {
@@ -49,6 +49,13 @@ class EntityCollection implements IList
         }
 
         return false;
+    }
+
+    public function clear(): void
+    {
+        foreach ($this->getIterator() as $entity) {
+            $this->database->remove($entity);
+        }
     }
 
     public function getIterator(): Enumerator
@@ -62,19 +69,19 @@ class EntityCollection implements IList
         return $entities;
     }
 
-    public function first(): object
+    public function first(): ?object
     {
-        foreach ($this->getIterator() as $element) {
-            return $element;
+        foreach ($this->getIterator() as $entity) {
+            return $entity;
         }
+
+        return null;
     }
 
-    public function last(): object
+    public function last(): ?object
     {
-        foreach ($this->getIterator() as $element) {
-            $last = $element;
-        }
-        return $last;
+        $entities = $this->toArray();
+        return $entities[count($entities) - 1] ?? null;
     }
 
     public function toArray(): array
