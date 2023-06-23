@@ -43,14 +43,27 @@ class EntityStateManager
         $this->identityMap[$entityName][$entityHash] = $entry;
     }
 
-    public function getEntry(object|string $entity, ?string $keyValue = null): ?EntityEntry
+    public function getEntry(object|string $entity, array $keyValues = []): ?EntityEntry
     {
         if (is_string($entity)) {
             if (isset($this->identityMap[$entity])) {
                 foreach ($this->identityMap[$entity] as $entry) {
-                    $key = $entry->Metadata->PropertyKey;
-                    if ($entry->Entity->$key == $keyValue) {
-                        return $entry;
+                    if (count($keyValues) > 0 && count($keyValues) == count($entry->Metadata->Keys)) {
+                        switch (count($keyValues)) {
+                            case 1:
+                                $key = $entry->Metadata->Keys[0];
+                                if ($entry->Entity->$key == $keyValues[0]) {
+                                    return $entry;
+                                }
+                                break;
+                            case 2:
+                                $key1 = $entry->Metadata->Keys[0];
+                                $key2 = $entry->Metadata->Keys[1];
+                                if ($entry->Entity->$key1 == $keyValues[0] && $entry->Entity->$key2 == $keyValues[1]) {
+                                    return $entry;
+                                }
+                                break;
+                        }
                     }
                 }
             }
