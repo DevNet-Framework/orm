@@ -45,21 +45,32 @@ class EntityDataPersister
 
     public function update(EntityEntry $entry): int
     {
-        $entityType   = $entry->Metadata;
-        $key          = $entityType->getPrimaryKey();
-        $placeHolders = [];
-        $values       = [];
+        $entityType = $entry->Metadata;
+        $count      = count($entityType->Keys);
 
+        if ($count < 1 && $count > 2) {
+            return 0;
+        }
+
+        $placeHolders = [];
         foreach ($entry->Values as $name => $value) {
             $placeHolders[] = $this->sqlHelper->delimitIdentifier($name) . " = ?";
             $values[]       = $value;
         }
 
         $placeHolders = implode(', ', $placeHolders);
+        $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
+        $key          = $entityType->Keys[0];
         $values[]     = $entry->Entity->$key;
         $key          = $this->sqlHelper->delimitIdentifier($key);
-        $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
         $dbCommand    = $this->connection->createCommand("UPDATE {$table} SET {$placeHolders} WHERE {$key} = ?");
+
+        if ($count == 2) {
+            $key2      = $entityType->Keys[1];
+            $values[]  = $entry->Entity->$key2;
+            $key2      = $this->sqlHelper->delimitIdentifier($key2);
+            $dbCommand = $this->connection->createCommand("UPDATE {$table} SET {$placeHolders} WHERE {$key} = ? AND {$key2} = ?");
+        }
 
         return $dbCommand->execute($values);
     }
@@ -67,11 +78,24 @@ class EntityDataPersister
     public function delete(EntityEntry $entry): int
     {
         $entityType = $entry->Metadata;
-        $key        = $entityType->getPrimaryKey();
-        $values[]   = $entry->Entity->$key;
-        $key        = $this->sqlHelper->delimitIdentifier($key);
-        $table      = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
-        $dbCommand  = $this->connection->createCommand("DELETE FROM {$table} WHERE {$key} = ?");
+        $count      = count($entityType->Keys);
+
+        if ($count < 1 && $count > 2) {
+            return 0;
+        }
+
+        $table     = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
+        $key       = $entityType->Keys[0];
+        $values[]  = $entry->Entity->$key;
+        $key       = $this->sqlHelper->delimitIdentifier($key);
+        $dbCommand = $this->connection->createCommand("DELETE FROM {$table} WHERE {$key} = ?");
+
+        if ($count == 2) {
+            $key2      = $entityType->Keys[1];
+            $values[]  = $entry->Entity->$key2;
+            $key2      = $this->sqlHelper->delimitIdentifier($key2);
+            $dbCommand = $this->connection->createCommand("DELETE FROM {$table} WHERE {$key} = ? AND {$key2} = ?");
+        }
 
         return $dbCommand->execute($values);
     }
