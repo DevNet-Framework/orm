@@ -30,7 +30,7 @@ class EntityProperty
         foreach ($this->methodInfo->getAttributes() as $attribute) {
             if ($attribute->getName() == Column::class) {
                 $column = $attribute->newInstance();
-                $this->columnName = $column->Name;
+                $this->columnName = $column->getName();
                 break;
             }
         }

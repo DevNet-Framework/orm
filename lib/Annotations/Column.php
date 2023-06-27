@@ -9,14 +9,11 @@
 
 namespace DevNet\Entity\Annotations;
 
-use DevNet\System\PropertyTrait;
 use Attribute;
 
 #[Attribute]
 class Column
 {
-    use PropertyTrait;
-
     private string $name;
 
     public function __construct(string $name)
@@ -24,7 +21,7 @@ class Column
         $this->name = $name;
     }
 
-    public function get_Name(): string
+    public function getName(): string
     {
         return $this->name;
     }
