@@ -50,7 +50,7 @@ class EntityType
                 $this->schema = $table->getSchema();
             } else if ($attribute->getName() == PrimaryKey::class) {
                 $primary = $attribute->newInstance();
-                $this->keys = $primary->Keys;
+                $this->keys = $primary->getKeys();
             }
         }
 

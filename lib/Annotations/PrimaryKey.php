@@ -9,22 +9,23 @@
 
 namespace DevNet\Entity\Annotations;
 
-use DevNet\System\PropertyTrait;
 use Attribute;
 
 #[Attribute]
 class PrimaryKey
 {
-   use PropertyTrait;
+   private array $keys = [];
 
-   private array $keys;
-
-   public function __construct(string ...$propertyName)
+   public function __construct(string $propertyName, string ...$propertyNames)
    {
-      $this->keys = $propertyName;
+      $this->keys[] = $propertyName;
+
+      foreach ($propertyNames as $propertyName) {
+         $this->keys[] = $propertyName;
+      }
    }
 
-   public function get_Keys(): array
+   public function getKeys(): array
    {
       return $this->keys;
    }
