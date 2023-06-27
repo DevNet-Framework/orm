@@ -9,29 +9,26 @@
 
 namespace DevNet\Entity\Annotations;
 
-use DevNet\System\PropertyTrait;
 use Attribute;
 
 #[Attribute]
 class Table
 {
-    use PropertyTrait;
-
     private string $name;
-    private ?string $schema;
+    private string $schema;
 
-    public function __construct(string $name, ?string $schema = null)
+    public function __construct(string $name, string $schema = '')
     {
         $this->name = $name;
         $this->schema = $schema;
     }
 
-    public function get_Name(): string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function get_Schema(): ?string
+    public function getSchema(): string
     {
         return $this->schema;
     }

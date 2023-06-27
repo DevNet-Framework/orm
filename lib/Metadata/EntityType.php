@@ -46,8 +46,8 @@ class EntityType
         foreach ($this->methodInfo->getAttributes() as $attribute) {
             if ($attribute->getName() == Table::class) {
                 $table = $attribute->newInstance();
-                $this->tableName = $table->Name;
-                $this->schema = $table->Schema;
+                $this->tableName = $table->getName();
+                $this->schema = $table->getSchema();
             } else if ($attribute->getName() == PrimaryKey::class) {
                 $primary = $attribute->newInstance();
                 $this->keys = $primary->Keys;
