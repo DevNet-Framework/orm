@@ -9,14 +9,11 @@
 
 namespace DevNet\Entity\Annotations;
 
-use DevNet\System\PropertyTrait;
 use Attribute;
 
 #[Attribute]
 class ForeignKey
 {
-   use PropertyTrait;
-
    private string $propertyName;
 
    public function __construct(string $propertyName)
@@ -24,7 +21,7 @@ class ForeignKey
       $this->propertyName = $propertyName;
    }
 
-   public function get_PropertyName(): string
+   public function getPropertyName(): string
    {
       return $this->propertyName;
    }

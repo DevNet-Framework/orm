@@ -50,7 +50,7 @@ class EntityNavigation
                 foreach ($this->methodInfo->getAttributes() as $attribute) {
                     if ($attribute->getName() == ForeignKey::class) {
                         $foreignKey = $attribute->newInstance();
-                        $this->hasForeignKey($foreignKey->PropertyName);
+                        $this->hasForeignKey($foreignKey->getPropertyName());
                         return;
                     }
                 }
