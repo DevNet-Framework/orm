@@ -159,11 +159,11 @@ class MySqlQueryGenerator extends ExpressionVisitor
     public function visitProperty(Expression $expression): void
     {
         if (in_array($expression->Parameter->Name, $this->parameters)) {
-            $propertyType = $this->entityType->getProperty($expression->Property);
-            if (!$propertyType) {
+            $entityProperty = $this->entityType->getProperty($expression->Property);
+            if (!$entityProperty) {
                 throw new PropertyException("undefined property {$this->entityType->EntityName}::{$expression->Property}");
             }
-            $this->Sql[] = "`{$propertyType->Column['Name']}`";
+            $this->Sql[] = "`{$entityProperty->getColumnName()}`";
         } else {
             $property = $expression->Property;
             $this->OuterVariables[] = $expression->Parameter->Value->$property;
