@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class Column extends Operation
+class ColumnOperation extends Operation
 {
     public string $Table;
     public string $Name;
@@ -17,7 +17,7 @@ class Column extends Operation
     public ?int $Max;
     public ?int $Scale;
     public bool $Nullable = false;
-    public bool $Identity = false; // auto increment
+    public bool $Identity = false;
     public $Default = null;
 
     public function __construct(string $table, string $name, string $type, ?int $max = null, ?int $scale = null)
@@ -29,19 +29,19 @@ class Column extends Operation
         $this->Scale = $scale;
     }
 
-    public function nullable(bool $nullable = true): Column
+    public function nullable(bool $nullable = true): ColumnOperation
     {
         $this->Nullable = $nullable;
         return $this;
     }
 
-    public function default($value): Column
+    public function default($value): ColumnOperation
     {
         $this->Default = $value;
         return $this;
     }
 
-    public function identity(): Column
+    public function identity(): ColumnOperation
     {
         $this->Identity = true;
         $this->Nullable = false;
