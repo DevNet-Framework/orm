@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-abstract class Table extends Operation
+abstract class TableOperation extends Operation
 {
     public string $Name;
     public ?string $Schema = null;
@@ -17,7 +17,7 @@ abstract class Table extends Operation
     public array $Constraints = [];
 
     public function __construct(string $name, ?string $schema = null)
-    {        
+    {
         $this->Name = $name;
         $this->Schema = $schema;
     }
