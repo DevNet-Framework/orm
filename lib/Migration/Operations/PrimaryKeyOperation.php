@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class PrimaryKey extends Operation
+class PrimaryKeyOperation extends Operation
 {
     public string $Table;
     public array $Columns;
