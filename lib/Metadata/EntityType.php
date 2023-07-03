@@ -43,7 +43,7 @@ class EntityType
             $this->keys[] = 'Id';
         }
 
-        foreach ($this->methodInfo->getAttributes() as $attribute) {
+        foreach ($this->entityInfo->getAttributes() as $attribute) {
             if ($attribute->getName() == Table::class) {
                 $table = $attribute->newInstance();
                 $this->tableName = $table->getName();
