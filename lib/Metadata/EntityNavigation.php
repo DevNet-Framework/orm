@@ -34,7 +34,7 @@ class EntityNavigation
 
         switch ($cardinality) {
             case 2:
-                foreach ($this->methodInfo->getAttributes() as $attribute) {
+                foreach ($this->propertyInfo->getAttributes() as $attribute) {
                     if ($attribute->getName() == Generic::class) {
                         $collection = $attribute->newInstance();
                         $types = $collection->getTypes();
@@ -47,7 +47,7 @@ class EntityNavigation
                 $this->cardinality = 0;
                 break;
             case 1:
-                foreach ($this->methodInfo->getAttributes() as $attribute) {
+                foreach ($this->propertyInfo->getAttributes() as $attribute) {
                     if ($attribute->getName() == ForeignKey::class) {
                         $foreignKey = $attribute->newInstance();
                         $this->hasForeignKey($foreignKey->getPropertyName());
