@@ -27,7 +27,7 @@ class EntityProperty
         $this->propertyInfo = $propertyInfo;
         $this->columnName   = $propertyInfo->getName();
 
-        foreach ($this->methodInfo->getAttributes() as $attribute) {
+        foreach ($this->propertyInfo->getAttributes() as $attribute) {
             if ($attribute->getName() == Column::class) {
                 $column = $attribute->newInstance();
                 $this->columnName = $column->getName();
