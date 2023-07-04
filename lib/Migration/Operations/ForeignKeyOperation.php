@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class ForeignKey extends Operation
+class ForeignKeyOperation extends Operation
 {
     public string $Table;
     public string $Column;
@@ -25,7 +25,7 @@ class ForeignKey extends Operation
         $this->Column = $column;
     }
 
-    public function references(string $referencedTable, string $referencedColumn): ForeignKey
+    public function references(string $referencedTable, string $referencedColumn): ForeignKeyOperation
     {
         $this->ReferencedTable  = $referencedTable;
         $this->ReferencedColumn = $referencedColumn;
@@ -33,19 +33,19 @@ class ForeignKey extends Operation
         return $this;
     }
 
-    public function constraint(string $name): ForeignKey
+    public function constraint(string $name): ForeignKeyOperation
     {
         $this->Constraint = $name;
         return $this;
     }
 
-    public function onUpdate(string $option): ForeignKey
+    public function onUpdate(string $option): ForeignKeyOperation
     {
         $this->OnUpdate = $option;
         return $this;
     }
 
-    public function onDelete(string $option): ForeignKey
+    public function onDelete(string $option): ForeignKeyOperation
     {
         $this->OnUpdate = $option;
         return $this;
