@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class UniqueConstraint extends Operation
+class UniqueConstraintOperation extends Operation
 {
     public string $Table;
     public array $Columns;
