@@ -9,32 +9,32 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class CreateTable extends Table
+class CreateTableOperation extends TableOperation
 {
-    public function column(string $name, string $type, ?int $max = null, ?int $scale = null): Column
+    public function column(string $name, string $type, ?int $max = null, ?int $scale = null): ColumnOperation
     {
-        $column = new Column($this->Name, $name, $type, $max, $scale);
+        $column = new ColumnOperation($this->Name, $name, $type, $max, $scale);
         $this->Columns[] = $column;
         return $column;
     }
 
-    public function primaryKey(string ...$columns): PrimaryKey
+    public function primaryKey(string ...$columns): PrimaryKeyOperation
     {
-        $primaryKey = new PrimaryKey($this->Name, $columns);
+        $primaryKey = new PrimaryKeyOperation($this->Name, $columns);
         $this->Constraints[] = $primaryKey;
         return $primaryKey;
     }
 
-    public function foreignKey(string $column): ForeignKey
+    public function foreignKey(string $column): ForeignKeyOperation
     {
-        $foreignKey = new ForeignKey($this->Name, $column);
+        $foreignKey = new ForeignKeyOperation($this->Name, $column);
         $this->Constraints[] = $foreignKey;
         return $foreignKey;
     }
 
-    public function uniqueConstraint(string ...$columns): UniqueConstraint
+    public function uniqueConstraint(string ...$columns): UniqueConstraintOperation
     {
-        $unique = new UniqueConstraint($this->Name, $columns);
+        $unique = new UniqueConstraintOperation($this->Name, $columns);
         $this->Constraints[] = $unique;
         return $unique;
     }
