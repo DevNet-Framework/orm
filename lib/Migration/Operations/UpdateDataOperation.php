@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class UpdateData extends Operation
+class UpdateDataOperation extends Operation
 {
     public string $Table;
     public array $Columns;
@@ -17,7 +17,7 @@ class UpdateData extends Operation
     public ?string $Schema = null;
 
     public function __construct(string $table, array $columns, array $keys, ?string $schema = null)
-    {        
+    {
         $this->Table   = $table;
         $this->Columns = $columns;
         $this->Keys    = $keys;
