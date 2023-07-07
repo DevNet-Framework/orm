@@ -9,14 +9,14 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class InsertData extends Operation
+class InsertDataOperation extends Operation
 {
     public string $Table;
     public array $Columns;
     public ?string $Schema;
 
     public function __construct(string $table, array $columns, ?string $schema = null)
-    {        
+    {
         $this->Table   = $table;
         $this->Columns = $columns;
         $this->Schema  = $schema;
