@@ -9,14 +9,14 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class DeleteData extends Operation
+class DeleteDataOperation extends Operation
 {
     public string $Table;
     public array $Keys;
     public ?string $Schema = null;
 
     public function __construct(string $table, array $keys, ?string $schema = null)
-    {        
+    {
         $this->Table  = $table;
         $this->Keys   = $keys;
         $this->Schema = $schema;
