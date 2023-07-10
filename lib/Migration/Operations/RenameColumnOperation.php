@@ -9,7 +9,9 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class RenameColumn extends Column
+use DevNet\System\Exceptions\MethodException;
+
+class RenameColumnOperation extends ColumnOperation
 {
     public string $Rename;
 
@@ -18,6 +20,21 @@ class RenameColumn extends Column
         $this->Table  = $table;
         $this->Name   = $name;
         $this->Rename = $rename;
+    }
+
+    public function nullable(bool $nullable = true): ColumnOperation
+    {
+        throw new MethodException("The Method nullable() Not Applicable");
+    }
+
+    public function default($value): ColumnOperation
+    {
+        throw new MethodException("The Method default() Not Applicable");
+    }
+
+    public function identity(): ColumnOperation
+    {
+        throw new MethodException("The Method identity() Not Applicable");
     }
 
     public function accept(OperationVisitor $visitor): void
