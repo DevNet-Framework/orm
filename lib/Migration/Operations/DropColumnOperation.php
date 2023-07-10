@@ -11,7 +11,7 @@ namespace DevNet\Entity\Migration\Operations;
 
 use DevNet\System\Exceptions\MethodException;
 
-class DropColumn extends Column
+class DropColumnOperation extends ColumnOperation
 {
     public function __construct(string $table, string $name)
     {
@@ -19,17 +19,17 @@ class DropColumn extends Column
         $this->Name  = $name;
     }
 
-    public function notNull(): Column
+    public function nullable(bool $nullable = true): ColumnOperation
     {
-        throw new MethodException("The Method notNull() Not Applicable");
+        throw new MethodException("The Method nullable() Not Applicable");
     }
 
-    public function default($value): Column
+    public function default($value): ColumnOperation
     {
         throw new MethodException("The Method default() Not Applicable");
     }
 
-    public function identity(): Column
+    public function identity(): ColumnOperation
     {
         throw new MethodException("The Method identity() Not Applicable");
     }
