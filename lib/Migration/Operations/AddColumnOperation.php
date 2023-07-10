@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class AddColumn extends Column
+class AddColumnOperation extends ColumnOperation
 {
     public function accept(OperationVisitor $visitor): void
     {
