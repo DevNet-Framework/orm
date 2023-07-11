@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class DropPrimaryKey extends PrimaryKey
+class DropPrimaryKeyOperation extends PrimaryKeyOperation
 {
     public function accept(OperationVisitor $visitor): void
     {
