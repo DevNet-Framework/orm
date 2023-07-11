@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class DropForeignKey extends ForeignKey
+class DropForeignKeyOperation extends ForeignKeyOperation
 {
     public function __construct(string $table, string $constraint)
     {
