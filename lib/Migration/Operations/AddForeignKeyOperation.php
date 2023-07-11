@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class AddForeignKey extends ForeignKey
+class AddForeignKeyOperation extends ForeignKeyOperation
 {
     public function accept(OperationVisitor $visitor): void
     {
