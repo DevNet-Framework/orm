@@ -9,35 +9,35 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class AlterTable extends Table
+class AlterTableOperation extends TableOperation
 {
-    public function addColumn(string $name, string $type, ?int $max = null, ?int $scale = null): AddColumn
+    public function addColumn(string $name, string $type, ?int $max = null, ?int $scale = null): AddColumnOperation
     {
-        $column = new AddColumn($this->Name, $name, $type, $max, $scale);
+        $column = new AddColumnOperation($this->Name, $name, $type, $max, $scale);
         $this->Columns[] = $column;
         return $column;
     }
 
-    public function AlterColumn(string $name, string $type, ?int $max = null, ?int $scale = null): AlterColumn
+    public function AlterColumn(string $name, string $type, ?int $max = null, ?int $scale = null): AlterColumnOperation
     {
-        $column = new AlterColumn($this->Name, $name, $type, $max, $scale);
+        $column = new AlterColumnOperation($this->Name, $name, $type, $max, $scale);
         $this->Columns[] = $column;
         return $column;
     }
 
     public function DropColumn(string $name): void
     {
-        $this->Columns[] = new DropColumn($this->Name, $name);
+        $this->Columns[] = new DropColumnOperation($this->Name, $name);
     }
 
     public function RenameColumn(string $name, string $rename): void
     {
-        $this->Columns[] = new RenameColumn($this->Name, $name, $rename);
+        $this->Columns[] = new RenameColumnOperation($this->Name, $name, $rename);
     }
 
-    public function addPrimaryKey(string ...$columns): AddPrimaryKey
+    public function addPrimaryKey(string ...$columns): AddPrimaryKeyOperation
     {
-        $primaryKey = new AddPrimaryKey($this->Name, $columns);
+        $primaryKey = new AddPrimaryKeyOperation($this->Name, $columns);
         $this->Constraints[] = $primaryKey;
         return $primaryKey;
     }
@@ -45,34 +45,34 @@ class AlterTable extends Table
     public function dropPrimaryKey(string $constraint = null): void
     {
         if ($constraint) {
-            $primaryKey = new DropPrimaryKey($this->Name, []);
+            $primaryKey = new DropPrimaryKeyOperation($this->Name, []);
             $primaryKey->constraint($constraint);
             $this->Constraints[] = $primaryKey;
         } else {
-            $this->Constraints[] = new DropPrimaryKey($this->Name, []);
+            $this->Constraints[] = new DropPrimaryKeyOperation($this->Name, []);
         }
     }
 
     public function addForeignKey(string $column, string $referencedTable, string $referencedColumn, string $constraint = null): void
     {
-        $this->Constraints[] = new AddForeignKey($this->Name, $column, $referencedTable, $referencedColumn, $constraint);
+        $this->Constraints[] = new AddForeignKeyOperation($this->Name, $column, $referencedTable, $referencedColumn, $constraint);
     }
 
     public function dropForeignKey(string $constraint): void
     {
-        $this->Constraints[] = new DropForeignKey($this->Name, $constraint);
+        $this->Constraints[] = new DropForeignKeyOperation($this->Name, $constraint);
     }
 
-    public function addUniqueConstraint(string ...$columns): AddUniqueConstraint
+    public function addUniqueConstraint(string ...$columns): AddUniqueConstraintOperation
     {
-        $unique = new AddUniqueConstraint($this->Name, $columns);
+        $unique = new AddUniqueConstraintOperation($this->Name, $columns);
         $this->Constraints[] = $unique;
         return $unique;
     }
 
     public function dropUniqueConstraint(string $constraint): void
     {
-        $this->Constraints[] = new dropUniqueConstraint($this->Name, $constraint);
+        $this->Constraints[] = new dropUniqueConstraintOperation($this->Name, $constraint);
     }
 
     public function accept(OperationVisitor $visitor): void
