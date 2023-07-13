@@ -9,14 +9,14 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class DropUniqueConstraint extends UniqueConstraint
+class DropUniqueConstraintOperation extends UniqueConstraintOperation
 {
     public function __construct(string $table, string $constraint)
     {
         $this->Table      = $table;
         $this->Constraint = $constraint;
     }
-    
+
     public function accept(OperationVisitor $visitor): void
     {
         $visitor->visitDropUniqueConstraint($this);
