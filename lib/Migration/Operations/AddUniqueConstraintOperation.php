@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class AddUniqueConstraint extends UniqueConstraint
+class AddUniqueConstraintOperation extends UniqueConstraintOperation
 {
     public function accept(OperationVisitor $visitor): void
     {
