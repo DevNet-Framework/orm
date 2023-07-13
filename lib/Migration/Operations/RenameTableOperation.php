@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Migration\Operations;
 
-class RenameTable extends Table
+class RenameTableOperation extends TableOperation
 {
     public string $Rename;
 
