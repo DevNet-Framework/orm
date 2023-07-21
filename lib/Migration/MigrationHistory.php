@@ -9,9 +9,7 @@
 
 namespace DevNet\Entity\Migration;
 
-use DevNet\Entity\Migration\Operations\CreateTable;
-use DevNet\Entity\Migration\Operations\InsertData;
-use DevNet\Entity\Migration\Operations\DeleteData;
+use DevNet\Entity\Migration\Operations\Operation;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Collections\Enumerator;
 use DevNet\System\Collections\IEnumerable;
@@ -78,7 +76,7 @@ class MigrationHistory implements IEnumerable
 
     public function getCreateScript(): string
     {
-        $table = new CreateTable('MigrationHistory');
+        $table = Operation::createTable('MigrationHistory');
         $table->column('Id', 'bigint')->nullable(false);
         $table->column('Name', 'varchar(45)')->nullable(false);
         $table->primaryKey('Id');
@@ -91,7 +89,7 @@ class MigrationHistory implements IEnumerable
 
     public function getInsertScript(string $id, string $name): string
     {
-        $data = new InsertData($this->table, ['Id' => $id, 'Name' => $name]);
+        $data = Operation::insertData($this->table, ['Id' => $id, 'Name' => $name]);
         $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
         $migrationGenerator->visit($data);
 
@@ -100,7 +98,7 @@ class MigrationHistory implements IEnumerable
 
     public function getDeleteScript(string $id): string
     {
-        $data = new DeleteData($this->table, ['Id' => $id]);
+        $data = Operation::deleteData($this->table, ['Id' => $id]);
         $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
         $migrationGenerator->visit($data);
 
