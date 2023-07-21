@@ -9,6 +9,7 @@
 
 namespace DevNet\Entity\Migration;
 
+use DevNet\System\Exceptions\MethodException;
 use DevNet\System\PropertyTrait;
 
 abstract class AbstractMigration
@@ -28,7 +29,7 @@ abstract class AbstractMigration
     public function build(string $action): array
     {
         if ($action != 'up' && $action != 'down') {
-            throw new \Exception("Method {$action} not supported");
+            throw new MethodException("Method {$action} not supported");
         }
 
         $builder = new MigrationBuilder();
