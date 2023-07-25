@@ -13,12 +13,12 @@ use DevNet\Entity\Migration\Operations\Operation;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Collections\Enumerator;
 use DevNet\System\Collections\IEnumerable;
-use DevNet\System\MethodTrait;
+use DevNet\System\Tweak;
 use stdClass;
 
 class MigrationHistory implements IEnumerable
 {
-    use MethodTrait;
+    use Tweak;
 
     private EntityDatabase $database;
     private string $table     = 'MigrationHistory';

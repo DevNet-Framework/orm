@@ -11,11 +11,11 @@ namespace DevNet\Entity\Providers\Sqlite;
 
 use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\System\Database\Sqlite\SqliteConnection;
-use DevNet\System\PropertyTrait;
+use DevNet\System\Tweak;
 
 class SqliteDataProvider implements IEntityDataProvider
 {
-    use PropertyTrait;
+    use Tweak;
 
     private SqliteConnection $connection;
     private SqliteHelper $sqlHelper;
