@@ -11,12 +11,12 @@ namespace DevNet\Entity\Metadata;
 
 use DevNet\Entity\Annotations\ForeignKey;
 use DevNet\System\Generic;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 use ReflectionProperty;
 
 class EntityNavigation
 {
-    use Tweak;
+    use PropertyTrait;
 
     public const One  = 1;
     public const Many = 2;

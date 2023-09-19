@@ -14,13 +14,13 @@ use DevNet\Entity\Annotations\Table;
 use DevNet\System\Collections\ICollection;
 use DevNet\System\Exceptions\ClassException;
 use DevNet\System\Exceptions\PropertyException;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 use DateTime;
 use Reflector;
 
 class EntityType
 {
-    use Tweak;
+    use PropertyTrait;
 
     private EntityModel $model;
     private Reflector $entityInfo;

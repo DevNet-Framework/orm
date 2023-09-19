@@ -10,11 +10,11 @@
 namespace DevNet\Entity\Migration;
 
 use DevNet\System\Exceptions\MethodException;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 
 abstract class AbstractMigration
 {
-    use Tweak;
+    use PropertyTrait;
 
     public function get_UpOperations(): array
     {

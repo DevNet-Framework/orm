@@ -10,12 +10,12 @@
 namespace DevNet\Entity\Migration;
 
 use DevNet\Entity\Migration\Operations\Operation;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 use Closure;
 
 class MigrationBuilder
 {
-    use Tweak;
+    use PropertyTrait;
 
     private array $operations = [];
 

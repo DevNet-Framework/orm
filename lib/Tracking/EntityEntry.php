@@ -10,12 +10,12 @@
 namespace DevNet\Entity\Tracking;
 
 use DevNet\Entity\Metadata\EntityType;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 use DateTime;
 
 class EntityEntry
 {
-    use Tweak;
+    use PropertyTrait;
 
     private EntityType $metadata;
     private EntityState $state;

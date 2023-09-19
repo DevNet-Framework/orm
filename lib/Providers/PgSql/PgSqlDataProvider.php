@@ -11,11 +11,11 @@ namespace DevNet\Entity\Providers\PgSql;
 
 use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\System\Database\PgSql\PgSqlConnection;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 
 class PgSqlDataProvider implements IEntityDataProvider
 {
-    use Tweak;
+    use PropertyTrait;
 
     private PgSqlConnection $connection;
     private PgSqlHelper $sqlHelper;

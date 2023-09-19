@@ -14,11 +14,11 @@ use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\System\Database\DbTransaction;
 use DevNet\System\Exceptions\ClassException;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 
 class EntityContext
 {
-    use Tweak;
+    use PropertyTrait;
 
     protected EntityOptions $options;
     protected EntityDatabase $database;

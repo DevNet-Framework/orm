@@ -16,11 +16,11 @@ use DevNet\Entity\Storage\EntityDataPersister;
 use DevNet\Entity\Tracking\EntityEntry;
 use DevNet\Entity\Tracking\EntityStateManager;
 use DevNet\Entity\Tracking\EntityState;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 
 class EntityDatabase
 {
-    use Tweak;
+    use PropertyTrait;
 
     private EntityModel $model;
     private EntityFinder $finder;
@@ -72,7 +72,7 @@ class EntityDatabase
     public function finder(string $entityName): object
     {
         $entityType = $this->model->getEntityType($entityName);
-        return $this->entityFinderFactory->create($entityType); // need to check the source of this object
+        return $this->entityFinderFactory->create($entityType);
     }
 
     public function entry(object $entity): EntityEntry

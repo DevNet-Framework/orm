@@ -15,7 +15,7 @@ use DevNet\System\Linq\Enumerables\TakeEnumerable;
 use DevNet\System\Compiler\Expressions\Expression;
 use DevNet\System\Linq\IQueryProvider;
 use DevNet\System\Linq\IQueryable;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 
 /**
  * create expression from method and passe it to queryProvider.
@@ -23,7 +23,7 @@ use DevNet\System\Tweak;
 class EntityQuery implements IQueryable
 {
 
-    use Tweak;
+    use PropertyTrait;
 
     private object $entityType;
     private IQueryProvider $provider;

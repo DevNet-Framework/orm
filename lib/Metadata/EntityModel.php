@@ -10,11 +10,11 @@
 namespace DevNet\Entity\Metadata;
 
 use DevNet\Entity\EntityModelBuilder;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 
 class EntityModel
 {
-    use Tweak;
+    use PropertyTrait;
 
     private EntityModelBuilder $builder;
     private array $entityModel = [];

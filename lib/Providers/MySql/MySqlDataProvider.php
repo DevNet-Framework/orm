@@ -11,11 +11,11 @@ namespace DevNet\Entity\Providers\MySql;
 
 use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\System\Database\MySql\MySqlConnection;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 
 class MySqlDataProvider implements IEntityDataProvider
 {
-    use Tweak;
+    use PropertyTrait;
 
     private MySqlConnection $connection;
     private MySqlHelper $sqlHelper;

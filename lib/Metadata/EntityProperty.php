@@ -10,12 +10,12 @@
 namespace DevNet\Entity\Metadata;
 
 use DevNet\Entity\Annotations\Column;
-use DevNet\System\Tweak;
+use DevNet\System\PropertyTrait;
 use ReflectionProperty;
 
 class EntityProperty
 {
-    use Tweak;
+    use PropertyTrait;
 
     private EntityType $entityType;
     private ReflectionProperty $propertyInfo;
