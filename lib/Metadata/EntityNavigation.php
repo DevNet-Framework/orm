@@ -10,8 +10,8 @@
 namespace DevNet\Entity\Metadata;
 
 use DevNet\Entity\Annotations\ForeignKey;
-use DevNet\System\Generic;
 use DevNet\System\PropertyTrait;
+use DevNet\System\Type;
 use ReflectionProperty;
 
 class EntityNavigation
@@ -34,10 +34,10 @@ class EntityNavigation
 
         switch ($cardinality) {
             case 2:
-                foreach ($this->propertyInfo->getAttributes() as $attribute) {
-                    if ($attribute->getName() == Generic::class) {
-                        $collection = $attribute->newInstance();
-                        $types = $collection->getTypes();
+                foreach ($this->propertyInfo->getAttributes(Type::class) as $attribute) {
+                    $type = $attribute->newInstance();
+                    if ($type->Name == ICollection::class && $type->isGenericType()) {
+                        $types = $type->getGenericArguments();
                         if ($types[0]->isClass()) {
                             $this->hasMany($types[0]);
                             return;
@@ -47,12 +47,10 @@ class EntityNavigation
                 $this->cardinality = 0;
                 break;
             case 1:
-                foreach ($this->propertyInfo->getAttributes() as $attribute) {
-                    if ($attribute->getName() == ForeignKey::class) {
-                        $foreignKey = $attribute->newInstance();
-                        $this->hasForeignKey($foreignKey->getPropertyName());
-                        return;
-                    }
+                foreach ($this->propertyInfo->getAttributes(ForeignKey::class) as $attribute) {
+                    $foreignKey = $attribute->newInstance();
+                    $this->hasForeignKey($foreignKey->getPropertyName());
+                    return;
                 }
                 break;
         }
