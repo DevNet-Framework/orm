@@ -127,12 +127,12 @@ class EntityType
 
     public function getProperty(string $propertyName): EntityProperty
     {
-        $propery = $this->properties[$propertyName] ?? null;
-        if (!$propery) {
+        $property = $this->properties[$propertyName] ?? null;
+        if (!$property) {
             throw new PropertyException("Could not find the public property {$this->entityName}::{$propertyName}", 0, 1);
         }
 
-        return $propery;
+        return $property;
     }
 
     public function getNavigation(string $navigationName): EntityNavigation
@@ -164,16 +164,16 @@ class EntityType
         }
     }
 
-    public function addForeignKey(string $propertyName, string $relatedTentity): void
+    public function addForeignKey(string $propertyName, string $relatedEntity): void
     {
         if (!property_exists($this->entityName, $propertyName)) {
             throw new PropertyException("Could not find the public property {$this->entityName}::{$propertyName}");
         }
 
-        if (!class_exists($relatedTentity)) {
-            throw new ClassException("Could not find the entity reference {$relatedTentity}", 0, 1);
+        if (!class_exists($relatedEntity)) {
+            throw new ClassException("Could not find the entity reference {$relatedEntity}", 0, 1);
         }
 
-        $this->foreignKeys[$relatedTentity] = $propertyName;
+        $this->foreignKeys[$relatedEntity] = $propertyName;
     }
 }

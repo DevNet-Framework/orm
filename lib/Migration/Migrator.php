@@ -17,13 +17,13 @@ class Migrator
 {
     private IEntityDataProvider $dataProvider;
     private MigrationHistory $history;
-    private MigrationAssembly $assembley;
+    private MigrationAssembly $assembly;
 
     public function __construct(EntityDatabase $database, string $namespace, string $directory)
     {
         $this->dataProvider = $database->DataProvider;
         $this->history      = new MigrationHistory($database, $namespace, $directory);
-        $this->assembley    = new MigrationAssembly($namespace, $directory);
+        $this->assembly    = new MigrationAssembly($namespace, $directory);
     }
 
     public function generateScript(array $operations): string
@@ -39,7 +39,7 @@ class Migrator
     public function getCommands(?string $targetMigration = null): array
     {
         if ($targetMigration !== null) {
-            $targetMigration = $this->assembley->findMigrationId($targetMigration);
+            $targetMigration = $this->assembly->findMigrationId($targetMigration);
         }
 
         $lastMigration      = $this->history->max(fn ($migration) => $migration->Id);
@@ -48,14 +48,14 @@ class Migrator
         $commands           = [];
 
         if ($targetMigration === null) {
-            $migrationsToApply = $this->assembley->where(fn ($migration) => $migration->Id > $lastMigration)
+            $migrationsToApply = $this->assembly->where(fn ($migration) => $migration->Id > $lastMigration)
                 ->orderBy(fn ($migration) => $migration->Id);
         } else if ($targetMigration > $lastMigration) {
             if ($targetMigration) {
-                $migrationsToApply = $this->assembley->where(fn ($migration) => $migration->Id > $lastMigration && $migration->Id <= $targetMigration)
+                $migrationsToApply = $this->assembly->where(fn ($migration) => $migration->Id > $lastMigration && $migration->Id <= $targetMigration)
                     ->orderBy(fn ($migration) => $migration->Id);
             } else {
-                $migrationsToApply = $this->assembley->where(fn ($migration) => $migration->Id > $lastMigration)
+                $migrationsToApply = $this->assembly->where(fn ($migration) => $migration->Id > $lastMigration)
                     ->orderBy(fn ($migration) => $migration->Id);
             }
         } else {

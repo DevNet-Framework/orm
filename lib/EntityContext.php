@@ -98,6 +98,6 @@ class EntityContext
 
     public function onModelCreate(EntityModelBuilder $builder): void
     {
-        # overide code...
+        # override code...
     }
 }

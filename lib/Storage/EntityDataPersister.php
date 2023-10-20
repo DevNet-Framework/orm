@@ -27,18 +27,18 @@ class EntityDataPersister
     {
         $entityType   = $entry->Metadata;
         $placeHolders = [];
-        $culomns      = [];
+        $columns      = [];
         $values       = [];
         foreach ($entry->Values as $name => $value) {
             $placeHolders[] = '?';
-            $culomns[]      = $this->sqlHelper->delimitIdentifier($name);
+            $columns[]      = $this->sqlHelper->delimitIdentifier($name);
             $values[]       = $value;
         }
 
         $placeHolders = implode(', ', $placeHolders);
-        $culomns      = implode(', ', $culomns);
+        $columns      = implode(', ', $columns);
         $table        = $this->sqlHelper->delimitIdentifier($entityType->getTableName(), $entityType->getSchemaName());
-        $dbCommand    = $this->connection->createCommand("INSERT INTO {$table} ($culomns) VALUES ({$placeHolders})");
+        $dbCommand    = $this->connection->createCommand("INSERT INTO {$table} ($columns) VALUES ({$placeHolders})");
 
         return $dbCommand->execute($values);
     }

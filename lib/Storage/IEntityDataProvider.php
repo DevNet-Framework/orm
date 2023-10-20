@@ -18,7 +18,7 @@ use DevNet\System\Exceptions\PropertyException;
 interface IEntityDataProvider
 {
     /**
-     * This method must retun the following properties.
+     * This method must return the following properties.
      * @return DbConnection $Connection
      * @return ISqlGenerationHelper $SqlHelper
      * @return ExpressionVisitor $QueryGenerator

@@ -98,12 +98,12 @@ class EntityDatabase
     public function save(): int
     {
         $entries = $this->entityStateManager->getEntries();
-        $count = $this->persiste($entries);
+        $count = $this->persist($entries);
         $this->entityStateManager->clearEntries();
         return $count;
     }
 
-    public function persiste($entries): int
+    public function persist($entries): int
     {
         $count = 0;
         $this->dataProvider->Connection->open();
