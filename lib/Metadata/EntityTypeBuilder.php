@@ -26,7 +26,7 @@ class EntityTypeBuilder
 
     public function hasKey(string ...$properties): static
     {
-        $this->metadata->addKey($properties);
+        $this->metadata->setPrimaryKey($properties);
         return $this;
     }
 
