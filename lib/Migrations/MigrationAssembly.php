@@ -35,7 +35,7 @@ class MigrationAssembly implements IEnumerable
                 $class = $namespace . "\\" . $matches[2];
                 if (class_exists($class)) {
                     $parents = class_parents($class);
-                    if (in_array(AbstractMigration::class, $parents)) {
+                    if (in_array(Migration::class, $parents)) {
                         $migration = new stdClass();
                         $migration->Id = (int)$matches[1];
                         $migration->Name = $matches[2];

@@ -12,7 +12,7 @@ namespace DevNet\Entity\Migrations;
 use DevNet\System\Exceptions\MethodException;
 use DevNet\System\PropertyTrait;
 
-abstract class AbstractMigration
+abstract class Migration
 {
     use PropertyTrait;
 

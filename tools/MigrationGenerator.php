@@ -37,10 +37,10 @@ class MigrationGenerator implements ICodeGenerator
         $this->content->appendLine();
         $this->content->appendLine("namespace {$namespace};");
         $this->content->appendLine();
-        $this->content->appendLine('use DevNet\Entity\Migrations\AbstractMigration;');
+        $this->content->appendLine('use DevNet\Entity\Migrations\Migration;');
         $this->content->appendLine('use DevNet\Entity\Migrations\MigrationBuilder;');
         $this->content->appendLine();
-        $this->content->appendLine("class {$name} extends AbstractMigration");
+        $this->content->appendLine("class {$name} extends Migration");
         $this->content->appendLine('{');
         $this->content->appendLine('    public function up(MigrationBuilder $builder): void');
         $this->content->appendLine('    {');
