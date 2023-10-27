@@ -7,12 +7,12 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migration\Operations;
+namespace DevNet\Entity\Migrations\Operations;
 
-class DropTableOperation extends TableOperation
+class DropPrimaryKeyOperation extends PrimaryKeyOperation
 {
     public function accept(OperationVisitor $visitor): void
     {
-        $visitor->visitDropTable($this);
+        $visitor->visitDropPrimaryKey($this);
     }
 }

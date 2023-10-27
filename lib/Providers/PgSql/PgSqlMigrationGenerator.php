@@ -9,8 +9,8 @@
 
 namespace DevNet\Entity\Providers\PgSql;
 
-use DevNet\Entity\Migration\Operations\OperationVisitor;
-use DevNet\Entity\Migration\Operations\Operation;
+use DevNet\Entity\Migrations\Operations\OperationVisitor;
+use DevNet\Entity\Migrations\Operations\Operation;
 use DevNet\System\Text\StringBuilder;
 
 class PgSqlMigrationGenerator extends OperationVisitor

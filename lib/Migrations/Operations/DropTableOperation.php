@@ -7,18 +7,12 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migration\Operations;
+namespace DevNet\Entity\Migrations\Operations;
 
-class DropForeignKeyOperation extends ForeignKeyOperation
+class DropTableOperation extends TableOperation
 {
-    public function __construct(string $table, string $constraint)
-    {
-        $this->Table      = $table;
-        $this->Constraint = $constraint;
-    }
-
     public function accept(OperationVisitor $visitor): void
     {
-        $visitor->visitDropForeignKey($this);
+        $visitor->visitDropTable($this);
     }
 }

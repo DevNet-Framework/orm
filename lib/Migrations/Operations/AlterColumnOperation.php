@@ -7,7 +7,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migration\Operations;
+namespace DevNet\Entity\Migrations\Operations;
 
 class AlterColumnOperation extends ColumnOperation
 {

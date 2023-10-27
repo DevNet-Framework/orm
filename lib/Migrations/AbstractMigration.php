@@ -7,7 +7,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migration;
+namespace DevNet\Entity\Migrations;
 
 use DevNet\System\Exceptions\MethodException;
 use DevNet\System\PropertyTrait;

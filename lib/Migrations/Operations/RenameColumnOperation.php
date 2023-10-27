@@ -7,16 +7,19 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migration\Operations;
+namespace DevNet\Entity\Migrations\Operations;
 
 use DevNet\System\Exceptions\MethodException;
 
-class DropColumnOperation extends ColumnOperation
+class RenameColumnOperation extends ColumnOperation
 {
-    public function __construct(string $table, string $name)
+    public string $Rename;
+
+    public function __construct(string $table, string $name, string $rename)
     {
-        $this->Table = $table;
-        $this->Name  = $name;
+        $this->Table  = $table;
+        $this->Name   = $name;
+        $this->Rename = $rename;
     }
 
     public function nullable(bool $nullable = true): ColumnOperation
@@ -36,6 +39,6 @@ class DropColumnOperation extends ColumnOperation
 
     public function accept(OperationVisitor $visitor): void
     {
-        $visitor->visitDropColumn($this);
+        $visitor->visitRenameColumn($this);
     }
 }

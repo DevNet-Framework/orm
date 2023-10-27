@@ -9,7 +9,7 @@
 
 namespace DevNet\Entity\Storage;
 
-use DevNet\Entity\Migration\Operations\OperationVisitor;
+use DevNet\Entity\Migrations\Operations\OperationVisitor;
 use DevNet\Entity\Storage\ISqlGenerationHelper;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Database\DbConnection;

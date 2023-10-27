@@ -7,12 +7,12 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migration\Operations;
+namespace DevNet\Entity\Migrations\Operations;
 
-class AddForeignKeyOperation extends ForeignKeyOperation
+class AddColumnOperation extends ColumnOperation
 {
     public function accept(OperationVisitor $visitor): void
     {
-        $visitor->visitAddForeignKey($this);
+        $visitor->visitAddColumn($this);
     }
 }

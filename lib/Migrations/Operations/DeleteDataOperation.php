@@ -7,25 +7,23 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migration\Operations;
+namespace DevNet\Entity\Migrations\Operations;
 
-class UpdateDataOperation extends Operation
+class DeleteDataOperation extends Operation
 {
     public string $Table;
-    public array $Columns;
     public array $Keys;
     public ?string $Schema = null;
 
-    public function __construct(string $table, array $columns, array $keys, ?string $schema = null)
+    public function __construct(string $table, array $keys, ?string $schema = null)
     {
-        $this->Table   = $table;
-        $this->Columns = $columns;
-        $this->Keys    = $keys;
-        $this->Schema  = $schema;
+        $this->Table  = $table;
+        $this->Keys   = $keys;
+        $this->Schema = $schema;
     }
 
     public function accept(OperationVisitor $visitor): void
     {
-        $visitor->visitUpdateData($this);
+        $visitor->visitDeleteData($this);
     }
 }

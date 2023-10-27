@@ -7,9 +7,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migration\Operations;
+namespace DevNet\Entity\Migrations\Operations;
 
-class PrimaryKeyOperation extends Operation
+class UniqueConstraintOperation extends Operation
 {
     public string $Table;
     public array $Columns;
@@ -17,18 +17,19 @@ class PrimaryKeyOperation extends Operation
 
     public function __construct(string $table, array $columns)
     {
-        $this->Table      = $table;
-        $this->Columns    = $columns;
-        $this->Constraint = "PK_" . $table;
+        $this->Table = $table;
+        $this->Columns = $columns;
+        $columns = implode(',', $columns);
+        $this->Constraint = "UQ_" . $table . "_" . "$columns";
     }
 
-    public function constraint(string $name): void
+    public function constraint(string $name)
     {
         $this->Constraint = $name;
     }
 
     public function accept(OperationVisitor $visitor): void
     {
-        $visitor->visitPrimaryKey($this);
+        $visitor->visitUniqueConstraint($this);
     }
 }

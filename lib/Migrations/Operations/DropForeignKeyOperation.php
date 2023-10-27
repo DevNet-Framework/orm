@@ -7,9 +7,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migration\Operations;
+namespace DevNet\Entity\Migrations\Operations;
 
-class DropUniqueConstraintOperation extends UniqueConstraintOperation
+class DropForeignKeyOperation extends ForeignKeyOperation
 {
     public function __construct(string $table, string $constraint)
     {
@@ -19,6 +19,6 @@ class DropUniqueConstraintOperation extends UniqueConstraintOperation
 
     public function accept(OperationVisitor $visitor): void
     {
-        $visitor->visitDropUniqueConstraint($this);
+        $visitor->visitDropForeignKey($this);
     }
 }
