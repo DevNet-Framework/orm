@@ -24,13 +24,13 @@ class MigrationGenerator implements ICodeGenerator
 
     public function generate(array $parameters): array
     {
-        $output    = $parameters['--output'] ?? 'Migrations';
-        $namespace = str_replace('/', '\\', $output);
-        $namespace = 'Application\\' . $namespace;       
-        $namespace = trim($namespace, '\\');
-        $namespace = ucwords($namespace, '\\');
         $name      = $parameters['--name'] ?? 'MyMigration';
         $name      = ucfirst($name);
+        $output    = $parameters['--output'] ?? 'Migrations';
+        $namespace = $parameters['--prefix'] ?? 'Application';
+        $namespace = $namespace .'\\' . str_replace('/', '\\', $output);
+        $namespace = trim($namespace, '\\');
+        $namespace = ucwords($namespace, '\\');
 
         $this->content = new StringBuilder();
         $this->content->appendLine('<?php');
