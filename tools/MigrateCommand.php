@@ -36,12 +36,12 @@ class MigrateCommand extends CommandLine implements ICommandHandler
         $projectRoot = getcwd();
         $configBuilder = new ConfigurationBuilder();
         $settingsPath = $projectRoot . '/' . 'settings.json';
-        if (file_exists($settingsPath)) {
+        if (is_file($settingsPath)) {
             $configBuilder->addJsonFile($settingsPath);
         }
 
         $configuration = $configBuilder->build();
-        $connectionString = $configuration->getValue('database:connection');
+        $connectionString = $configuration->getValue('Database:ConnectionString');
         $connection = $args->get('--connection');
         if ($connection) {
             if ($connection->Value) {
@@ -49,7 +49,7 @@ class MigrateCommand extends CommandLine implements ICommandHandler
             }
         }
 
-        $providerType = $configuration->getValue('database:provider');
+        $providerType = $configuration->getValue('Database:ProviderType');
         $provider = $args->get('--provider');
         if ($provider) {
             if ($provider->Value) {
