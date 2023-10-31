@@ -7,7 +7,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Providers\MySql;
+namespace DevNet\Entity\MySql;
 
 use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\System\Database\MySql\MySqlConnection;

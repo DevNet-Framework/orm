@@ -7,7 +7,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Providers\Sqlite;
+namespace DevNet\Entity\Sqlite;
 
 use DevNet\Entity\Storage\IEntityDataProvider;
 use DevNet\System\Database\Sqlite\SqliteConnection;

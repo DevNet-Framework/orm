@@ -7,7 +7,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Providers\PgSql;
+namespace DevNet\Entity\PgSql;
 
 use DevNet\Entity\Metadata\EntityType;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;

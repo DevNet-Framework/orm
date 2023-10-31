@@ -7,7 +7,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Providers\Sqlite;
+namespace DevNet\Entity\Sqlite;
 
 use DevNet\Entity\Migrations\Operations\OperationVisitor;
 use DevNet\Entity\Migrations\Operations\Operation;
