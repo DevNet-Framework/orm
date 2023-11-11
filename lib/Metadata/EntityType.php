@@ -27,7 +27,7 @@ class EntityType
     private string $name;
     private string $tableName;
     private ?string $schema    = null;
-    private array $Keys        = [];
+    private array $keys        = [];
     private array $foreignKeys = [];
     private array $properties  = [];
     private array $navigations = [];
