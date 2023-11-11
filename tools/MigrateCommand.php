@@ -18,6 +18,7 @@ use DevNet\System\Command\ICommandHandler;
 use DevNet\System\Configuration\ConfigurationBuilder;
 use DevNet\System\IO\ConsoleColor;
 use DevNet\System\IO\Console;
+use DirectoryIterator;
 
 class MigrateCommand extends CommandLine implements ICommandHandler
 {
@@ -61,15 +62,17 @@ class MigrateCommand extends CommandLine implements ICommandHandler
         $entityContext = new EntityContext($entityOptions);
         if ($entityContext) {
             Console::writeLine("Build started...");
-            $path = 'Migrations';
+            $directoryName = 'Migrations';
             $directory = $args->get('--directory');
             if ($directory) {
                 if ($directory->Value) {
-                    $path = ucwords($directory->Value, '/');
+                    $directoryName = ucwords($directory->Value, '/');
                 }
             }
-            $namespace = 'Application\\' . str_replace('/', '\\', $path);
-            $migrator = new Migrator($entityContext->Database, $namespace, $projectRoot . '/' . $path);
+
+            $namespace = 'Application\\' . str_replace('/', '\\', $directoryName);
+            $path = $this->findMigrationsPath($projectRoot, $directoryName);
+            $migrator = new Migrator($entityContext->Database, $namespace, $path);
             $target = $args->get('--target');
             if ($target) {
                 $migrator->migrate($target->Value);
@@ -86,5 +89,27 @@ class MigrateCommand extends CommandLine implements ICommandHandler
         Console::$ForegroundColor = ConsoleColor::Green;
         Console::writeLine("Done.");
         Console::resetColor();
+    }
+
+    public function findMigrationsPath(string $projectRoot, string $directoryName): ?string
+    {
+        $directories = [];
+        foreach (new DirectoryIterator($projectRoot) as $path) {
+            if ($path->isDir() && !$path->isDot()) {
+                if ($path->getFilename() == $directoryName) {
+                    return $projectRoot . '/' . $directoryName;
+                }
+                $directories[] = $path->getFilename();
+            }
+        }
+
+        foreach ($directories as $dir) {
+            $path = $this->findMigrationsPath($projectRoot . '/' . $dir, $directoryName);
+            if ($path) {
+                return $path;
+            }
+        }
+
+        return null;
     }
 }
