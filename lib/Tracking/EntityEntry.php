@@ -29,7 +29,6 @@ class EntityEntry
         $this->state    = EntityState::Attached;
 
         foreach ($this->metadata->Properties as $property) {
-            $propertyName = $property->PropertyInfo->getName();
             if ($property->PropertyInfo->isInitialized($this->entity)) {
                 $value = $property->PropertyInfo->getValue($this->entity);
                 if (is_array($value) || is_object($value)) {
@@ -39,9 +38,7 @@ class EntityEntry
                         continue;
                     }
                 }
-                $this->values[$propertyName] = $value;
-            } else {
-                $this->values[$propertyName] = null;
+                $this->values[$property->getColumnName()] = $value;
             }
         }
     }
