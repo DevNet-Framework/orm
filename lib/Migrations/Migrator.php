@@ -16,14 +16,14 @@ use DevNet\Entity\Storage\IEntityDataProvider;
 class Migrator
 {
     private IEntityDataProvider $dataProvider;
-    private MigrationHistory $history;
     private MigrationAssembly $assembly;
+    private MigrationHistory $history;
 
-    public function __construct(EntityDatabase $database, string $namespace, string $directory)
+    public function __construct(EntityDatabase $database, string $directory)
     {
         $this->dataProvider = $database->DataProvider;
-        $this->history      = new MigrationHistory($database, $namespace, $directory);
-        $this->assembly    = new MigrationAssembly($namespace, $directory);
+        $this->assembly     = new MigrationAssembly($directory);
+        $this->history      = new MigrationHistory($database, $this->assembly);
     }
 
     public function generateScript(array $operations): string
@@ -69,7 +69,7 @@ class Migrator
             $upScript   = $this->generateScript($migration->UpOperations);
             $commands[] = $this->dataProvider->Connection->createCommand($upScript);
 
-            $addScript  = $this->history->getInsertScript($migrationToApply->Id, $migrationToApply->Name);
+            $addScript  = $this->history->getInsertScript($migrationToApply->Id);
             $commands[] = $this->dataProvider->Connection->createCommand($addScript);
         }
 

@@ -19,6 +19,7 @@ use DevNet\System\Configuration\ConfigurationBuilder;
 use DevNet\System\IO\ConsoleColor;
 use DevNet\System\IO\Console;
 use DirectoryIterator;
+use DOMDocument;
 
 class MigrateCommand extends CommandLine implements ICommandHandler
 {
@@ -70,9 +71,8 @@ class MigrateCommand extends CommandLine implements ICommandHandler
                 }
             }
 
-            $namespace = 'Application\\' . str_replace('/', '\\', $directoryName);
             $path = $this->findMigrationsPath($projectRoot, $directoryName);
-            $migrator = new Migrator($entityContext->Database, $namespace, $path);
+            $migrator = new Migrator($entityContext->Database, $path);
             $target = $args->get('--target');
             if ($target) {
                 $migrator->migrate($target->Value);

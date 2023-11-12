@@ -9,13 +9,13 @@
 
 namespace DevNet\Entity\Migrations;
 
+use DevNet\System\Linq;
 use DevNet\Entity\Migrations\Operations\Operation;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\System\Collections\Enumerator;
 use DevNet\System\Collections\IEnumerable;
 use DevNet\System\MethodTrait;
 use DevNet\System\PropertyTrait;
-use stdClass;
 
 class MigrationHistory implements IEnumerable
 {
@@ -27,7 +27,7 @@ class MigrationHistory implements IEnumerable
     private array $migrations = [];
     private bool $existence   = false;
 
-    public function __construct(EntityDatabase $database, string $namespace, string $directory)
+    public function __construct(EntityDatabase $database, MigrationAssembly $assembly)
     {
         $this->database = $database;
 
@@ -46,17 +46,13 @@ class MigrationHistory implements IEnumerable
         if ($dbReader) {
             $this->existence = true;
             while ($dbReader->read()) {
-                $file = $directory . "/" . $dbReader->getValue("Id") . "_" . $dbReader->getValue("Name") . ".php";
-                if (file_exists($file)) {
-                    require_once($file);
-                    $migration = new stdClass();
-                    $migration->Id = (int)$dbReader->getValue("Id");
-                    $migration->Name = $dbReader->getValue("Name");
-                    $migration->Type = $namespace . "\\" . $dbReader->getValue("Name");
-                    $this->migrations[] = $migration;
-                } else {
-                    throw new \Exception("Not found File: {$file}");
+                $id =  $dbReader->getValue("Id");
+                $migration = $assembly->where(fn ($migration) => $migration->Id == $id)->first();
+                if (!$migration) {
+                    $connection->close();
+                    throw new \Exception("Could not find migration: $id");
                 }
+                $this->migrations[] = $migration;
             }
         }
 
@@ -80,7 +76,7 @@ class MigrationHistory implements IEnumerable
     {
         $table = Operation::createTable('MigrationHistory');
         $table->column('Id', 'bigint')->nullable(false);
-        $table->column('Name', 'varchar(45)')->nullable(false);
+        $table->column('Version', 'varchar(15)')->nullable(false);
         $table->primaryKey('Id');
 
         $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
@@ -89,9 +85,9 @@ class MigrationHistory implements IEnumerable
         return $migrationGenerator->__toString();
     }
 
-    public function getInsertScript(string $id, string $name): string
+    public function getInsertScript(string $id): string
     {
-        $data = Operation::insertData($this->table, ['Id' => $id, 'Name' => $name]);
+        $data = Operation::insertData($this->table, ['Id' => $id, 'Version' => '1.0.0']);
         $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
         $migrationGenerator->visit($data);
 
