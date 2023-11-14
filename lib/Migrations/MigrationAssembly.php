@@ -27,29 +27,44 @@ class MigrationAssembly implements IEnumerable
     {
         foreach (new DirectoryIterator($directory) as $file) {
             if ($file->isFile()) {
-                preg_match('/(?i)(\d+)_(\w+).php/', $file->getFilename(), $matches);
+                preg_match('%(\d+).*\.php%i', $file->getFilename(), $matches);
                 $id = $matches[1] ?? null;
-                $name = $matches[2] ?? null;
-                if (!$id || !$name) {
+                if (!$id) {
                     continue;
                 }
 
                 $content = file_get_contents($file->getRealPath());
-                preg_match('/(?i)namespace\s+([a-z0-9_\\\]+);/', $content, $matches);
-                $namespace = $matches[1] ?? null;
-                if (!$namespace) {
+                preg_match_all('%namespace\s+([a-z][a-z0-9_\\\]*)\s*;|class\s+([a-z][a-z0-9_]*)|/\*(.|\n)*?\*/|//.*%i', $content, $matches);
+
+                $namespace = null;
+                $namespaces = $matches[1] ?? [];
+                foreach ($namespaces as $namespace) {
+                    if ($namespace) {
+                        break;
+                    }
+                }
+
+                $class = null;
+                $classes = $matches[2] ?? [];
+                foreach ($classes as $class) {
+                    if ($class) {
+                        break;
+                    }
+                }
+
+                if (!$namespace || !$class) {
                     continue;
                 }
 
                 @include_once $file->getRealPath();
 
-                $class = $namespace . "\\" . $name;
-                if (class_exists($class)) {
-                    $parents = class_parents($class);
+                $className = $namespace . '\\' . $class;
+                if (class_exists($className)) {
+                    $parents = class_parents($className);
                     if (in_array(Migration::class, $parents)) {
                         $migration = new stdClass();
                         $migration->Id = $id;
-                        $migration->Type = $class;
+                        $migration->Type = $className;
                         $this->migrations[] = $migration;
                     }
                 }
