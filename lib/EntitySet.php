@@ -23,9 +23,9 @@ class EntitySet extends EntityQuery
         parent::__construct($database->Model->getEntityType($entityName), $database->QueryProvider);
     }
 
-    public function find(string $keyValue): ?object
+    public function find(string ...$keyValues): ?object
     {
-        return $this->database->Finder->find($this->EntityType, $keyValue);
+        return $this->database->Finder->find($this->EntityType, $keyValues);
     }
 
     public function add(object $entity): void
