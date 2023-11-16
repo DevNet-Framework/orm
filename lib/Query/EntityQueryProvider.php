@@ -50,18 +50,18 @@ class EntityQueryProvider implements IQueryProvider
                     if ($property->PropertyInfo->hasType()) {
                         $propertyType = $property->PropertyInfo->getType()->getName();
                         if ($propertyType == DateTime::class) {
-                            $date = $dbReader->getValue($property->Column['Name']);
+                            $date = $dbReader->getValue($property->getColumnName());
                             if ($date) {
                                 $value = new DateTime($date);
                             }
                         } else if ($propertyType == "bool") {
-                            $value = (bool)$dbReader->getValue($property->Column['Name']);
+                            $value = (bool)$dbReader->getValue($property->getColumnName());
                         } else if ($propertyType == "int") {
-                            $value = (int)$dbReader->getValue($property->Column['Name']);
+                            $value = (int)$dbReader->getValue($property->getColumnName());
                         } else if ($propertyType == "float") {
-                            $value = (float)$dbReader->getValue($property->Column['Name']);
+                            $value = (float)$dbReader->getValue($property->getColumnName());
                         } else {
-                            $value = $dbReader->getValue($property->Column['Name']);
+                            $value = $dbReader->getValue($property->getColumnName());
                         }
                     }
 
