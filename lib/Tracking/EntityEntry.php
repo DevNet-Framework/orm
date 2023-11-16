@@ -72,7 +72,6 @@ class EntityEntry
     {
         $values = [];
         foreach ($this->metadata->Properties as $property) {
-            $propertyName = $property->PropertyInfo->getName();
             if ($property->PropertyInfo->isInitialized($this->entity)) {
                 $value = $property->PropertyInfo->getValue($this->entity);
                 if (is_array($value) || is_object($value)) {
@@ -82,13 +81,13 @@ class EntityEntry
                         continue;
                     }
                 }
-                $values[$propertyName] = $value;
-            } else {
-                $values[$propertyName] = null;
+                if ($this->values[$property->getColumnName()] != $value) {
+                    $values[$property->getColumnName()] = $value;
+                }
             }
         }
 
-        if ($this->values != $values) {
+        if ($values) {
             $this->values = $values;
             $this->state  = EntityState::Modified;
         }
