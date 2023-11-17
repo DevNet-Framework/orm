@@ -10,6 +10,7 @@
 namespace DevNet\Entity\Metadata;
 
 use DevNet\Entity\Annotations\ForeignKey;
+use DevNet\System\Collections\ICollection;
 use DevNet\System\PropertyTrait;
 use DevNet\System\Type;
 use ReflectionProperty;
@@ -22,35 +23,36 @@ class EntityNavigation
     public const Many = 2;
 
     private EntityType $entityType;
-    private EntityType $targetEntityType;
+    private string $targetEntity;
     private ReflectionProperty $propertyInfo;
-    private int $cardinality;
+    private int $cardinality = 0;
 
     public function __construct(EntityType $entityType, ReflectionProperty $propertyInfo, int $cardinality = 0)
     {
         $this->entityType   = $entityType;
         $this->propertyInfo = $propertyInfo;
-        $this->cardinality  = $cardinality;
 
         switch ($cardinality) {
             case 2:
-                foreach ($this->propertyInfo->getAttributes(Type::class) as $attribute) {
+                $attribute = $this->propertyInfo->getAttributes(Type::class)[0] ?? null;
+                if ($attribute) {
                     $type = $attribute->newInstance();
-                    if ($type->Name == ICollection::class && $type->isGenericType()) {
+                    if ($type->Name == ICollection::class) {
                         $types = $type->getGenericArguments();
-                        if ($types[0]->isClass()) {
+                        if ($types && $types[0]->isClass()) {
                             $this->hasMany($types[0]);
-                            return;
                         }
                     }
                 }
-                $this->cardinality = 0;
                 break;
             case 1:
-                foreach ($this->propertyInfo->getAttributes(ForeignKey::class) as $attribute) {
+                $attribute = $this->propertyInfo->getAttributes(ForeignKey::class)[0] ?? null;
+                if ($attribute) {
                     $foreignKey = $attribute->newInstance();
                     $this->hasForeignKey($foreignKey->getPropertyName());
-                    return;
+                } else {
+                    $this->targetEntity = $this->propertyInfo->getType()->getName();
+                    $this->cardinality = 1;
                 }
                 break;
         }
@@ -66,9 +68,9 @@ class EntityNavigation
         return $this->entityType;
     }
 
-    public function get_TargetEntityType(): EntityType
+    public function get_TargetEntity(): ?string
     {
-        return $this->targetEntityType;
+        return $this->targetEntity ?? null;
     }
 
     public function get_Cardinality(): int
@@ -78,13 +80,14 @@ class EntityNavigation
 
     public function hasMany(string $relatedEntity): void
     {
-        $this->targetEntityType = $this->metadata->Model->getEntityType($relatedEntity);
+        $this->targetEntity = $relatedEntity;
         $this->cardinality = 2;
     }
 
     public function hasForeignKey(string $propertyName): void
     {
-        $navigationType = $this->propertyInfo->getType()->getName();
-        $this->entityType->addForeignKey($propertyName,  $navigationType);
+        $this->targetEntity = $this->propertyInfo->getType()->getName();
+        $this->entityType->addForeignKey($propertyName, $this->targetEntity);
+        $this->cardinality = 1;
     }
 }

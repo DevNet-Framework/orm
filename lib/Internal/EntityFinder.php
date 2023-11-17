@@ -65,22 +65,24 @@ class EntityFinder
     {
         $this->database->attach($entity);
 
-        $entityType = $this->database->Model->getEntityType(get_class($entity));
+        $entityType = $this->database->Model->getEntityType($entity::class);
         foreach ($entityType->Navigations as $navigation) {
             $navigation->PropertyInfo->setAccessible(true);
             if ($navigation->Cardinality == 2 && count($entityType->Keys) == 1) {
                 $key = $entityType->Keys[0];
                 $navigation->PropertyInfo->setValue($entity, new EntityCollection($navigation, $this->database, $entity->$key));
             } else if ($navigation->Cardinality == 1) {
-                $foreignKey = $navigation->EntityType->getForeignKey($navigation->TargetEntityType->Name);
+                $foreignKey = $navigation->EntityType->getForeignKey($navigation->TargetEntity);
                 if ($foreignKey) {
-                    $ParentEntity = $this->find($navigation->TargetEntityType, [$entity->$foreignKey]);
+                    $ParentEntityType = $this->database->Model->getEntityType($navigation->TargetEntity);
+                    $ParentEntity = $this->find($ParentEntityType, [$entity->$foreignKey]);
                     $navigation->PropertyInfo->setValue($entity, $ParentEntity);
                 } else {
                     if (count($entityType->Keys) == 1) {
                         $key = $entityType->Keys[0];
                         $childEntity = $this->query($navigation, $entity->$key)->first();
                         if ($childEntity) {
+                            $this->load($childEntity);
                             $navigation->PropertyInfo->setValue($entity, $childEntity);
                         }
                     }
@@ -91,8 +93,9 @@ class EntityFinder
 
     public function query(EntityNavigation $navigation, string $keyValue): IQueryable
     {
-        $query = new EntityQuery($navigation->TargetEntityType, $this->database->QueryProvider);
-        $foreignKey = $navigation->TargetEntityType->getForeignKey($navigation->EntityType->Name);
+        $entityTypeTarget = $this->database->Model->getEntityType($navigation->TargetEntity);
+        $foreignKey = $entityTypeTarget->getForeignKey($navigation->EntityType->Name);
+        $query = new EntityQuery($entityTypeTarget, $this->database->QueryProvider);
 
         return $query->where(fn ($entity) => $entity->$foreignKey == $keyValue);
     }

@@ -20,11 +20,8 @@ class EntityCollection implements ICollection
     private EntityDatabase $database;
     private string $keyValue;
 
-    public function __construct(
-        EntityNavigation $navigation,
-        EntityDatabase $database,
-        string $keyValue
-    ) {
+    public function __construct(EntityNavigation $navigation, EntityDatabase $database, string $keyValue)
+    {
         $this->navigation = $navigation;
         $this->database   = $database;
         $this->keyValue   = $keyValue;
