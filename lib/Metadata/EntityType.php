@@ -129,7 +129,7 @@ class EntityType
     {
         $property = $this->properties[$propertyName] ?? null;
         if (!$property) {
-            throw new PropertyException("Could not find the public property {$this->entityName}::{$propertyName}", 0, 1);
+            throw new PropertyException("Could not find the public property {$this->name}::{$propertyName}", 0, 1);
         }
 
         return $property;
@@ -139,7 +139,7 @@ class EntityType
     {
         $navigation = $this->navigations[$navigationName] ?? null;
         if (!$navigation) {
-            throw new PropertyException("Could not find the public property {$this->entityName}::{$navigationName}", 0, 1);
+            throw new PropertyException("Could not find the public property {$this->name}::{$navigationName}", 0, 1);
         }
 
         return $navigation;
@@ -154,8 +154,8 @@ class EntityType
     public function setPrimaryKey(array $propertyNames): void
     {
         foreach ($propertyNames as $propertyName) {
-            if (!property_exists($this->entityName, $propertyName)) {
-                new PropertyException("Could not find the public property {$this->entityName}::{$propertyName}", 0, 1);
+            if (!property_exists($this->name, $propertyName)) {
+                new PropertyException("Could not find the public property {$this->name}::{$propertyName}", 0, 1);
             }
         }
 
@@ -166,8 +166,8 @@ class EntityType
 
     public function addForeignKey(string $propertyName, string $relatedEntity): void
     {
-        if (!property_exists($this->entityName, $propertyName)) {
-            throw new PropertyException("Could not find the public property {$this->entityName}::{$propertyName}");
+        if (!property_exists($this->name, $propertyName)) {
+            throw new PropertyException("Could not find the public property {$this->name}::{$propertyName}");
         }
 
         if (!class_exists($relatedEntity)) {
