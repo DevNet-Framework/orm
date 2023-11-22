@@ -19,7 +19,6 @@ use DevNet\System\Configuration\ConfigurationBuilder;
 use DevNet\System\IO\ConsoleColor;
 use DevNet\System\IO\Console;
 use DirectoryIterator;
-use DOMDocument;
 
 class MigrateCommand extends CommandLine implements ICommandHandler
 {
@@ -61,33 +60,33 @@ class MigrateCommand extends CommandLine implements ICommandHandler
 
         $entityOptions = new EntityOptions($connectionString, $providerType);
         $entityContext = new EntityContext($entityOptions);
-        if ($entityContext) {
-            Console::writeLine("Build started...");
-            $directoryName = 'Migrations';
-            $directory = $args->get('--directory');
-            if ($directory) {
-                if ($directory->Value) {
-                    $directoryName = ucwords($directory->Value, '/');
-                }
-            }
 
-            $path = $this->findMigrationsPath($projectRoot, $directoryName);
-            $migrator = new Migrator($entityContext->Database, $path);
-            $target = $args->get('--target');
-            if ($target) {
-                $migrator->migrate($target->Value);
-            } else {
-                $migrator->migrate();
+        $directoryName = 'Migrations';
+        $directory = $args->get('--directory');
+        if ($directory) {
+            if ($directory->Value) {
+                $directoryName = ucwords($directory->Value, '/');
             }
-        } else {
-            Console::$ForegroundColor = ConsoleColor::Red;
-            Console::writeLine("EntityContext not found.");
-            Console::resetColor();
-            return;
         }
 
-        Console::$ForegroundColor = ConsoleColor::Green;
-        Console::writeLine("Done.");
+        $path = $this->findMigrationsPath($projectRoot, $directoryName);
+        $migrator = new Migrator($entityContext->Database, $path);
+        $target = $args->get('--target');
+        if ($target) {
+            $count = $migrator->migrate($target->Value);
+        } else {
+            $count = $migrator->migrate();
+        }
+
+        if ($count > 0) {
+            Console::$ForegroundColor = ConsoleColor::Green;
+            Console::writeLine("Done.");
+            Console::resetColor();
+            exit;
+        }
+
+        Console::$ForegroundColor = ConsoleColor::Yellow;
+        Console::writeLine("No migration has been applied!");
         Console::resetColor();
     }
 

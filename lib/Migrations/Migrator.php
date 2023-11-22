@@ -12,6 +12,7 @@ namespace DevNet\Entity\Migrations;
 use DevNet\System\Linq;
 use DevNet\Entity\Storage\EntityDatabase;
 use DevNet\Entity\Storage\IEntityDataProvider;
+use DevNet\System\IO\Console;
 
 class Migrator
 {
@@ -67,26 +68,32 @@ class Migrator
             $migration  = $migrationToApply->Type;
             $migration  = new $migration();
             $upScript   = $this->generateScript($migration->UpOperations);
-            $commands[] = $this->dataProvider->Connection->createCommand($upScript);
 
-            $addScript  = $this->history->getInsertScript($migrationToApply->Id);
-            $commands[] = $this->dataProvider->Connection->createCommand($addScript);
+            if (!empty($upScript)) {
+                $commands[0][$migrationToApply->Id][] = $this->dataProvider->Connection->createCommand($upScript);
+            }
+
+            $addScript = $this->history->getInsertScript($migrationToApply->Id);
+            $commands[0][$migrationToApply->Id][] = $this->dataProvider->Connection->createCommand($addScript);
         }
 
         foreach ($migrationsToRevert as $migrationToRevert) {
             $migration  = $migrationToRevert->Type;
             $migration  = new $migration();
             $downScript = $this->generateScript($migration->DownOperations);
-            $commands[] = $this->dataProvider->Connection->createCommand($downScript);
 
-            $delScript  = $this->history->getDeleteScript($migrationToRevert->Id);
-            $commands[] = $this->dataProvider->Connection->createCommand($delScript);
+            if (!empty($downScript)) {
+                $commands[1][$migrationToRevert->Id][] = $this->dataProvider->Connection->createCommand($downScript);
+            }
+
+            $delScript = $this->history->getDeleteScript($migrationToRevert->Id);
+            $commands[1][$migrationToRevert->Id][] = $this->dataProvider->Connection->createCommand($delScript);
         }
 
         return $commands;
     }
 
-    public function migrate(?string $targetMigration = null): void
+    public function migrate(?string $targetMigration = null): int
     {
         $commands   = $this->getCommands($targetMigration);
         $connection = $this->dataProvider->Connection;
@@ -94,16 +101,32 @@ class Migrator
 
         $transaction = $connection->beginTransaction();
 
-        if (!$this->history->exists() && $commands) {
+        if ($commands && !$this->history->exists()) {
             $createScript = $this->history->getCreateScript();
             $command = $connection->createCommand($createScript);
             $command->execute();
         }
 
         try {
-            foreach ($commands as $command) {
-                $command->execute();
+            if (isset($commands[0])) {
+                foreach ($commands[0] as $id => $applies) {
+                    Console::writeLine("Applying migration {$id}");
+                    foreach ($applies as $command) {
+                        $count = $command->execute();
+                    }
+                }
+            } else if (isset($commands[1])) {
+                foreach ($commands[1] as $id => $reverts) {
+                    Console::writeLine("Reverting migration {$id}");
+                    foreach ($reverts as $command) {
+                        $count = $command->execute();
+                    }
+                }
+            } else {
+                Console::writeLine("The database is already up to date.");
+                $count = 0;
             }
+
             $transaction->commit();
         } catch (\Exception $e) {
             $transaction->rollback();
@@ -111,5 +134,6 @@ class Migrator
         }
 
         $connection->close();
+        return $count;
     }
 }
