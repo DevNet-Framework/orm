@@ -58,6 +58,20 @@ class MigrateCommand extends CommandLine implements ICommandHandler
             }
         }
 
+        if (!$providerType) {
+            Console::$ForegroundColor = ConsoleColor::Red;
+            Console::writeLine("The data provider type is missing!");
+            Console::resetColor();
+            exit;
+        }
+
+        if (!$connectionString) {
+            Console::$ForegroundColor = ConsoleColor::Red;
+            Console::writeLine("The connection string is missing!");
+            Console::resetColor();
+            exit;
+        }
+
         $entityOptions = new EntityOptions($connectionString, $providerType);
         $entityContext = new EntityContext($entityOptions);
 
