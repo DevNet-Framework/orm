@@ -16,7 +16,7 @@ class ColumnOperation extends Operation
     public string $Type;
     public ?int $Max;
     public ?int $Scale;
-    public bool $Nullable = false;
+    public bool $Nullable = true;
     public bool $Identity = false;
     public $Default = null;
 
