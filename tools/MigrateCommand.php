@@ -2,8 +2,7 @@
 
 /**
  * @author      Mohammed Moussaoui
- * @copyright   Copyright (c) Mohammed Moussaoui. All rights reserved.
- * @license     MIT License. For full license information see LICENSE file in the project root.
+ * @license     MIT license. For more license information, see the LICENSE file in the root directory.
  * @link        https://github.com/DevNet-Framework
  */
 
@@ -15,7 +14,6 @@ use DevNet\Entity\Migrations\Migrator;
 use DevNet\System\Command\CommandEventArgs;
 use DevNet\System\Command\CommandLine;
 use DevNet\System\Command\ICommandHandler;
-use DevNet\System\Configuration\ConfigurationBuilder;
 use DevNet\System\IO\ConsoleColor;
 use DevNet\System\IO\Console;
 use DirectoryIterator;
@@ -35,14 +33,14 @@ class MigrateCommand extends CommandLine implements ICommandHandler
     public function onExecute(object $sender, CommandEventArgs $args): void
     {
         $projectRoot = getcwd();
-        $configBuilder = new ConfigurationBuilder();
-        $settingsPath = $projectRoot . '/' . 'settings.json';
+        $settingsPath = $projectRoot . '/settings.json';
         if (is_file($settingsPath)) {
-            $configBuilder->addJsonFile($settingsPath);
+            $contents = file_get_contents($settingsPath);
+            $settings = json_decode($contents, true);
+            $connectionString = $settings['Database']['ConnectionString'] ?? null;
+            $providerType = $settings['Database']['ProviderType'] ?? null;
         }
 
-        $configuration = $configBuilder->build();
-        $connectionString = $configuration->getValue('Database:ConnectionString');
         $connection = $args->get('--connection');
         if ($connection) {
             if ($connection->Value) {
@@ -50,7 +48,6 @@ class MigrateCommand extends CommandLine implements ICommandHandler
             }
         }
 
-        $providerType = $configuration->getValue('Database:ProviderType');
         $provider = $args->get('--provider');
         if ($provider) {
             if ($provider->Value) {

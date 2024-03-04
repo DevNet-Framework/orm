@@ -1,5 +1,5 @@
 {
-    "name": "devnet/entity",
+    "name": "devnet/orm",
     "description": "The DevNet Object Relational Mapper",
     "type": "library",
     "license": "MIT",
@@ -14,11 +14,11 @@
     },
     "autoload": {
         "psr-4": {
-            "DevNet\\Entity\\": "lib/",
+            "DevNet\\Entity\\": "src/",
             "DevNet\\Entity\\Tools\\": "tools/",
-            "DevNet\\Entity\\MySql\\": "lib/Providers/MySql/",
-            "DevNet\\Entity\\PgSql\\": "lib/Providers/PgSql/",
-            "DevNet\\Entity\\Sqlite\\": "lib/Providers/Sqlite/"
+            "DevNet\\Entity\\MySql\\": "src/Providers/MySql/",
+            "DevNet\\Entity\\PgSql\\": "src/Providers/PgSql/",
+            "DevNet\\Entity\\Sqlite\\": "src/Providers/Sqlite/"
         },
         "files": [
             "global.php"
