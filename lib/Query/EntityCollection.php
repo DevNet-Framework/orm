@@ -6,7 +6,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Internal;
+namespace DevNet\Entity\Query;
 
 use DevNet\Entity\Metadata\EntityNavigation;
 use DevNet\Entity\Storage\EntityDatabase;

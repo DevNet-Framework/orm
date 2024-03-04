@@ -6,11 +6,10 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Internal;
+namespace DevNet\Entity\Query;
 
 use DevNet\System\Linq;
 use DevNet\System\Linq\IQueryable;
-use DevNet\Entity\Query\EntityQuery;
 use DevNet\Entity\Metadata\EntityType;
 use DevNet\Entity\Metadata\EntityNavigation;
 use DevNet\Entity\Storage\EntityDatabase;
