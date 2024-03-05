@@ -102,20 +102,21 @@ class SqliteMigrationGenerator extends OperationVisitor
             case 'int':
             case 'smallint':
             case 'bigint':
-                $this->Statment[] = 'INTEGER';
+                $this->SqlBuilder->append(' INTEGER');
                 break;
             case 'decimal':
-                $this->Statment[] = 'NUMERIC';
+                $this->SqlBuilder->append(' NUMERIC');
                 break;
             case 'float':
             case 'double':
-                $this->Statment[] = 'REAL';
+                $this->SqlBuilder->append(' REAL');
                 break;
             case 'string':
-                $this->Statment[] = 'TEXT';
+                $this->SqlBuilder->append(' TEXT');
                 break;
             default:
-                $this->Statment[] = strtoupper($operation->Type);
+            $this->SqlBuilder->append(' ');
+            $this->SqlBuilder->append(strtoupper($operation->Type));
                 break;
         }
 
