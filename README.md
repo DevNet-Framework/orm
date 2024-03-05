@@ -9,7 +9,7 @@ This dependency is a part of **DevNet Framework**, an object relational mapping 
 
 You can install DevNet Entity ORM to your project, using composer by running the following command in your terminal:
 ```
-composer require devnet/entity
+composer require devnet/orm
 ```
 
 ## Documentation
