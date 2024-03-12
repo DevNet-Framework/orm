@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Metadata;
+namespace DevNet\ORM\Metadata;
 
-use DevNet\Entity\Annotations\Column;
+use DevNet\ORM\Annotations\Column;
 use DevNet\System\PropertyTrait;
 use ReflectionProperty;
 

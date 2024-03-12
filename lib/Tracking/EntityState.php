@@ -6,7 +6,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Tracking;
+namespace DevNet\ORM\Tracking;
 
 enum EntityState: int
 {

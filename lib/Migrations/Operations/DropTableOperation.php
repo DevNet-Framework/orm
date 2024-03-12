@@ -6,7 +6,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migrations\Operations;
+namespace DevNet\ORM\Migrations\Operations;
 
 class DropTableOperation extends TableOperation
 {

@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Query;
+namespace DevNet\ORM\Query;
 
-use DevNet\Entity\Storage\EntityDatabase;
+use DevNet\ORM\Storage\EntityDatabase;
 use DevNet\System\Linq\IQueryable;
 use DevNet\System\Linq\IQueryProvider;
 use DevNet\System\Compiler\Expressions\Expression;

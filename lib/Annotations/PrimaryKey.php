@@ -6,7 +6,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Annotations;
+namespace DevNet\ORM\Annotations;
 
 use Attribute;
 

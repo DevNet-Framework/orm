@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Tracking;
+namespace DevNet\ORM\Tracking;
 
-use DevNet\Entity\Metadata\EntityType;
+use DevNet\ORM\Metadata\EntityType;
 use DevNet\System\PropertyTrait;
 use DateTime;
 

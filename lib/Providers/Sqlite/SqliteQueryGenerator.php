@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Sqlite;
+namespace DevNet\ORM\Sqlite;
 
-use DevNet\Entity\Metadata\EntityType;
+use DevNet\ORM\Metadata\EntityType;
 use DevNet\System\Compiler\ExpressionStringBuilder;
 use DevNet\System\Compiler\Expressions\Expression;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;

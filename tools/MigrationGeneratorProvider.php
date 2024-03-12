@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Tools;
+namespace DevNet\ORM\Tools;
 
-use DevNet\Cli\Templating\CodeGeneratorProvider;
+use DevNet\CLI\Plugin\CodeGeneratorProvider;
 
 class MigrationGeneratorProvider extends CodeGeneratorProvider
 {

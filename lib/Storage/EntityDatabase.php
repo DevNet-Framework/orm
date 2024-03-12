@@ -6,15 +6,15 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Storage;
+namespace DevNet\ORM\Storage;
 
-use DevNet\Entity\Metadata\EntityModel;
-use DevNet\Entity\Query\EntityFinder;
-use DevNet\Entity\Query\EntityQueryProvider;
-use DevNet\Entity\Storage\EntityDataPersister;
-use DevNet\Entity\Tracking\EntityEntry;
-use DevNet\Entity\Tracking\EntityStateManager;
-use DevNet\Entity\Tracking\EntityState;
+use DevNet\ORM\Metadata\EntityModel;
+use DevNet\ORM\Query\EntityFinder;
+use DevNet\ORM\Query\EntityQueryProvider;
+use DevNet\ORM\Storage\EntityDataPersister;
+use DevNet\ORM\Tracking\EntityEntry;
+use DevNet\ORM\Tracking\EntityStateManager;
+use DevNet\ORM\Tracking\EntityState;
 use DevNet\System\PropertyTrait;
 
 class EntityDatabase

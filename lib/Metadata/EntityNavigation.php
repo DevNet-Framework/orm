@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Metadata;
+namespace DevNet\ORM\Metadata;
 
-use DevNet\Entity\Annotations\ForeignKey;
+use DevNet\ORM\Annotations\ForeignKey;
 use DevNet\System\Collections\ICollection;
 use DevNet\System\PropertyTrait;
 use DevNet\System\Type;

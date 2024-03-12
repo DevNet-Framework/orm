@@ -6,7 +6,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Metadata;
+namespace DevNet\ORM\Metadata;
 
 class EntityTypeBuilder
 {

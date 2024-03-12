@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Sqlite;
+namespace DevNet\ORM\Sqlite;
 
-use DevNet\Entity\Storage\ISqlGenerationHelper;
+use DevNet\ORM\Storage\ISqlGenerationHelper;
 
 class SqliteHelper implements ISqlGenerationHelper
 {

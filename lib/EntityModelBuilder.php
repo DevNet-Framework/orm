@@ -6,11 +6,11 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity;
+namespace DevNet\ORM;
 
-use DevNet\Entity\Metadata\EntityModel;
-use DevNet\Entity\Metadata\EntityTypeBuilder;
-use DevNet\Entity\Metadata\IEntityTypeConfiguration;
+use DevNet\ORM\Metadata\EntityModel;
+use DevNet\ORM\Metadata\EntityTypeBuilder;
+use DevNet\ORM\Metadata\IEntityTypeConfiguration;
 
 class EntityModelBuilder
 {

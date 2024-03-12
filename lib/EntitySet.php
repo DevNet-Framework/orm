@@ -6,10 +6,10 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity;
+namespace DevNet\ORM;
 
-use DevNet\Entity\Query\EntityQuery;
-use DevNet\Entity\Storage\EntityDatabase;
+use DevNet\ORM\Query\EntityQuery;
+use DevNet\ORM\Storage\EntityDatabase;
 
 class EntitySet extends EntityQuery
 {

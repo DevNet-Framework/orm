@@ -6,10 +6,10 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-use DevNet\Cli\Commands\CommandRegistry;
-use DevNet\Cli\Templating\CodeGeneratorRegistry;
-use DevNet\Entity\Tools\MigrateCommand;
-use DevNet\Entity\Tools\MigrationGeneratorProvider;
+use DevNet\CLI\Commands\CommandRegistry;
+use DevNet\CLI\Plugin\CodeGeneratorRegistry;
+use DevNet\ORM\Tools\MigrateCommand;
+use DevNet\ORM\Tools\MigrationGeneratorProvider;
 
 /**
  * DevNet CLI package is not mandatory required by DevNet Entity package,

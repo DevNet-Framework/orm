@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migrations;
+namespace DevNet\ORM\Migrations;
 
-use DevNet\Entity\Migrations\Operations\Operation;
+use DevNet\ORM\Migrations\Operations\Operation;
 use DevNet\System\PropertyTrait;
 use Closure;
 

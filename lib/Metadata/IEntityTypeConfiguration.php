@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Metadata;
+namespace DevNet\ORM\Metadata;
 
-use DevNet\Entity\Metadata\EntityTypeBuilder;
+use DevNet\ORM\Metadata\EntityTypeBuilder;
 
 interface IEntityTypeConfiguration
 {

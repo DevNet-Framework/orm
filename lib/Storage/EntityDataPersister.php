@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Storage;
+namespace DevNet\ORM\Storage;
 
-use DevNet\Entity\Tracking\EntityEntry;
+use DevNet\ORM\Tracking\EntityEntry;
 use DevNet\System\Database\DbConnection;
 
 class EntityDataPersister

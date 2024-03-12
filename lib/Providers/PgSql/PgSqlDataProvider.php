@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\PgSql;
+namespace DevNet\ORM\PgSql;
 
-use DevNet\Entity\Storage\IEntityDataProvider;
+use DevNet\ORM\Storage\IEntityDataProvider;
 use DevNet\System\Database\PgSql\PgSqlConnection;
 use DevNet\System\PropertyTrait;
 

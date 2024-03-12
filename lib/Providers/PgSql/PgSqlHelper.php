@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\PgSql;
+namespace DevNet\ORM\PgSql;
 
-use DevNet\Entity\Storage\ISqlGenerationHelper;
+use DevNet\ORM\Storage\ISqlGenerationHelper;
 
 class PgSqlHelper implements ISqlGenerationHelper
 {

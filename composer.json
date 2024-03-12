@@ -14,11 +14,11 @@
     },
     "autoload": {
         "psr-4": {
-            "DevNet\\Entity\\": "lib/",
-            "DevNet\\Entity\\MySql\\": "lib/Providers/MySql/",
-            "DevNet\\Entity\\PgSql\\": "lib/Providers/PgSql/",
-            "DevNet\\Entity\\Sqlite\\": "lib/Providers/Sqlite/",
-            "DevNet\\Entity\\Tools\\": "tools/"
+            "DevNet\\ORM\\": "lib/",
+            "DevNet\\ORM\\MySql\\": "lib/Providers/MySql/",
+            "DevNet\\ORM\\PgSql\\": "lib/Providers/PgSql/",
+            "DevNet\\ORM\\Sqlite\\": "lib/Providers/Sqlite/",
+            "DevNet\\ORM\\Tools\\": "tools/"
         },
         "files": [
             "global.php"

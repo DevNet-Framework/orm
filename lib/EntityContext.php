@@ -6,11 +6,11 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity;
+namespace DevNet\ORM;
 
-use DevNet\Entity\Metadata\EntityModel;
-use DevNet\Entity\Storage\EntityDatabase;
-use DevNet\Entity\Storage\IEntityDataProvider;
+use DevNet\ORM\Metadata\EntityModel;
+use DevNet\ORM\Storage\EntityDatabase;
+use DevNet\ORM\Storage\IEntityDataProvider;
 use DevNet\System\Database\DbTransaction;
 use DevNet\System\Exceptions\ClassException;
 use DevNet\System\PropertyTrait;

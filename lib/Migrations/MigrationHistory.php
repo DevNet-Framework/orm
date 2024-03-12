@@ -6,11 +6,11 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migrations;
+namespace DevNet\ORM\Migrations;
 
 use DevNet\System\Linq;
-use DevNet\Entity\Migrations\Operations\Operation;
-use DevNet\Entity\Storage\EntityDatabase;
+use DevNet\ORM\Migrations\Operations\Operation;
+use DevNet\ORM\Storage\EntityDatabase;
 use DevNet\System\Collections\Enumerator;
 use DevNet\System\Collections\IEnumerable;
 use DevNet\System\MethodTrait;

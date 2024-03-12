@@ -6,10 +6,10 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Storage;
+namespace DevNet\ORM\Storage;
 
-use DevNet\Entity\Migrations\Operations\OperationVisitor;
-use DevNet\Entity\Storage\ISqlGenerationHelper;
+use DevNet\ORM\Migrations\Operations\OperationVisitor;
+use DevNet\ORM\Storage\ISqlGenerationHelper;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Database\DbConnection;
 use DevNet\System\Exceptions\PropertyException;

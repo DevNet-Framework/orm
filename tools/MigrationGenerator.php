@@ -6,10 +6,10 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Tools;
+namespace DevNet\ORM\Tools;
 
-use DevNet\Cli\Templating\CodeModel;
-use DevNet\Cli\Templating\ICodeGenerator;
+use DevNet\CLI\Plugin\CodeModel;
+use DevNet\CLI\Plugin\ICodeGenerator;
 use DevNet\System\Text\StringBuilder;
 
 class MigrationGenerator implements ICodeGenerator
@@ -36,8 +36,8 @@ class MigrationGenerator implements ICodeGenerator
         $this->content->appendLine();
         $this->content->appendLine("namespace {$namespace};");
         $this->content->appendLine();
-        $this->content->appendLine('use DevNet\Entity\Migrations\Migration;');
-        $this->content->appendLine('use DevNet\Entity\Migrations\MigrationBuilder;');
+        $this->content->appendLine('use DevNet\ORM\Migrations\Migration;');
+        $this->content->appendLine('use DevNet\ORM\Migrations\MigrationBuilder;');
         $this->content->appendLine();
         $this->content->appendLine("class {$name} extends Migration");
         $this->content->appendLine('{');

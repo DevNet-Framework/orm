@@ -6,10 +6,10 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\PgSql;
+namespace DevNet\ORM\PgSql;
 
-use DevNet\Entity\Migrations\Operations\OperationVisitor;
-use DevNet\Entity\Migrations\Operations\Operation;
+use DevNet\ORM\Migrations\Operations\OperationVisitor;
+use DevNet\ORM\Migrations\Operations\Operation;
 use DevNet\System\Text\StringBuilder;
 
 class PgSqlMigrationGenerator extends OperationVisitor

@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\MySql;
+namespace DevNet\ORM\MySql;
 
-use DevNet\Entity\Metadata\EntityType;
+use DevNet\ORM\Metadata\EntityType;
 use DevNet\System\Compiler\Expressions\ExpressionVisitor;
 use DevNet\System\Compiler\ExpressionStringBuilder;
 use DevNet\System\Compiler\Expressions\Expression;

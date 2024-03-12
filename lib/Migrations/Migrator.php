@@ -6,11 +6,11 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migrations;
+namespace DevNet\ORM\Migrations;
 
 use DevNet\System\Linq;
-use DevNet\Entity\Storage\EntityDatabase;
-use DevNet\Entity\Storage\IEntityDataProvider;
+use DevNet\ORM\Storage\EntityDatabase;
+use DevNet\ORM\Storage\IEntityDataProvider;
 use DevNet\System\IO\Console;
 
 class Migrator

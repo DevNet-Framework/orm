@@ -6,10 +6,10 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Metadata;
+namespace DevNet\ORM\Metadata;
 
-use DevNet\Entity\Annotations\PrimaryKey;
-use DevNet\Entity\Annotations\Table;
+use DevNet\ORM\Annotations\PrimaryKey;
+use DevNet\ORM\Annotations\Table;
 use DevNet\System\Collections\ICollection;
 use DevNet\System\Exceptions\ClassException;
 use DevNet\System\Exceptions\PropertyException;

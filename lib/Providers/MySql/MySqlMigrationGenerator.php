@@ -6,10 +6,10 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\MySql;
+namespace DevNet\ORM\MySql;
 
-use DevNet\Entity\Migrations\Operations\OperationVisitor;
-use DevNet\Entity\Migrations\Operations\Operation;
+use DevNet\ORM\Migrations\Operations\OperationVisitor;
+use DevNet\ORM\Migrations\Operations\Operation;
 use DevNet\System\Text\StringBuilder;
 
 class MySqlMigrationGenerator extends OperationVisitor

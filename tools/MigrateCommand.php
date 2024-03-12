@@ -6,11 +6,11 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Tools;
+namespace DevNet\ORM\Tools;
 
-use DevNet\Entity\EntityContext;
-use DevNet\Entity\EntityOptions;
-use DevNet\Entity\Migrations\Migrator;
+use DevNet\ORM\EntityContext;
+use DevNet\ORM\EntityOptions;
+use DevNet\ORM\Migrations\Migrator;
 use DevNet\System\Command\CommandEventArgs;
 use DevNet\System\Command\CommandLine;
 use DevNet\System\Command\ICommandHandler;

@@ -6,14 +6,14 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Query;
+namespace DevNet\ORM\Query;
 
 use DevNet\System\Linq;
 use DevNet\System\Linq\IQueryable;
-use DevNet\Entity\Metadata\EntityType;
-use DevNet\Entity\Metadata\EntityNavigation;
-use DevNet\Entity\Storage\EntityDatabase;
-use DevNet\Entity\Tracking\EntityStateManager;
+use DevNet\ORM\Metadata\EntityType;
+use DevNet\ORM\Metadata\EntityNavigation;
+use DevNet\ORM\Storage\EntityDatabase;
+use DevNet\ORM\Tracking\EntityStateManager;
 
 class EntityFinder
 {

@@ -6,9 +6,9 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\MySql;
+namespace DevNet\ORM\MySql;
 
-use DevNet\Entity\Storage\ISqlGenerationHelper;
+use DevNet\ORM\Storage\ISqlGenerationHelper;
 
 class MySqlHelper implements ISqlGenerationHelper
 {

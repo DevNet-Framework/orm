@@ -6,7 +6,7 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Migrations;
+namespace DevNet\ORM\Migrations;
 
 use DevNet\System\Collections\Enumerator;
 use DevNet\System\Collections\IEnumerable;

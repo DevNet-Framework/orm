@@ -6,10 +6,10 @@
  * @link        https://github.com/DevNet-Framework
  */
 
-namespace DevNet\Entity\Query;
+namespace DevNet\ORM\Query;
 
-use DevNet\Entity\Metadata\EntityNavigation;
-use DevNet\Entity\Storage\EntityDatabase;
+use DevNet\ORM\Metadata\EntityNavigation;
+use DevNet\ORM\Storage\EntityDatabase;
 use DevNet\System\Collections\Enumerator;
 use DevNet\System\Collections\ICollection;
 
