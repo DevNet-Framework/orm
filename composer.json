@@ -10,15 +10,15 @@
         }
     ],
     "require": {
-        "devnet/core": "1.0.*"
+        "devnet/system": "1.1.*"
     },
     "autoload": {
         "psr-4": {
             "DevNet\\Entity\\": "lib/",
-            "DevNet\\Entity\\Tools\\": "tools/",
             "DevNet\\Entity\\MySql\\": "lib/Providers/MySql/",
             "DevNet\\Entity\\PgSql\\": "lib/Providers/PgSql/",
-            "DevNet\\Entity\\Sqlite\\": "lib/Providers/Sqlite/"
+            "DevNet\\Entity\\Sqlite\\": "lib/Providers/Sqlite/",
+            "DevNet\\Entity\\Tools\\": "tools/"
         },
         "files": [
             "global.php"
