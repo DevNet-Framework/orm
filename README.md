@@ -16,4 +16,4 @@ composer require devnet/orm
 Full documentation on how to use **DevNet Framework** is available at [devnet-framework.github.io](https://devnet-framework.github.io)
 
 ## License
-This library is licensed under the MIT license. See [License File](https://github.com/DevNet-Framework/entity/blob/master/LICENSE) in the root folder for more information.
+This library is licensed under the MIT license. See [License File](https://github.com/DevNet-Framework/orm/blob/master/LICENSE) in the root folder for more information.
