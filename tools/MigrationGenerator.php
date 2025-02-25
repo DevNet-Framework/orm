@@ -50,6 +50,6 @@ class MigrationGenerator implements ICodeGenerator
         $this->content->appendLine('    }');
         $this->content->appendLine('}');
 
-        return [new CodeModel(date('Ymdhis') . '_' . $name . '.php', $this->content, $output)];
+        return [new CodeModel(date('YmdHis') . '_' . $name . '.php', $this->content, $output)];
     }
 }
