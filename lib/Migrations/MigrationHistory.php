@@ -25,6 +25,7 @@ class MigrationHistory implements IEnumerable
     private string $table     = 'MigrationHistory';
     private array $migrations = [];
     private bool $existence   = false;
+    private string $version   = "0.0.0";
 
     public function __construct(EntityDatabase $database, MigrationAssembly $assembly)
     {
@@ -56,6 +57,14 @@ class MigrationHistory implements IEnumerable
         }
 
         $connection->close();
+
+        $json = json_decode(file_get_contents(dirname(__DIR__, 5). "/vendor/composer/installed.json"));
+        foreach ($json->packages as $package) {
+            if ($package->name == "devnet/orm") {
+                $this->version = $package->version;
+                break;
+            }
+        }
     }
 
     public function exists(): bool
@@ -86,7 +95,7 @@ class MigrationHistory implements IEnumerable
 
     public function getInsertScript(string $id): string
     {
-        $data = Operation::insertData($this->table, ['Id' => $id, 'Version' => '1.0.0']);
+        $data = Operation::insertData($this->table, ['Id' => $id, 'Version' => $this->version]);
         $migrationGenerator = new $this->database->DataProvider->MigrationGenerator;
         $migrationGenerator->visit($data);
 
