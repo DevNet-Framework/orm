@@ -24,7 +24,6 @@ class MigrationHistory implements IEnumerable
     private EntityDatabase $database;
     private string $table     = 'MigrationHistory';
     private array $migrations = [];
-    private bool $existence   = false;
     private string $version   = "0.0.0";
 
     public function __construct(EntityDatabase $database, MigrationAssembly $assembly)
@@ -44,7 +43,6 @@ class MigrationHistory implements IEnumerable
         }
 
         if ($dbReader) {
-            $this->existence = true;
             while ($dbReader->read()) {
                 $id =  $dbReader->getValue("Id");
                 $migration = $assembly->where(fn ($migration) => $migration->Id == $id)->first();
@@ -69,7 +67,7 @@ class MigrationHistory implements IEnumerable
 
     public function exists(): bool
     {
-        return $this->existence;
+        return empty($this->migrations) ? false : true;
     }
 
     public function getSelectScript(): string
