@@ -122,7 +122,6 @@ class Migrator
                     }
                 }
             } else {
-                Console::writeLine("The database is already up to date.");
                 $count = 0;
             }
 
