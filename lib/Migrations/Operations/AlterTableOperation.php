@@ -41,7 +41,7 @@ class AlterTableOperation extends TableOperation
         return $primaryKey;
     }
 
-    public function dropPrimaryKey(string $constraint = null): void
+    public function dropPrimaryKey(?string $constraint = null): void
     {
         if ($constraint) {
             $primaryKey = new DropPrimaryKeyOperation($this->Name, []);
@@ -52,7 +52,7 @@ class AlterTableOperation extends TableOperation
         }
     }
 
-    public function addForeignKey(string $column, string $referencedTable, string $referencedColumn, string $constraint = null): void
+    public function addForeignKey(string $column, string $referencedTable, string $referencedColumn, ?string $constraint = null): void
     {
         $this->Constraints[] = new AddForeignKeyOperation($this->Name, $column, $referencedTable, $referencedColumn, $constraint);
     }

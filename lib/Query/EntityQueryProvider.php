@@ -23,7 +23,7 @@ class EntityQueryProvider implements IQueryProvider
         $this->database = $database;
     }
 
-    public function createQuery(object $entityType, Expression $expression = null): IQueryable
+    public function createQuery(object $entityType, ?Expression $expression = null): IQueryable
     {
         return new EntityQuery($entityType, $this, $expression);
     }

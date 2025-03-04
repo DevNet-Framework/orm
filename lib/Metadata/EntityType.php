@@ -144,7 +144,7 @@ class EntityType
         return $navigation;
     }
 
-    public function setTableName(string $name, string $schema = null): void
+    public function setTableName(string $name, ?string $schema = null): void
     {
         $this->tableName = $name;
         $this->schema = $schema;
