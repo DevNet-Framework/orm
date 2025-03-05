@@ -35,7 +35,7 @@ class EntityContext
 
         $interfaces = class_implements($providerType);
         if (!in_array(IEntityDataProvider::class, $interfaces)) {
-            throw new ClassException("{$providerType} must implements IEntityDataProvider inteface", 0, 1);
+            throw new ClassException("{$providerType} must implements IEntityDataProvider interface", 0, 1);
         }
 
         $provider = new $providerType($options->ConnectionString);

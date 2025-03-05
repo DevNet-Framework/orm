@@ -29,7 +29,7 @@ class EntityQuery implements IQueryable
     private IQueryProvider $provider;
     private Expression $expression;
 
-    public function __construct(object $entityType, IQueryProvider $provider, Expression $expression = null)
+    public function __construct(object $entityType, IQueryProvider $provider, ?Expression $expression = null)
     {
         $this->entityType = $entityType;
         $this->provider   = $provider;
