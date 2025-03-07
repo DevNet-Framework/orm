@@ -59,7 +59,7 @@ class EntityContext
 
     public function get_Model(): EntityModel
     {
-        return $this->model;
+        return $this->database->Model;
     }
 
     public function beginTransaction(): void
