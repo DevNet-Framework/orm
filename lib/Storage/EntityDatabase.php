@@ -68,12 +68,6 @@ class EntityDatabase
         return $this->entityStateManager;
     }
 
-    public function finder(string $entityName): object
-    {
-        $entityType = $this->model->getEntityType($entityName);
-        return $this->entityFinderFactory->create($entityType);
-    }
-
     public function entry(object $entity): EntityEntry
     {
         return $this->entityStateManager->getOrCreateEntry($entity);
